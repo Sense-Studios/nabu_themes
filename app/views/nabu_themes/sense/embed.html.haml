@@ -1,0 +1,12 @@
+:javascript
+  var program_id = "#{@program.id}";
+  var client_id = "#{@program.client_id}";
+  var account_id = "#{@account_id}"; 
+:scss
+  html, body {
+    padding: 0;
+    margin: 0;
+    background-color: black;
+  }     
+= javascript_include_tag 'application'
+= render partial: "shared/videoplayer", locals: {height:'auto'} 

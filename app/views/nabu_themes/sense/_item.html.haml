@@ -1,0 +1,24 @@
+.showcase_item
+  .background.skew
+    .content.unskew
+      - if defined?(news)
+        .showcase-info.full.news
+          .showcase-info-text
+            = item.meta.moviedescription.title
+          .showcase-info-Meer
+            = link_to "Meer >".html_safe, sense_news_path
+      - elsif defined?(Meer)
+        - tag = item.tags.reject{|tag| tag == 'home'}.first || nil
+        .showcase-info.full.Meer{ style: "background-image: url(#{item.meta.moviedescription.thumbnail})"}
+          .showcase-info-text
+            = "Meer #{tag}?"
+          .showcase-info-Meer
+            = link_to "Meer >".html_safe, sense_showcases_path(tag)
+      - else
+        .showcase-header-image{ style: "background-image: url(#{item.meta.moviedescription.thumbnail})"}
+          = link_to '', sense_showcase_path(item.id)
+        .showcase-info
+          .showcase-info-text
+            = item.meta.moviedescription.title
+          .showcase-info-Meer
+            = link_to "Meer >".html_safe, sense_showcase_path(item.id)

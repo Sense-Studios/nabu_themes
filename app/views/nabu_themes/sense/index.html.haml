@@ -1,0 +1,20 @@
+#slider
+  %ul
+    - (@items * 2).each_with_index do |item, index|
+      %li{ 'data-idx' => index, style: "background-image: url(#{item.meta.moviedescription.thumbnail})"}
+        .player
+          /%iframe{ src: "#{sense_frontpage_embed_url(item.id)}", scrolling: 'no', frameborder: 0, allowfullscreen: false, width: '100%', height: '100%' }
+        %span{:class=>'fa fa_icon play-circle-o item-play'}
+        
+        .item           
+          - %w(news showcase more).each do |b|
+            %div{ class: "block #{b}" }
+              = render partial: 'nabu_themes/sense/item', locals: {item: item, "#{b}".to_sym => true}
+#category
+  %ul
+    - @items.each_with_index do |n, index|
+      %li.skew{ 'data-idx' => index }
+        .unskew
+          test 
+          = index
+          = n.meta.moviedescription.tags.split(',').reject{|tag| tag == 'home'}.first || nil

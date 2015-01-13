@@ -1,0 +1,19 @@
+#content.video 
+  #video
+    = render partial: "shared/player/video", locals: { height:'100%'}
+  = render partial: "shared/player/scrubbar"
+  = render partial: "shared/player/controls"
+  = link_to '#more', class: 'more-btn' do
+    More
+    = fa_icon('chevron-down')
+  #more
+    %h4= @program.meta.moviedescription.title
+    = image_tag @program.meta.moviedescription.thumbnail
+    = @program.meta.moviedescription.description  
+    
+:coffee
+  $ ->
+    console.log('program: ', #{@program.to_json})
+    $("#footer").removeClass('navbar-fixed-bottom')
+    $(".more-btn").click = ->
+      $(this).fadeOut()

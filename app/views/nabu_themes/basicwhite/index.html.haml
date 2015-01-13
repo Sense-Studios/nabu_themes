@@ -1,0 +1,114 @@
+-### Video Player ###
+
+.video_background
+  -#.moar_button.over_glow
+  -#  Meer videos
+  .video_background_hider
+  = render :partial => "shared/videoplayer", locals: {height:''}
+
+-### TOP: Nav and Menu ###
+
+.top
+  .custom_navbar
+    .custom_navbar_brand
+      = link_to "javascript:", :target=>"_top" , :class => 'navbar-brand' do
+        = image_tag @theme.logo, :class => ''
+
+  
+    .menu_button.pull-right
+      = image_tag '/clients/AgriMedia/images/menu_icon.png'
+  
+  .side_menu
+    .side_menu_overlay_gradient
+
+    .search
+      %span.glyphicon.glyphicon-remove.close_butt
+      %input#search_field{:placeholder=>'Search'}
+
+    .line
+      %hr
+
+    %ul.side_menu_content
+      -# renders through Javascript
+
+      .side_menu_social
+        .facebook
+        .twitter
+        .linkedin
+        .youtube
+
+-### MIDDLE: brandbox ###
+
+.middle
+  .brandbox
+    .nav_buttons.left_button
+      %span.glyphicon.glyphicon-chevron-left.glyph
+
+    .header
+      %ul.cat_group
+
+    .content
+
+    .nav_buttons.right_button
+      %span.glyphicon.glyphicon-chevron-right.glyph
+
+-### BOTTOM: info and recommended ###
+
+.bottom
+  .tab_label
+    .tab_btn.show_info
+      %span.glyphicon.glyphicon-info-sign
+    .tab_btn.play_now
+      %span.glyphicon.glyphicon-expand
+
+  .video_bar_footer
+    .video_footer_gradient
+    
+    
+    
+    
+    .col-sm-4.video_info
+      %h3 
+        %strong= @program.meta.moviedescription.title
+        %br
+        %small.code= @program.created_at
+      %p= @program.meta.moviedescription.description
+
+    .col-sm-8.latest_videos
+      %h3 
+        Laatste
+        %strong videos
+
+      .video_list
+        - @programs[0..2].each do |p|
+          .latest_item
+
+            -# TODO UPDATE THIS TO SOMETHING THEMEY
+            -# like /theme/theme_name/#{p.id} ?
+            = link_to "/clients/#{@owner.account_name}/video/#{p.id}", :target=>"_top" do
+              = image_tag p.meta.moviedescription.thumbnail, :width=>'198px', :height=>'112px'
+            .image_gradient
+            .ontopof
+              %strong.latest_title= p.meta.moviedescription.title
+              %br
+              %date
+                = distance_of_time_in_words(p.created_at, Time.now) 
+                oud.
+
+-### EXTRAs: brandbox ###
+= @theme.to_yaml
+
+-# this could be moved to the actual themes using shapeshift
+%script{:src=>'/assets/jquery-shapeshift/jquery.shapeshift.js'}
+= javascript_include_tag "nabu_themes/basicwhite/basicwhite"
+
+:javascript 
+  var programs = #{@programs.to_json}
+  var menudata = #{@menudata}
+
+= stylesheet_link_tag "nabu_themes/basicwhite/basicwhite", media: "all", "data-turbolinks-track" => true, "async" => true
+
+:css
+  .primary-color: { color: #{@theme.main_color} !important; } 
+  .secondary-color: { color: #{@theme.support_color} !important; }
+  .third-color: { background-color: #FFAABB !important; }

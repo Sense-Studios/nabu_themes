@@ -1,0 +1,95 @@
+<%= form_for(@theme) do |f| %>
+  <% if @theme.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@theme.errors.count, "error") %> prohibited this theme from being saved:</h2>
+
+      <ul>
+      <% @theme.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <!--  Main  -->
+
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= f.label :about %><br>
+    <%= f.text_area :about %>
+  </div>
+
+  <div class="field">
+    <%= f.label :contact %><br>
+    <%= f.text_area :contact %>
+  </div>
+
+
+  <!--  Connect and theme  -->
+
+  <div class="field">
+    <%= f.label :slug %><br>
+    <%= f.text_field :slug %>
+  </div>
+
+  <div class="field">
+    <%= f.label :owner %><br>
+    <%= f.text_field :owner %>
+  </div>
+
+  <!-- TODO: make this a dropdown -->
+  <div class="field">
+    <%= f.label :home_program %><br>
+    <%= f.text_field :home_program %>
+  </div>
+
+  <!-- TODO: make this a drop down -->
+  <div class="field">
+    <%= f.label :theme %><br>
+    <%= f.text_field :theme %>
+  </div>
+
+
+  <!-- customizing theme -->
+
+  <!-- TODO: make this a file upload through urias' s3_uploader -->
+  <div class="field">
+    <%= f.label :logo %><br>
+    <%= f.text_field :logo %>
+  </div>
+
+  <!-- TODO: add color picker to this -->
+  <div class="field">
+    <%= f.label :main_color %><br>
+    <%= f.text_field :main_color %>
+  </div>
+
+  <!-- TODO: add color picker to this -->
+  <div class="field">
+    <%= f.label :support_color %><br>
+    <%= f.text_field :support_color %>
+  </div>
+
+  <div class="field">
+    <%= f.label :settings %><br>
+    <%= f.text_area :settings %>
+  </div>
+
+
+  <!-- Submit -->
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+
+<% end %>

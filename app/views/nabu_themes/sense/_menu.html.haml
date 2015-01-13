@@ -1,0 +1,30 @@
+#menu.closed
+  .close-btn
+    %span{ :class => 'fa fa-close fa-2x' }
+
+  %ul
+    %li
+      Work
+      %ul
+        - @categories.each do |cat|
+          %li
+            = link_to cat.humanize, sense_showcases_path(cat)            
+    %li
+      = link_to 'About us', sense_about_path
+    %li
+      = link_to 'Onze klanten', sense_clients_path
+    %li
+      = link_to 'News', sense_news_path
+    %li
+      = link_to 'Contact', sense_contact_path
+
+  .social
+    = link_to 'https://facebook.com/sensestudios' do
+      %span{:class => 'fa facebook fa_stacked_icon fa-2x' }
+        facebook
+    = link_to 'https://twitter.com/sensestudios' do
+      %span{:class => 'fa twitter fa_stacked_icon fa-2x' }
+        twitter
+    = link_to 'http://www.linkedin.com/company/sense-studios' do
+      %span{:class => 'fa linkedin fa_stacked_icon fa-2x' }
+        linkedin

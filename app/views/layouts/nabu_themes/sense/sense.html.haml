@@ -1,0 +1,32 @@
+!!!
+%head
+
+  -# translations
+  :javascript
+    window.t = #{raw @t.to_json}
+  
+  = stylesheet_link_tag "nabu_themes/sense/sense", media: "all", "data-turbolinks-track" => true
+  = javascript_include_tag "nabu_themes/sense/sense", "data-turbolinks-track" => true
+  = csrf_meta_tags
+  
+  -# TODO refactor this code copied from application layout
+  - if @program
+    %title= @program.title
+    
+    - owner = User.find( @program.client_id )
+    - if !owner.account_id.nil?
+      - @account_id = User.find( owner.id ).account_id
+    - else
+      - @account_id = owner.id
+
+    :javascript
+      program_id = "#{@program.id}";
+      client_id = "#{@program.client_id}";
+      account_id = "#{@account_id}";
+    
+%body
+  #wrapper
+    = render 'nabu_themes/sense/header'
+    = render 'nabu_themes/sense/menu'
+    = yield
+    = render 'nabu_themes/sense/footer'

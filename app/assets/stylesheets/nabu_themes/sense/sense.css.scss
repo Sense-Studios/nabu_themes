@@ -1,0 +1,411 @@
+// Place all the styles related to the sense controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+@import "bourbon";
+@import "bootstrap";
+@import "bootstrap/theme";
+@import "font-awesome";
+
+@import url(http://fonts.googleapis.com/css?family=PT+Sans);
+
+$yellow: #e1b42e;
+$grey: #171717;
+$transparent-black: rgba(0,0,0,.3);
+
+$primary-color: $yellow;
+$primary-text-color: white;
+
+@mixin shadow {
+  -webkit-box-shadow: 4px 4px 5px 0px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow:    4px 4px 5px 0px rgba(0, 0, 0, 0.5);
+  box-shadow:         4px 4px 5px 0px rgba(0, 0, 0, 0.5);
+}
+
+@mixin skew {      
+  -webkit-transform:    skewX(-30deg);
+  transform:    skewX(-30deg);  
+}
+
+@mixin unskew {
+  -webkit-transform:    skewX(30deg);
+  transform:    skewX(30deg);
+}
+
+@mixin rounded {  
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  -webkit-border-radius: 10px 0;
+  border-radius: 10px 0;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
+
+@mixin links($color) {
+  a, a:hover, a:active, a:visited {
+    color: $color;
+  }
+}
+
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
+body {  
+  background: $grey;
+  color: white;
+  font-family: 'PT Sans', sans-serif;
+}
+
+#header {
+  z-index: 2;
+  background: $transparent-black;
+  border: none;
+  height: 50px;
+  padding-left: 15px;
+  padding-right: 15px;
+  
+  .search {
+    float: right;
+  }
+  .menu_btn {
+    cursor: pointer;
+    padding: 10px;
+  }
+}
+
+#logo {
+  z-index: 10;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: inline;
+  height: 50px;
+  padding: 15px;
+  img {
+    height: 100%;
+  }
+}
+
+#content{
+  z-index: 1;
+  position: static;
+  top: 0;
+  bottom: 0px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: opacity 2s;
+  -webkit-transition: opacity 2s;
+  display: block;
+  width: 100%;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  
+  &.video {
+    position: static;
+  }
+  
+  img.content-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: .2;
+  }
+  
+  > div {
+    position: relative;
+  }
+  
+  #showcases {
+    margin-top: 65px;
+    margin-bottom: 50px;
+  }
+  
+  #video {
+    height: 100%;
+  }
+  
+  .more-btn {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    right: 50%;
+    width: 40px;
+    text-align: center;
+  }
+  
+  #scrubbar {
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    right: 0;
+    margin: 0;
+  }
+  
+  #controls {
+    position: absolute;
+    bottom: 50px;
+  }
+  
+  #more {
+    background-color: white;
+    color: black;
+  }
+}
+
+#slider {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  ul {    
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    list-style: none;
+    li {
+      position: relative;
+      display: block;
+      float: left;
+      margin: 0;
+      padding: 0px;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: 50%;
+      .item-play {
+        position: absolute;
+        top: 50%;
+        font-size: 5rem;
+        cursor: pointer;
+      }
+    }
+  }
+  .item {
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+    .block {
+      display: inline-block;
+    }
+  }
+}
+
+#home-menu-slider {
+  position: absolute;
+  bottom: 50px;
+  width: 100%;
+  height: 180px;
+  
+  .galleria-container {
+    background: none;
+    overflow: initial;
+  }
+  .galleria-info-title,
+  .galleria-info-link,
+  .galleria-info-close,
+  .galleria-thumbnails-container,
+  .galleria-images img {
+    display: none!important;
+  }
+  .galleria-info {
+    display: block!important;
+    width: 100%;
+    position: static;
+  }
+  .galleria-info-text {
+    display: block!important;
+    padding: 0;
+  }
+  .galleria-info-description {
+    font-family: 'PT Sans', sans-serif;
+    font-style: initial;
+    font-size: 14pt;
+  }  
+  
+}
+
+#category {
+  position: relative;
+  top: 50px;
+  max-width: 20%;
+  ul {
+    li {
+      @include rounded;
+      &.skew { @include skew; }
+      list-style: none;
+      background: rgba(50,50,50,.4);
+      margin: 10px 0;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: font-size 1s;
+      &.active {
+        font-size: xx-large;
+      }
+      > div {
+        &.unskew { @include unskew; }
+      }
+    }
+  }
+}
+
+.row {
+  clear: both;
+}
+
+.showcase_item {
+  width: 350px;
+  height: 150px;
+  margin: 15px;
+  float: left;
+  position: relative;
+  color: $primary-text-color;
+    
+  .background {
+    &.skew { @include skew }
+    @include rounded;
+    height: 100%;
+    overflow: hidden;
+    border: none;
+    -webkit-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
+    box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2) ;
+    background: $transparent-black;
+    .content {
+      @include unskew;
+      height: 100%;
+      .showcase-header-image {
+        width: 126%;
+        height: 50%;
+        overflow: hidden;
+        position: absolute;
+        left: -13%;
+        background-repeat: no-repeat;
+        background-position: 50%;
+        background-size: 100%;
+        a {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+        }
+        &.faded {
+          opacity: .4;
+        }
+      }
+      .showcase-info {
+        position: absolute;
+        bottom: 0;
+        width: 113%;
+        height: 50%;
+        left: -13%;
+        padding: 5px 13%;
+        .showcase-info-text {
+          height: 50px;
+        }
+        .showcase-info-more {
+          position: absolute;
+          right: 13%;
+          bottom: 5px;
+          color: $primary-color;
+          @include links($primary-color);
+        }
+        &.full {
+          width: 126%;          
+          height: 100%;
+          left: -13%;
+          padding: 5px 26%;
+          background: none;
+          .showcase-info-more {
+            right: 26%;
+          }
+          &.more {
+            background-position: 50%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-color: opacify($transparent-black, 0.4);
+            background-blend-mode: darken;
+          }
+        }
+      }            
+    }
+  }  
+}
+
+#menu {
+  z-index: 3;
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  width: 25%;
+  background: black;
+  transition: right 1s;
+  padding: 15px 25px;
+  text-align: right;
+  ul li {
+    list-style: none;
+    color: $primary-color;
+    @include links($primary-color);
+    font-size: 18px;
+    margin-bottom: 5px;
+    ul li {
+      font-size: 14px;
+      color: $primary-text-color;
+      @include links($primary-text-color);
+    }
+  }
+  .social {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    @include links($primary-text-color);
+  }
+  &.closed {
+    transform: translateX(100%);
+  }  
+  .close-btn {
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
+}
+
+#video_container {
+  height: 100%;
+  
+  #video_frame {
+    width: 100%;
+    height: 100%!important;
+  }
+}
+
+#footer {  
+  z-index: 2;
+  height: 40px;
+  line-height: 40px;
+  color: $primary-text-color;
+  text-align: center;
+  background: $transparent-black;
+  border: none;
+  span {
+    margin: 0 5px;
+  }
+  &.video {
+    position: static;
+  }
+  .phone {
+    font-size: 16px;
+  }
+  .separator {
+    color: $primary-color;
+  }
+}

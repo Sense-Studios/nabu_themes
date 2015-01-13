@@ -1,0 +1,6 @@
+- @bg = @items.first.meta.moviedescription.thumbnail if @items.length
+#content
+  = image_tag @bg, class: 'content-background'
+  #showcases.container    
+    .row
+      = render partial: 'item', collection: @items
