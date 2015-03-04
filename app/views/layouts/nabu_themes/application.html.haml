@@ -6,6 +6,7 @@
     %link{"rel"=>"icon", "type"=>"image/png", "href"=>"/assets/favicon/Favicon_design.png"}
   
     :javascript
+      // YOU ARE IN THE NABU APPLICATION CONTROLLER
       var test = "#{@program.id}";
       window.t = #{raw @t.to_json}
       if (!window.console) console = {log: function() {}};   // ie8 fix

@@ -42,26 +42,29 @@
     <%= f.text_field :slug %>
   </div>
 
+  <!-- Make this hidden (?) -->
   <div class="field">
     <%= f.label :owner %><br>
-    <%= f.text_field :owner %>
+    <%= f.text_field :owner, :value => @owner.id %>
   </div>
-
-  <!-- TODO: make this a dropdown -->
+  
   <div class="field">
     <%= f.label :home_program %><br>
-    <%= f.text_field :home_program %>
+    <%= f.collection_select(:home_program, @programs, :id, :title) %>
   </div>
-
-  <!-- TODO: make this a drop down -->
+    
   <div class="field">
     <%= f.label :theme %><br>
-    <%= f.text_field :theme %>
+    <%= f.select(:theme, NABU_THEMES_AVAILABLE_THEMES) %>        
   </div>
 
+  <div class="field">
+    <%= f.label :menu %><br>
+    <%= f.collection_select(:menu, NabuThemes::Menu.all, :id, :name) %><br>
+    <%= link_to "Go to Menu editor", menus_path %>
+  </div>
 
   <!-- customizing theme -->
-
   <!-- TODO: make this a file upload through urias' s3_uploader -->
   <div class="field">
     <%= f.label :logo %><br>
@@ -80,6 +83,23 @@
     <%= f.text_field :support_color %>
   </div>
 
+  <!-- TODO: add color picker to this -->
+  <div class="field">
+    <%= f.label :background_color %><br>
+    <%= f.text_field :background_color %>
+  </div>
+  
+  <!-- color picker demo code>
+  <div class="input color" data-color="rgb(255, 146, 180)" data-color-format="rgb">
+    <input type="text" class="span2" value="" >
+    <span class="add-on"><i style="background-color: rgb(255, 146, 180)"></i></span>
+  </div>
+
+  <script>
+    $('.color').colorpicker()
+  </script>
+  -->
+
   <div class="field">
     <%= f.label :settings %><br>
     <%= f.text_area :settings %>
@@ -87,7 +107,6 @@
 
 
   <!-- Submit -->
-
   <div class="actions">
     <%= f.submit %>
   </div>

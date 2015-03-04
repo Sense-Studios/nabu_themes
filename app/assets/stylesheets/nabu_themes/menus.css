@@ -1,0 +1,24 @@
+/*
+  Place all the styles related to the matching controller here.
+  They will automatically be included in application.css.
+*/
+
+/* for the menu editor */
+.menu-editor {
+  list-style: none;
+  padding: 0;
+  background-color: whitesmoke;
+  min-height:64px;
+  padding-bottom: 12px;
+  
+  li {
+    padding: 8px 4px;
+    cursor: pointer;
+    display: block;
+    min-height: 52px;
+  
+    img {
+      margin-right: 8px;
+    }
+  }
+}

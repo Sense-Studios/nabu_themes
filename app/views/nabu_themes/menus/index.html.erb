@@ -1,0 +1,48 @@
+<h1>Listing Menus</h1>
+<%= link_to ' + New Menu', new_menu_path, :class=>'pull-right btn btn-success' %>
+
+<br>
+<hr>
+<br>
+
+
+<table width='100%' class='table table-condensed table-hover datatable'>
+  <thead>
+    <tr>      
+      <th>Name</th>
+      <th>Categorieen, # items</td>
+      <th>actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @menus.each do |menu| %>
+      <tr>        
+        <td><%= menu.name %></td>
+        <td>
+          <% begin %>
+            <% m = JSON.parse(menu.items)['menu'] %>
+            <% m.each do |c| %>
+             <%= c['name'] %>, 
+             <%= c['items'].count %>
+             <br>
+            <% end %>          
+          <% rescue %>
+            Something went wrong
+          <% end %>
+        </td>
+        <td>
+          <%= link_to 'Show', menu, :target => '_top' %> | 
+          <%= link_to 'Edit', edit_menu_path(menu), :target => '_top' %> | 
+          <%= link_to 'Destroy', menu, method: :delete, data: { confirm: 'Are you sure?' }, :target => '_top' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<br>
+<br>
+<%= render :partial => "shared/admin/admin_info" %>
+<%= render :partial => "shared/admin/datatables_translations" %>

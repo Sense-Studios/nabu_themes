@@ -1,29 +1,45 @@
-<h1>Listing themes</h1>
+<h1>Listing Channels</h1>
+<%= link_to ' + New Channel', new_theme_path, :class=>'pull-right btn btn-success' %>
 
-<table>
+<br>
+<hr>
+<br>
+
+<table width='100%' class='table table-condensed table-hover datatable'>
   <thead>
     <tr>
+      <th>Logo</th>
       <th>Title</th>
-      <th>slug</th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th>Theme</th>
+      <th>Menu</th>
+      <th>Slug</th>
+      <th>Created</th>
+      <th>Actions</th>
     </tr>
   </thead>
 
   <tbody>
     <% @themes.each do |theme| %>
       <tr>
+        <td><%= image_tag theme.logo, :width=>'32px' %>
         <td><%= theme.title %></td>
+        <td><%= theme.theme %></td>
+        <td><%= link_to NabuThemes::Menu.find( theme.menu ).name, edit_menu_path(theme.menu) unless theme.menu.blank?  %></td>
         <td><%= theme.slug %></td>
-        <td><%= link_to 'Show', theme %></td>
-        <td><%= link_to 'Edit', edit_theme_path(theme) %></td>
-        <td><%= link_to 'Destroy', theme, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= theme.created_at %></td>        
+        <td>
+          <%= link_to 'Show', theme.slug, :target => '_blank' unless theme.slug.blank? %> |
+          <%= link_to 'Edit', edit_theme_path(theme) %> | 
+          <%= link_to 'Destroy', theme, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
+<br>
+<br>
+<%= render :partial => "shared/admin/admin_info" %>
+<%= render :partial => "shared/admin/datatables_translations" %>
 
-<%= link_to 'New Theme', new_theme_path %>

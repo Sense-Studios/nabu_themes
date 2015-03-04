@@ -3,26 +3,29 @@
 .video_background
   -#.moar_button.over_glow
   -#  Meer videos
-  .video_background_hider
-  = render :partial => "shared/videoplayer", locals: {height:''}
+  .video_background_hider#video_container
+  = render :partial => "shared/player/video", locals: {height:''}
+  
+  #controls.control_holder.hidden
+    = render partial: 'nabu_themes/basicwhite/controls'
+    
 
 -### TOP: Nav and Menu ###
 
 .top
   .custom_navbar
     .custom_navbar_brand
-      = link_to "javascript:", :target=>"_top" , :class => 'navbar-brand' do
-        = image_tag @theme.logo, :class => ''
+      = link_to "javascript:", :target=>"_top" , :class => 'navbar-brand primary-color ' do
+        = image_tag @theme.logo, :class => 'pull-left'                
+        %h1.pull-left= @theme.title 
 
-  
     .menu_button.pull-right
       = image_tag '/clients/AgriMedia/images/menu_icon.png'
   
   .side_menu
     .side_menu_overlay_gradient
-
     .search
-      %span.glyphicon.glyphicon-remove.close_butt
+      %span.glyphicon.glyphicon-remove.close_butt.primary-color-hover
       %input#search_field{:placeholder=>'Search'}
 
     .line
@@ -42,61 +45,59 @@
 .middle
   .brandbox
     .nav_buttons.left_button
-      %span.glyphicon.glyphicon-chevron-left.glyph
+      %span
+        %span.glyphicon.glyphicon-chevron-left.custom_navigation_video.glyph.primary-color-hover
 
-    .header
+    .header{:style=>"margin-left:11vh;"}
       %ul.cat_group
 
     .content
 
     .nav_buttons.right_button
-      %span.glyphicon.glyphicon-chevron-right.glyph
+      %span
+        %span.glyphicon.glyphicon-chevron-right.custom_navigation_video.glyph.primary-color-hover
 
 -### BOTTOM: info and recommended ###
 
 .bottom
   .tab_label
     .tab_btn.show_info
-      %span.glyphicon.glyphicon-info-sign
+      %span.glyphicon.glyphicon-info-sign.primary-color-hover
     .tab_btn.play_now
-      %span.glyphicon.glyphicon-expand
+      %span.glyphicon.glyphicon-play-circle.primary-color-hover
 
   .video_bar_footer
     .video_footer_gradient
-    
-    
-    
-    
-    .col-sm-4.video_info
-      %h3 
-        %strong= @program.meta.moviedescription.title
-        %br
-        %small.code= @program.created_at
-      %p= @program.meta.moviedescription.description
+      - #FOOTER TABS
+      %div.tabpanel{:role=>"tabpanel"}
+        %ul#tabs.nav.nav-tabs.nav_tabs_custom.primary-bottom-border-color-active{:role=>"tablist"}
+          %li.tabtitlewrapper.active{:role=>"presentation"}
+            %a.primary-border-color-active{:href=>"#related", :aria=>{:controls=>"related"}, :role=>"tab" , :data=>{:toggle=>"tab"}} 
+              %h3.tabtitle
+                GERELATEERD
+          %li.tabtitlewrapper{:role=>"presentation"}
+            %a.primary-border-color-active{:href=>"#definition", :aria=>{:controls=>"definition"}, :role=>"tab" , :data=>{:toggle=>"tab"}} 
+              %h3.tabtitle
+                OMSCHRIJVING
+          %li.tabtitlewrapper{:role=>"presentation"}
+            %a.primary-border-color-active{:href=>"#newvideos", :aria=>{:controls=>"newvideos"}, :role=>"tab" , :data=>{:toggle=>"tab"}} 
+              %h3.tabtitle
+                NIEUWSTE VIDEOS
+        
+        .tab-content
+          #related.tab-pane.fade.in.active{:role=>"tabpanel",}
+            = render partial: 'nabu_themes/basicwhite/latestvideos'
+          #definition.tab-pane.fade{:role=>"tabpanel",}
+            = render partial: 'nabu_themes/basicwhite/moviedescription'
+          #newvideos.tab-pane.fade{:role=>"tabpanel",}
+            = render partial: 'nabu_themes/basicwhite/latestvideos'
 
-    .col-sm-8.latest_videos
-      %h3 
-        Laatste
-        %strong videos
+                      
 
-      .video_list
-        - @programs[0..2].each do |p|
-          .latest_item
 
-            -# TODO UPDATE THIS TO SOMETHING THEMEY
-            -# like /theme/theme_name/#{p.id} ?
-            = link_to "/clients/#{@owner.account_name}/video/#{p.id}", :target=>"_top" do
-              = image_tag p.meta.moviedescription.thumbnail, :width=>'198px', :height=>'112px'
-            .image_gradient
-            .ontopof
-              %strong.latest_title= p.meta.moviedescription.title
-              %br
-              %date
-                = distance_of_time_in_words(p.created_at, Time.now) 
-                oud.
 
 -### EXTRAs: brandbox ###
-= @theme.to_yaml
+=# @theme.to_yaml
 
 -# this could be moved to the actual themes using shapeshift
 %script{:src=>'/assets/jquery-shapeshift/jquery.shapeshift.js'}
@@ -109,6 +110,28 @@
 = stylesheet_link_tag "nabu_themes/basicwhite/basicwhite", media: "all", "data-turbolinks-track" => true, "async" => true
 
 :css
-  .primary-color: { color: #{@theme.main_color} !important; } 
-  .secondary-color: { color: #{@theme.support_color} !important; }
-  .third-color: { background-color: #FFAABB !important; }
+  .primary-color { color: #{@theme.main_color } !important; } 
+  .secondary-color { color: #{@theme.support_color } !important; }
+  .background-color { background-color: #{@theme.background_color } !important; }
+  .primary-border-color { border-color: #{@theme.main_color } !important; } 
+  .primary-background-color { background-color: #{@theme.main_color } !important; }
+  .primary-background-color-hover:hover { background-color: #{@theme.main_color } !important; } 
+  .primary-color-hover:hover { color: #{@theme.main_color } !important; }  
+  .active .primary-border-color-active { border-color: #{@theme.main_color }!important; border-bottom-color: transparent!important; }
+  .primary-bottom-border-color-active { border-color: #{@theme.main_color }!important; }
+
+/*
+:javascript
+  $(document).ready( function() {
+    var background;
+    background = '#{@theme.main_color }';
+    background = background.replace('#','');
+    r = parseInt(background.substring(0,2), 16);
+    g = parseInt(background.substring(2,4), 16);
+    b = parseInt(background.substring(4,6), 16);
+
+    result = 'rgba('+r+','+g+','+b+','+ 50 +')';
+    console.log("background-color" + result);
+  });
+    
+*/

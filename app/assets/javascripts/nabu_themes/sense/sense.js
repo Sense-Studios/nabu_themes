@@ -13,6 +13,7 @@
 // to include these.
 // require_tree ../../templates
 // require_tree marduq/marqers
+//= require jquery-cookie/jquery.cookie
 
 //= require marduq_api/marduq_api
 
@@ -21,17 +22,18 @@
 //= require marduq/debug
 //= require marduq/social
 //= require marduq/player
-//= require marduq/editor
+//  require marduq/editor
 //= require marduq/marqers
-//= require marduq/marqers/MarqerPrototype
 
+//= require marduq/marqers/MarqerPrototype
 //= require marduq/marqers
 //= require marduq/controls
-//= require marduq/sources/zoomin
-//= require marduq/sources/ytchannel
-//= require marduq/sources/marduq3
+//  require marduq/sources/zoomin
+//  require marduq/sources/ytchannel
+//  require marduq/sources/marduq3
 //= require marduq/sources/common
 //= require marduq/marduq
+//= require frontend/analytics
 //= require frontend
 
 //= require_tree .

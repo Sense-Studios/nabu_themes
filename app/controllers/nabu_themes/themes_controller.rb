@@ -2,32 +2,39 @@ require_dependency "nabu_themes/application_controller"
 
 module NabuThemes
   class ThemesController < ApplicationController
-    before_action :set_theme, only: [:show, :edit, :update, :destroy]
+    before_action :set_theme, only: [:show, :edit, :update, :destroy]    
     layout "layouts/admin"    
 
     # check and find a slug, then find the themeuser and fill # the theme
     # note that slug checking is done in the routes
-    def render_theme      
+    def render_theme
 
-      # lookup slug, and get owner and id info
+      @slug = params[:slug]
       @theme = Theme.where( { "slug"=>params[:slug] } ).first()
-      @owner = User.find( @theme.owner )   # agrimedia
-
-      @programs = MarduqResource::Program.where( "client_id" => @owner.client_id )
-      @program = MarduqResource::Program.find( @theme.home_program )
-
-      @menudata = @owner.menu # menu.find @theme.menu_id
-      @items = @programs[0..4] # remove this (relic of the sense theme )
-      @categories = [ "dikke", "piemel", "drie", "bier"] # remove this, no function
-
-      begin
-        render 'nabu_themes/' + @theme.theme + '/index', :layout => "nabu_themes/" + @theme.theme + "/" + @theme.theme
-      rescue
-        render 'nabu_themes/' + @theme.theme + '/index', :layout => "nabu_themes/application"
+      @menudata = NabuThemes::Menu.find( @theme.menu ).items      
+      if params[:id].blank?
+        @program = MarduqResource::Program.find( @theme.home_program ) # home program      
+      else
+        @program = MarduqResource::Program.find( params[:id] ) # home program      
       end
 
+      @programs = MarduqResource::Program.where( "client_id" => User.find( @theme.owner ).client_id )           
+      @page = 'nabu_themes/' + @theme.theme + '/index'        
+
+      # get a page if supplied
+      if !params[:page].blank?
+        @page = 'nabu_themes/' + @theme.theme + '/' + params[:page].to_s
+      end
+
+      begin
+        # try for the layout in /theme directory/layout/theme
+        render @page, :layout => "nabu_themes/" + @theme.theme + "/" + @theme.theme
+      rescue
+        # render the default layout
+        render @page, :layout => "nabu_themes/application"
+      end
     end
-    
+
     # GET /themes
     def index
       @themes = Theme.all
@@ -39,15 +46,27 @@ module NabuThemes
 
     # GET /themes/new
     def new
+      # find owner and account id through clipcard
+      @owner = current_user
+      if !@owner.account_id.nil?
+        @account_id = User.find( @owner.id ).account_id 
+      else
+        @account_id = @owner.id
+      end
+
+      @programs = MarduqResource::Program.where( "client_id" => User.find( @owner ).client_id )
+
       @theme = Theme.new
     end
 
     # GET /themes/1/edit
     def edit
+      @owner = User.find( @theme.owner )
+      @programs = MarduqResource::Program.where( "client_id" => @owner.client_id )
     end
 
     # POST /themes
-    def create
+    def create      
       @theme = Theme.new(theme_params)
 
       if @theme.save
@@ -80,7 +99,7 @@ module NabuThemes
 
       # Only allow a trusted parameter "white list" through.
       def theme_params
-        params.require(:theme).permit(:title, :description, :about, :contact, :slug, :owner, :home_program, :theme, :logo, :main_color, :support_color, :settings )
+        params.require(:theme).permit(:title, :description, :about, :contact, :slug, :owner, :home_program, :theme, :menu, :logo, :main_color, :support_color, :background_color, :settings )
       end
 
   end

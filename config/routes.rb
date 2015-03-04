@@ -1,18 +1,20 @@
 NabuThemes::Engine.routes.draw do
-# Rails.application.routes.draw do  # NOT MyEngineName::Engine.routes.draw
+  
+  # menu (set) management
+  resources :menus  
   
   # theme management
   resources :themes  
-
-  # check if the slug is available
-  get '/(:slug)', to: 'themes#render_theme' , constraints: lambda { |request| NabuThemes::Theme.all.pluck(:slug).include?( request.params['slug'] ) }
+  
+  # check if the slug is available and open it, else go on with the list
+  get '/(:slug)(/:page)(/:id)', to: 'themes#render_theme' , constraints: lambda { |request| NabuThemes::Theme.all.pluck(:slug).include?( request.params['slug'] ) }
 
   # basic white theme
-  namespace 'basicwhite' do
-    get '/', to: "basicwhite#index"
-  end
+  # namespace 'basicwhite' do
+  #   get '/', to: "basicwhite#index"
+  # end
   
-  # sense theme
+  # sense theme, will be deleted as the site gets modernized
   namespace 'sense' do
     get '/', to: 'sense#index'
     get 'showcases(/:tag)', to: 'sense#showcases', as: :showcases
@@ -22,9 +24,6 @@ NabuThemes::Engine.routes.draw do
     get 'contact', to: 'sense#contact'
     get 'news', to: 'sense#news'
     get 'frontpage-embed/:id', to: 'sense#embed', as: :frontpage_embed
-  end
-  
-  # something with slugs?
-  # get "/(:slug)", to: "themes#find_slug"
-  
+  end  
+
 end

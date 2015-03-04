@@ -5,7 +5,7 @@
   = render partial: "shared/player/controls"
   = link_to '#more', class: 'more-btn' do
     More
-    = fa_icon('chevron-down')
+    %span{:class=>'fa fa_icon chevron-down'}
   #more
     %h4= @program.meta.moviedescription.title
     = image_tag @program.meta.moviedescription.thumbnail

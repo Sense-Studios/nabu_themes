@@ -39,7 +39,8 @@ function doVideoResize() {
   var ipadcorr = 0;
   if (agent.label == 'IPAD') ipadcorr = 24;    
   if ( program.meta.player_options.scrubbar == "true" ) { scr = 20 }
-  vf.style.height = ( document.documentElement.clientHeight - ( 36 + scr ) - ipadcorr ) + "px";
+  // vf.style.height = ( document.documentElement.clientHeight - ( 36 + scr ) - ipadcorr ) + "px";
+  vf.style.height = ( document.documentElement.clientHeight - ipadcorr ) + "px";
 
   // document.getElementsByTagName("body")[0].style.overflow = "hidden";     // no scrollbar
   document.getElementsByTagName("body")[0].style.background = "#aaaaaa";  // background black
@@ -89,6 +90,8 @@ var marqercheckup = setInterval( function() {
 
 function loadProgram( p ) {
   
+  console.log("BASICWHITE LOAD PROGRAM: ", p )
+  
   if ( p !== undefined && p.id != lastprogram ) { // the program id isnt actually switched anymore
     program = p;
     getPlayer( p, '#video_frame', agent.technology, agent.videotype );
@@ -96,25 +99,32 @@ function loadProgram( p ) {
     $('#video_frame').hide();
     pop.on( 'loadstart', function() { $('#video_frame').delay(800).fadeIn('slow') } ); // youtube
     $('#video_frame').delay(800).fadeIn('slow'); // regular video
-  }
+  }    
+  
+  console.log("BASICWHITE RESET ANIMATION: ", p )
   
   $('.brandbox').fadeOut('slow');
   $('.middle').css('pointer-events','none');
   $('.custom_navbar').animate({'background-color':'rgba(0,0,0,0)'}, 600);
   $('.bottom').removeClass('show_bottom');
+  $('.control_holder').removeClass('control_holder_higher');
   $('.video_background_hider').animate({'opacity':0}, 1200 );
   $('.video_background_hider').css('pointer-events','none');
   $('.program_list').shapeshift(ss_options);
+
+  console.log("BASICWHITE SET INFO: ", p )
 
   if ( p !== undefined ) {
     var t = "";
     t += "<h3> NOW: <strong>" + p.meta.moviedescription.title + "</strong></h3>";
     t += "<small class='code'>" + p.created_at + "</small>";
     t += "<p>"+  p.meta.moviedescription.description + "</p>";
-    $('.video_bar_footer .video_info').html('');
-    $('.video_bar_footer .video_info').append(t);
-    $('.video_bar_footer .video_info').hide().fadeIn('slow');
+    $('#definition').html('');
+    $('#definition').append(t);
+    $('#definition').hide().fadeIn('slow');
   }
+  
+  console.log("BASICWHITE SET MARQERS: ", p )
   
   clearInterval( marqercheckup );
   $('.marqer').removeClass('hidden');
@@ -125,7 +135,65 @@ function loadProgram( p ) {
   pop.volume(1);  
   pop.playbackRate(1);
   
+  console.log("BASICWHITE add hidden")
+  $('.control_holder').addClass('hidden')
+
+  console.log("BASICWHITE ADD LISTENERS: ", pop, p )
+  
+  console.log("LOADED DATA: ", pop, p )
+  // hide controls, before play
+  pop.on('loadeddata', function() {
+    console.log("BASICWHITE: loaded data ... ")
+    showControls()    
+  })
+  
+  console.log("BASICWHITE CANPLAY: ", pop, p )
+  // failsave
+  pop.on('canplay', function() {
+    console.log("BASICWHITE: canplay ... ")
+    showControls()
+  })  
+  
+  console.log("BASICWHITE ZUT: ", pop, p )
+  // connect play/pause
+  pop.on( 'playing', function() { checkPlayButton() } )
+  pop.on( 'play', function() { checkPlayButton() } )
+  pop.on( 'pause', function() { checkPlayButton() } )
+  //pop.on( 'ended', function() { checkPlayButton() } )
+
+  console.log("BASICWHITE ZUT: ", pop, p )
+  pop.on('play', function() {
+    console.log("BASICWHITE: play ... ")
+    showControls()
+  })  
+
+  console.log("BASICWHITE MEERZUT: ", pop, p )
+  // turn big play button back on (unless yotube ?)
+  if ( program.program_items[0].asset._type == "Video" ) {
+    $(".big-play").removeClass('hidden')  
+    $('.control_holder').removeClass('hidden')
+  }
+
+  
+  //CHECK IF VIDEO IS YOUTUBE????????
+  //??????????????????????
+  //if ( program.program_items[0].asset._type != "Video" ) {
+  //  $(".quality-switcher").addClass('hidden')  
+  //}
+  console.log("BASIC WHITE toggleMUTE");
+  pop.on( 'mute', function() { 
+    console.log("BASIC WHITE toggleMUTED");
+  })
+  
+  if(pop.mute()){
+    console.log("BASIC WHITE toggleMUTED");
+  }
+
+  
+
   // reset and set marqers here with program p?
+  if (p === undefined ) return;
+
   var temp = p.marqers;
   var originalDuration = 0;
   resetMarqers( marqers, originalDuration );
@@ -137,26 +205,61 @@ function loadProgram( p ) {
     $('.marqer').fadeIn("slow");
   }, 100 );
   
+  //
   $('.program_list').shapeshift(ss_options); // failsafe
 }
   
-var toggleSite = function() { 
+var toggleMuteButton = function() {    
+  console.log("BASIC WHITE toggleMUTED");
+}  
   
-  if ( $('.brandbox').is(":visible") ) {
-     loadProgram();
-    
+/*
+var checkPlayButton = function() {
+  if ( pop.paused() ) {
+    // set controller o play
+    $(".glyphicon-play").removeClass("display");
+    $(".glyphicon-pause").addClass("display");
   }else{
-    
+    // set op pause
+    $(".glyphicon-play").addClass("display");
+    $(".glyphicon-pause").removeClass("display");
+    $(".big-play").addClass('hidden')
+  }
+}
+*/
+
+var showControls = function() {    
+  $('.control_holder').removeClass('hidden')
+  $('.control_holder').fadeIn();
+  checkPlayButton() ; 
+}
+
+
+
+var toggleSite = function() { 
+  if ( $('.brandbox').is(":visible") ) {
+    // show video
+    $('.big-play').removeClass('hidden');
+    $('.control_holder').fadeIn('slow'); 
+    loadProgram();
+
+  }else{
+
+    // show video
+    $('.big-play').addClass('hidden');
+    $('.control_holder').fadeOut('slow');  
+
     $('.brandbox').fadeIn('slow');
     $('.custom_navbar').animate({'background-color':'rgba(255,255,255,1)'}, 600);
     $('.middle').css('pointer-events','all');
     $('.video_background_hider').css('pointer-events','all');
     $('.bottom').removeClass('show_bottom');
+    $('.control_holder').removeClass('control_holder_higher');
     $('.video_background_hider').animate({'opacity':1}, 1200 );
     $('.marqer').addClass('hidden');
     $('.moar_button').fadeOut('slow');
-    
-    $('.program_list').shapeshift(ss_options); // failsafe
+
+    $('.program_list').shapeshift(ss_options); // failsafe, re-init shapeshift
   }
   
   pop.volume(0);
@@ -165,7 +268,10 @@ var toggleSite = function() {
 
 $('.navbar-brand').click( toggleSite );
 $('.moar_button').click( toggleSite );
-$('.show_info').click( function() { $('.bottom').toggleClass('show_bottom'); } );
+$('.show_info').click( function() {  
+  $('.bottom').toggleClass('show_bottom'); 
+  $('.control_holder').toggleClass('control_holder_higher');
+} );
 $('.play_now').click( toggleSite );
 
 // ########################################################################
@@ -180,6 +286,7 @@ function lookUpProgram(id) {
 
 function loadProgramById(id) {
   loadProgram( lookUpProgram( id ) );
+  $('.side_menu').animate({right: '-300px'} ); // close menu, just in case
 }
 
 var curr = 0;
@@ -218,6 +325,8 @@ $(function() {
         var item = "";
         var p = lookUpProgram( item_value.id );
 
+
+
         if ( item_value.emphasize ) {
           item += '<div class="item" data-ss-colspan=2>';
           item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
@@ -227,24 +336,24 @@ $(function() {
           item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
           item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="198px" height="112px" >';
         }
-        
+        var string = p.title;
+        var limit = 20;
+        if(string.length > limit)
+        {
+          var lengthstring = string.substring(0, limit) + "&#133;";
+        } else {
+          var lengthstring = string;
+        }
         item += '</a>';
         item += ' <div class="image_gradient"/>';
         item += ' <div class="video_duration_bottom_left"/>';
-        item += ' <h4 class="ontopof">'+p.title+'</h4';
+        item += ' <h4 class="ontopof">'+lengthstring+'</h4';
         item += '</div>';
 
 
         // append it to this category
         $('.category'+key+' .program_list').append(item);
       });
-
-      // now add the footer
-      // var footer = "<div class='footer'><h3>";
-      // footer += '<a class="go_to_video over_glow" href="javascript:">';
-      // footer += 'Naar video<span class="glyphicon glyphicon-play"/>';
-      // footer += '</a></h3></div>';
-      // $('.category'+key ).append(footer);
     });
     
     // APPEND AND ADD INTERACTION
@@ -255,8 +364,6 @@ $(function() {
       header_item += "<a href='javascript:'>" + menu_category.name + "</a>";
       header_item += "</li>";
       $('.cat_group').append(header_item);
-      
-      // do something smart
     });
   }
 
@@ -270,19 +377,34 @@ $(function() {
   $('.side_menu').css({right: '-300px'});
   
   // ### GET ACTUAL DATA!
-  // filter out the categories and fill them
-  var categories = ["landbouw", "akkerbouw", "tractoren", "anders"];
-  $.each( categories, function(key, c) {
-    var categorie = '<ul id="' + c + '" class="side_menu_category"><span class="side_menu_category_title">' + c + '</span></ul>';
+  // filter out the categories and fill them  
+  $.each( menudata.menu, function(key, c) {
+    var categorie = ''
+    categorie += '<ul id="' + c.name.toLowerCase().split(' ').join('_') + '" class="side_menu_category">'
+    categorie += '<span class="side_menu_category_title primary-color">' + c.name + '</span></ul>';
     $('.side_menu_content').append( categorie );
+    $.each( c.items, function( key, i) {
+      //STRING id.name MAXLENGTH 30 CHARACTERS
+      //ALLEEN VOOR DEMO DOELEINDEN??
+      var string = i.name;
+      var limit = 35;
+      if(string.length > limit)
+      {
+        var lengthstring = string.substring(0, limit) + "&#133;";
+      } else {
+        var lengthstring = string;
+      }
+      
+      var item = '';
+      item += '<li> <a href="javascript:loadProgramById(\''+i.id+'\');">';
+      item += '<img src="' + i.name + '" height="32px" width="48px"/>' + lengthstring + '</a>';
+      item += '</li>';
+      $('.side_menu_category:last').append( item );   
+    })
+    
+    
   });
   
-  // add the programs to the categories
-  $.each( programs, function( key, p ) {
-    var item = '<li> <a href="/'+p.id+'"> <img src="'+p.meta.moviedescription.thumbnail+'" height="32px" width="48px"/>' + p.title + '</a></li>';
-    $('#' + categories[ Math.floor( Math.random() * categories.length )]).append( item );
-  });
-
   // activate & open the first (?)
   $('ul:first').addClass('active');
   
@@ -296,10 +418,12 @@ $(function() {
   $('.side_menu_category li:odd').css('background-color', '#dcdcdc');
   $('.side_menu_category li').mouseenter( function() {     
     $( this ).addClass('side_menu_over')
+    $( this ).addClass('primary-background-color')
   }).mouseleave( function() {     
     $('.side_menu_category li:even').css('background-color', '#e8e8e8');
     $('.side_menu_category li:odd').css('background-color', '#dcdcdc');
     $( this ).removeClass('side_menu_over')
+    $( this ).removeClass('primary-background-color')
   });
   
   // remove at first
@@ -317,7 +441,9 @@ $(function() {
     }, 800, "easeOutBack" );
     curr++;
     $('.cat_item').removeClass('active');
+    $('.cat_item a').removeClass('primary-color');
     $('.cat_item:eq('+curr+')').addClass('active');
+    $('.cat_item:eq('+curr+') a').addClass('primary-color');
     
     checkButtons()
   });
@@ -328,7 +454,9 @@ $(function() {
     }, 800, "easeOutBack" );
     curr--;
     $('.cat_item').removeClass('active');
+    $('.cat_item a').removeClass('primary-color');
     $('.cat_item:eq('+curr+')').addClass('active');
+    $('.cat_item:eq('+curr+') a').addClass('primary-color');
     checkButtons()
   });
   
@@ -344,12 +472,122 @@ $(function() {
 
     curr = $('.cat_item').index( $(this) );
     $('.cat_item').removeClass('active');
+    $('.cat_item a').removeClass('primary-color');
     $('.cat_item:eq('+curr+')').addClass('active');
+    $('.cat_item:eq('+curr+') a').addClass('primary-color');
     checkButtons()
   });
   
   // activate the first
   $('.cat_item:first').addClass('active');
-  $('.left_button').hide();
+  $('.cat_item:first a').addClass('primary-color');
+  $('.left_button').hide();  
 });
 
+//the tabs in the footer to be tabbable. and
+//PRIMARY COLORS FOR TAB TITLE
+$(document).ready(function() { $('h3','.active').addClass('primary-color'); });
+    $('#tabs a').click(function (e) {
+      $('h3').removeClass('primary-color');
+      $('h3', this).addClass('primary-color');
+      e.preventDefault()
+      $(this).tab('show')
+    }); 
+    
+//SLIDING CAROUSEL IN FOOTER FOR VIDEOS
+$(document).ready(function () {
+        
+    popTimeUpdate();
+
+
+
+    $('#myCarousel').carousel({
+      interval: false
+    });
+    $('.fdi-Carousel .item').each(function () {
+        var next = $(this).next();
+        if (!next.length) {
+            next = $(this).siblings(':first');
+        }
+        next.children(':first-child').clone().appendTo($(this));
+        
+
+      for (var i=0;i<4;i++) {
+          next=next.next();
+          if (!next.length) {
+          	next = $(this).siblings(':first');
+        	}
+          
+          next.children(':first-child').clone().appendTo($(this));
+        }
+    });
+/* HIDE CONTROLS AFTER INACTIVITY 2000MS 
+NOT WORKING PROPERLY
+    var onmousestop = function(){
+      $("#controls").hide();
+    }
+    
+    $("*").mousemove(function(e){
+      $("#controls").show();
+      clearTimeout(timer);
+      timer = setTimeout(onmousestop, 2000)
+    });
+*/
+
+	//ANIMATE SIDE-MENU ITEMS TO AUTO HEIGHT
+	 var clicked = 0; 
+   $(".side_menu_category_title").click(function(){
+    var curheight = $(this).parent().height();
+      if(curheight > 40){
+        $(this).parent().animate({height: "33px"}, 500);
+      }
+      else {
+        if (clicked == 1){
+          $(".side_menu_category_title").parent().animate({height: "33px"}, 500);
+        }
+        $(this).parent().css('height', 'auto');
+        var clickeddiv = $(this).parent().height();
+        $(this).parent().css('height', '33px');
+        $(this).parent().animate({height: clickeddiv}, 500);
+        clicked = 1; 
+      }
+	}); 
+	
+	
+	//SEARCH FOR URLS IN DESCRIPTION TEXT
+	//MAKE THOSE URLS PRIMARY-COLOR
+  $('.moviedescription p').html( urlifyLinks( $('.moviedescription p').html()));
+  $(".moviedescriptionp *").addClass("primary-color");
+  
+  
+  //QUALITY SWITCHER TEXT REPLACE SD WITH HD WHEN SWITCH
+  //AND BACK
+  $(".quality-switch-button").click(function(){
+  var innertext = $(".quality-switch-button").text();
+
+    if(innertext.indexOf("SD")>=0){
+      (this).innerHTML = "HD";
+    }
+    else {
+      (this).innerHTML = "SD";
+    }
+  });
+  
+  //SWITCH ICON MUTE IF CLICKED
+  $("#butt-togglemute").click(function() {
+    $(".glyphicon-volume-off").toggleClass("display");
+    $(".glyphicon-volume-up").toggleClass("display");
+  });
+  
+  
+
+  //SCRUBBER
+  //popProgress();
+  
+
+  
+
+
+
+  
+});

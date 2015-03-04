@@ -1,0 +1,55 @@
+%h1 
+  Menu Editor
+  %small
+    = @menu.name
+%hr
+
+= render 'form'
+
+.row
+  .col-md-4
+    %h3 Available Programs    
+    
+    .filter
+      search: 
+      %input.form-control{:id=>"available_program_search", :type=>"text"}
+
+    %hr
+
+    %ul#all_available.menu-editor.drop          
+      - @programs.to_a.reverse.each do |p|    
+        %li.new-item.ui-state-default.available_program_item{:id=>p.id}
+          = image_tag p.meta.moviedescription.thumbnail, :class=>'thumbnail pull-left', :height=>'32px' unless p.meta.nil?
+          %span.program_title
+            %strong
+              = p.title
+          %br
+          %small.program_title
+            = p.tags.join(", ")     
+
+  .col-md-8
+    %h3 
+      In the Menu   
+      %button#save_menu_button.btn.btn-default.pull-right
+        Save All
+
+      %button#create_category_button.btn.btn-default.pull-right
+        Create Category
+
+    %hr
+
+    %ul#le_menu.menu-editor.dropfalse
+
+
+
+= link_to 'Show', @menu 
+|
+= link_to 'Back', menus_path
+
+:javascript
+  // I've put this here, as I get a lot of syntaxing errors because of these lines
+  // ruby for javascript
+  var menudata = #{@menu_data}
+  var programs = #{@programs.to_json}
+  
+= javascript_include_tag "nabu_themes/menus"

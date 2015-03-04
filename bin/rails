@@ -16,5 +16,3 @@ require "sprockets/railtie"
 require "rails/test_unit/railtie"
 require "mongoid"
 require 'rails/engine/commands'
-
-require 'rails/engine/commands'

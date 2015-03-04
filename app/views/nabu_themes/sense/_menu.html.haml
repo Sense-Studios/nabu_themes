@@ -6,9 +6,11 @@
     %li
       Work
       %ul
+        - @categories = JSON.parse( @menudata )['menu']
         - @categories.each do |cat|
           %li
-            = link_to cat.humanize, sense_showcases_path(cat)            
+            = cat['name']
+            =# link_to cat.humanize, sense_showcases_path(cat)            
     %li
       = link_to 'About us', sense_about_path
     %li
