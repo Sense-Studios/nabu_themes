@@ -60,7 +60,7 @@
 
   <div class="field">
     <%= f.label :menu %><br>
-    <%= f.collection_select(:menu, NabuThemes::Menu.all, :id, :name) %><br>
+    <%= f.collection_select(:menu, @menus, :id, :name) %><br>
     <%= link_to "Go to Menu editor", menus_path %>
   </div>
 

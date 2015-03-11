@@ -26,6 +26,18 @@ var ss_options = {
   
 var lastprogram = null
 
+// Note that this function is a little different from the original resizer in embed.haml
+var program;
+
+// IE8 Fix, normally JQuery takes care of this, but I'm not taking chances here
+if ( window.addEventListener ) {
+  window.addEventListener("resize", doVideoResize);
+}else{
+  window.attachEvent("onresize", doVideoResize);
+}
+
+$('#video_frame').hide();
+
 // ########################################################################
 // Video Resize Script
 // ########################################################################
@@ -46,17 +58,7 @@ function doVideoResize() {
   document.getElementsByTagName("body")[0].style.background = "#aaaaaa";  // background black
 }
 
-// IE8 Fix, normally JQuery takes care of this, but I'm not taking chances here
-if ( window.addEventListener ) {
-  window.addEventListener("resize", doVideoResize);
-}else{
-  window.attachEvent("onresize", doVideoResize);
-}
 
-// Note that this function is a little different from the original resizer in embed.haml
-var program;
-
-$('#video_frame').hide();
 function initResize() {
   if ( program !== undefined && pop !== null ) {
     
@@ -76,7 +78,6 @@ function initResize() {
     setTimeout(initResize, 300);
   }
 }
-
 initResize();
 
 // ########################################################################
@@ -88,18 +89,27 @@ var marqercheckup = setInterval( function() {
   $('.marqer').addClass('hidden');
 }, 300);
 
+function fadeInVideo() {
+  if (pop != null ) {
+    $('#video_frame').delay(800).fadeIn('slow'); // regular video 
+    pop.on( 'loadstart', function() { $('#video_frame').delay(800).fadeIn('slow') } ); // youtube    
+  }else{
+    setTimeout( function() { fadeInVideo() }, 500 )
+  }
+}
+
 function loadProgram( p ) {
   
   console.log("BASICWHITE LOAD PROGRAM: ", p )
+  $('.track_marqer').remove() // is not removed initially, so a failsafe
   
   if ( p !== undefined && p.id != lastprogram ) { // the program id isnt actually switched anymore
     program = p;
     getPlayer( p, '#video_frame', agent.technology, agent.videotype );
     lastprogram = p.id;
-    $('#video_frame').hide();
-    pop.on( 'loadstart', function() { $('#video_frame').delay(800).fadeIn('slow') } ); // youtube
-    $('#video_frame').delay(800).fadeIn('slow'); // regular video
-  }    
+    $('#video_frame').hide();    
+    fadeInVideo()
+  }
   
   console.log("BASICWHITE RESET ANIMATION: ", p )
   
@@ -111,6 +121,16 @@ function loadProgram( p ) {
   $('.video_background_hider').animate({'opacity':0}, 1200 );
   $('.video_background_hider').css('pointer-events','none');
   $('.program_list').shapeshift(ss_options);
+  
+  buildProgram(p)
+}
+
+function buildProgram( p ) {
+  
+  if ( pop == null || pop == undefined ) {
+    setTimeout( function() { buildProgram( p ) }, 500 )
+    return;
+  }
 
   console.log("BASICWHITE SET INFO: ", p )
 
@@ -132,7 +152,10 @@ function loadProgram( p ) {
   $('.marqer').fadeIn(2400);
   
   $('.moar_button').fadeIn('slow');
-  pop.volume(1);  
+  
+  console.log("BASICWHITE SET MUTES: ", p )
+  pop.mute(false);
+  pop.volume(1);
   pop.playbackRate(1);
   
   console.log("BASICWHITE add hidden")
@@ -141,6 +164,7 @@ function loadProgram( p ) {
   console.log("BASICWHITE ADD LISTENERS: ", pop, p )
   
   console.log("LOADED DATA: ", pop, p )
+  
   // hide controls, before play
   pop.on('loadeddata', function() {
     console.log("BASICWHITE: loaded data ... ")
@@ -189,14 +213,13 @@ function loadProgram( p ) {
     console.log("BASIC WHITE toggleMUTED");
   }
 
-  
-
   // reset and set marqers here with program p?
   if (p === undefined ) return;
 
   var temp = p.marqers;
   var originalDuration = 0;
-  resetMarqers( marqers, originalDuration );
+  resetMarqers( marqers, originalDuration );  
+
   setTimeout( function() {
     setMarqers( temp, originalDuration );
     $('.track_marqer').hide();
@@ -234,18 +257,24 @@ var showControls = function() {
   checkPlayButton() ; 
 }
 
-
-
 var toggleSite = function() { 
-  if ( $('.brandbox').is(":visible") ) {
-    // show video
+  if ( $('.brandbox').is(":visible") ) {    
+    console.log("BASICWHITE SHOW VIDEO")
+
+    // show videos
     $('.big-play').removeClass('hidden');
     $('.control_holder').fadeIn('slow'); 
+    
+    // why the fuck is this reloading here?
     loadProgram();
 
-  }else{
+    //pop.volume(1);
+    //pop.playbackRate(1);
 
-    // show video
+  }else{
+    console.log("BASICWHITE SHOW MENU etc.")
+
+    // show menus
     $('.big-play').addClass('hidden');
     $('.control_holder').fadeOut('slow');  
 
@@ -260,19 +289,12 @@ var toggleSite = function() {
     $('.moar_button').fadeOut('slow');
 
     $('.program_list').shapeshift(ss_options); // failsafe, re-init shapeshift
-  }
-  
-  pop.volume(0);
-  pop.playbackRate(0.3);
-};
 
-$('.navbar-brand').click( toggleSite );
-$('.moar_button').click( toggleSite );
-$('.show_info').click( function() {  
-  $('.bottom').toggleClass('show_bottom'); 
-  $('.control_holder').toggleClass('control_holder_higher');
-} );
-$('.play_now').click( toggleSite );
+    pop.volume(0);
+    pop.playbackRate(0.3);
+
+  }
+};
 
 // ########################################################################
 // ### HELPERS
@@ -297,16 +319,8 @@ function checkButtons() {
   if ( curr <= 0 ) $('.left_button').hide();
 }
 
-// ########################################################################
-// ### INIT
-// ########################################################################
-
-$(function() {
-  
-  // ### MAIN VIEWS
-  var menu = "";
+function createMainContent() {
   if ( menudata.menu !== undefined ) { 
-    
     // ### Make Menu Categories!
     $.each( menudata.menu, function(key, menu_category ) {
       
@@ -326,7 +340,6 @@ $(function() {
         var p = lookUpProgram( item_value.id );
 
 
-
         if ( item_value.emphasize ) {
           item += '<div class="item" data-ss-colspan=2>';
           item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
@@ -336,26 +349,18 @@ $(function() {
           item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
           item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="198px" height="112px" >';
         }
-        var string = p.title;
-        var limit = 20;
-        if(string.length > limit)
-        {
-          var lengthstring = string.substring(0, limit) + "&#133;";
-        } else {
-          var lengthstring = string;
-        }
+
         item += '</a>';
         item += ' <div class="image_gradient"/>';
         item += ' <div class="video_duration_bottom_left"/>';
-        item += ' <h4 class="ontopof">'+lengthstring+'</h4';
+        item += ' <h4 class="ontopof">'+p.title+'</h4';
         item += '</div>';
-
 
         // append it to this category
         $('.category'+key+' .program_list').append(item);
       });
     });
-    
+
     // APPEND AND ADD INTERACTION
     $.each( menudata.menu, function(key, menu_category ) {
       // category header
@@ -366,74 +371,6 @@ $(function() {
       $('.cat_group').append(header_item);
     });
   }
-
-
-  $('.go_to_video').click( toggleSite );
-  
-  // ### SIDE MENU
-  // set buttons
-  $('.menu_button').click(function() { $('.side_menu').animate({right: '0px'} ); } );  
-  $('.close_butt').click(function() { $('.side_menu').animate({right: '-300px'} ); } );  
-  $('.side_menu').css({right: '-300px'});
-  
-  // ### GET ACTUAL DATA!
-  // filter out the categories and fill them  
-  $.each( menudata.menu, function(key, c) {
-    var categorie = ''
-    categorie += '<ul id="' + c.name.toLowerCase().split(' ').join('_') + '" class="side_menu_category">'
-    categorie += '<span class="side_menu_category_title primary-color">' + c.name + '</span></ul>';
-    $('.side_menu_content').append( categorie );
-    $.each( c.items, function( key, i) {
-      //STRING id.name MAXLENGTH 30 CHARACTERS
-      //ALLEEN VOOR DEMO DOELEINDEN??
-      var string = i.name;
-      var limit = 35;
-      if(string.length > limit)
-      {
-        var lengthstring = string.substring(0, limit) + "&#133;";
-      } else {
-        var lengthstring = string;
-      }
-      
-      var item = '';
-      item += '<li> <a href="javascript:loadProgramById(\''+i.id+'\');">';
-      item += '<img src="' + i.name + '" height="32px" width="48px"/>' + lengthstring + '</a>';
-      item += '</li>';
-      $('.side_menu_category:last').append( item );   
-    })
-    
-    
-  });
-  
-  // activate & open the first (?)
-  $('ul:first').addClass('active');
-  
-  // init search interaction
-  $('#search_field').on('input', function() { 
-  });
-  
-  // set interaction
-  $('.side_menu_category').find('li:first').css('box-shadow', 'inset 0px 2px 4px rgba(0,0,0,0.3)');
-  $('.side_menu_category li:even').css('background-color', '#e8e8e8');
-  $('.side_menu_category li:odd').css('background-color', '#dcdcdc');
-  $('.side_menu_category li').mouseenter( function() {     
-    $( this ).addClass('side_menu_over')
-    $( this ).addClass('primary-background-color')
-  }).mouseleave( function() {     
-    $('.side_menu_category li:even').css('background-color', '#e8e8e8');
-    $('.side_menu_category li:odd').css('background-color', '#dcdcdc');
-    $( this ).removeClass('side_menu_over')
-    $( this ).removeClass('primary-background-color')
-  });
-  
-  // remove at first
-  $('.moar_button').hide();
-
-  // ### MAIN
-  $('.program_list').shapeshift(ss_options);
-  // $('#video_frame').addClass('blurred');  
-  
-  $('.program_list').shapeshift(ss_options); // failsafe
   
   $('.right_button').click( function() {
     $('.content').animate({
@@ -482,28 +419,61 @@ $(function() {
   $('.cat_item:first').addClass('active');
   $('.cat_item:first a').addClass('primary-color');
   $('.left_button').hide();  
-});
+}
 
-//the tabs in the footer to be tabbable. and
-//PRIMARY COLORS FOR TAB TITLE
-$(document).ready(function() { $('h3','.active').addClass('primary-color'); });
-    $('#tabs a').click(function (e) {
-      $('h3').removeClass('primary-color');
-      $('h3', this).addClass('primary-color');
-      e.preventDefault()
-      $(this).tab('show')
-    }); 
-    
+function createMenu() {
+  // ### GET ACTUAL DATA!
+  // filter out the categories and fill them  
+  $.each( menudata.menu, function(key, c) {
+    var categorie = ''
+    categorie += '<ul id="' + c.name.toLowerCase().split(' ').join('_') + '" class="side_menu_category">'
+    categorie += '<span class="side_menu_category_title primary-color">' + c.name + '</span></ul>';
+    $('.side_menu_content').append( categorie );
+    $.each( c.items, function( key, i) {
+
+      var item = '';
+      item += '<li> <a href="javascript:loadProgramById(\'' + i.id + '\');">';
+      // item += '<img src="' + i.name + '" height="32px" width="48px"/>';
+      item += i.name;
+      item += '</a>';
+      item += '</li>';      
+      $('.side_menu_category:last').append( item );   
+    })
+  });
+  
+  // activate & open the first (?)
+  $('ul:first').addClass('active');
+  
+  // init search interaction
+  $('#search_field').on('input', function() { 
+  });
+  
+  // set interaction
+  $('.side_menu_category').find('li:first').css('box-shadow', 'inset 0px 2px 4px rgba(0,0,0,0.3)');
+  $('.side_menu_category li:even').css('background-color', '#e8e8e8');
+  $('.side_menu_category li:odd').css('background-color', '#dcdcdc');
+  $('.side_menu_category li').mouseenter( function() {     
+    $( this ).addClass('side_menu_over')
+    $( this ).addClass('primary-background-color')
+
+  }).mouseleave( function() {     
+    $('.side_menu_category li:even').css('background-color', '#e8e8e8');
+    $('.side_menu_category li:odd').css('background-color', '#dcdcdc');
+    $( this ).removeClass('side_menu_over')
+    $( this ).removeClass('primary-background-color')
+  });
+}
+
+
 //SLIDING CAROUSEL IN FOOTER FOR VIDEOS
-$(document).ready(function () {
-        
+function createFooter() {
+
     popTimeUpdate();
-
-
 
     $('#myCarousel').carousel({
       interval: false
     });
+
     $('.fdi-Carousel .item').each(function () {
         var next = $(this).next();
         if (!next.length) {
@@ -521,18 +491,19 @@ $(document).ready(function () {
           next.children(':first-child').clone().appendTo($(this));
         }
     });
-/* HIDE CONTROLS AFTER INACTIVITY 2000MS 
-NOT WORKING PROPERLY
-    var onmousestop = function(){
-      $("#controls").hide();
-    }
     
-    $("*").mousemove(function(e){
-      $("#controls").show();
-      clearTimeout(timer);
-      timer = setTimeout(onmousestop, 2000)
-    });
-*/
+  /* HIDE CONTROLS AFTER INACTIVITY 2000MS 
+  NOT WORKING PROPERLY
+  var onmousestop = function(){
+    $("#controls").hide();
+  }
+  
+  $("*").mousemove(function(e){
+    $("#controls").show();
+    clearTimeout(timer);
+    timer = setTimeout(onmousestop, 2000)
+  });
+  */
 
 	//ANIMATE SIDE-MENU ITEMS TO AUTO HEIGHT
 	 var clicked = 0; 
@@ -579,15 +550,56 @@ NOT WORKING PROPERLY
     $(".glyphicon-volume-up").toggleClass("display");
   });
   
-  
-
   //SCRUBBER
   //popProgress();
   
+};
 
+
+// ########################################################################
+// ### INIT
+// ########################################################################
+
+$(function() {
   
+  // ### MAIN VIEWS
+  var menu = "";  
+  createMainContent();
+  createMenu();
+  createFooter();
 
+  // NAVBAR
+  $('.navbar-brand').click( toggleSite );
+  
+  // MOAR (depricated)
+  $('.moar_button').click( toggleSite );   
+  $('.moar_button').hide();  
+  
+  // FOOTER
+  $('.show_info').click( function() {  
+    $('.bottom').toggleClass('show_bottom'); 
+    $('.control_holder').toggleClass('control_holder_higher');
+  } );
+  $('.play_now').click( toggleSite );
 
+  //PRIMARY COLORS FOR TAB TITLE
+  $('h3','.active').addClass('primary-color');
+  $('#tabs a').click(function (e) {
+    $('h3').removeClass('primary-color');
+    $('h3', this).addClass('primary-color');
+    e.preventDefault()
+    $(this).tab('show')
+  }); 
 
+  $('.go_to_video').click( toggleSite );
+  
+  // ### SIDE MENU
+  // set buttons
+  $('.menu_button').click(function() { $('.side_menu').animate({right: '0px'} ); } );  
+  $('.close_butt').click(function() { $('.side_menu').animate({right: '-300px'} ); } );  
+  $('.side_menu').css({right: '-300px'});
+
+  // ### MAIN
+  $('.program_list').shapeshift(ss_options);
   
 });

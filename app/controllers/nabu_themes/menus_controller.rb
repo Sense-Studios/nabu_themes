@@ -47,7 +47,8 @@ module NabuThemes
     
     # GET /menus
     def index
-      @menus = Menu.all
+      get_account_owner
+      @menus = Menu.where( :owner => @account_id )
     end
 
     # GET /menus/1
@@ -56,11 +57,13 @@ module NabuThemes
 
     # GET /menus/new
     def new
+      get_account_owner      
       @menu = Menu.new
+      @menu.owner = @account_id
     end
 
     # GET /menus/1/edit
-    def edit
+    def edit      
       @programs = MarduqResource::Program.where(client_id: current_user.client_id) || []
       @menu_data = @menu.items
     end
@@ -68,6 +71,8 @@ module NabuThemes
     # POST /menus
     def create
       @menu = Menu.new(menu_params)
+      get_account_owner
+      @menu.owner = @account_id
 
       if @menu.save                
         redirect_to edit_menu_path(@menu), notice: 'Menu was successfully created.'
@@ -92,6 +97,18 @@ module NabuThemes
     end
 
     private
+      def get_account_owner
+        # find owner and account id through clipcard
+        @owner = current_user
+        if !@owner.account_id.nil?
+          @account = User.find( @owner.id )
+          @account_id = @account.account_id 
+        else
+          @account = @owner
+          @account_id = @owner.id
+        end
+      end
+
       # Use callbacks to share common setup or constraints between actions.
       def set_menu
         @menu = Menu.find(params[:id])

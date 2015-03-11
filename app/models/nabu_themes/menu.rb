@@ -5,5 +5,6 @@ module NabuThemes
     belongs_to :theme
     field :name, type: String
     field :items, type: String, default: '{"menu":[ { "name" : "New Category", "items" : [] } ] } '
+    field :owner, type: User
   end
 end

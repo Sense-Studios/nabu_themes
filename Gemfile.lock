@@ -90,5 +90,4 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  jquery-rails
   nabu_themes!

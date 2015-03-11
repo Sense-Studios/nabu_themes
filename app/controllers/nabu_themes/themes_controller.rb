@@ -37,7 +37,8 @@ module NabuThemes
 
     # GET /themes
     def index
-      @themes = Theme.all
+      get_account_owner
+      @themes = Theme.where( :owner => @account_id )
     end
 
     # GET /themes/1
@@ -46,29 +47,23 @@ module NabuThemes
 
     # GET /themes/new
     def new
-      # find owner and account id through clipcard
-      @owner = current_user
-      if !@owner.account_id.nil?
-        @account_id = User.find( @owner.id ).account_id 
-      else
-        @account_id = @owner.id
-      end
-
+      get_account_owner
+      @menus = NabuThemes::Menu.where( :owner => @account_id )
       @programs = MarduqResource::Program.where( "client_id" => User.find( @owner ).client_id )
-
       @theme = Theme.new
     end
 
     # GET /themes/1/edit
     def edit
+      get_account_owner
       @owner = User.find( @theme.owner )
+      @menus = NabuThemes::Menu.where( :owner => @account_id )
       @programs = MarduqResource::Program.where( "client_id" => @owner.client_id )
     end
 
     # POST /themes
     def create      
-      @theme = Theme.new(theme_params)
-
+      @theme = Theme.new(theme_params)      
       if @theme.save
         redirect_to @theme, notice: 'Theme was successfully created.'
       else
@@ -92,6 +87,16 @@ module NabuThemes
     end
 
     private
+      def get_account_owner
+        # find owner and account id through clipcard
+        @owner = current_user
+        if !@owner.account_id.nil?
+          @account_id = User.find( @owner.id ).account_id 
+        else
+          @account_id = @owner.id
+        end
+      end
+    
       # Use callbacks to share common setup or constraints between actions.
       def set_theme
         @theme = Theme.find(params[:id])
