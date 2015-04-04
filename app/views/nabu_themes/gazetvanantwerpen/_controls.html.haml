@@ -1,0 +1,54 @@
+/%a{:href=>"javascript:doControl('playPause')", :style=>"color:black"} 
+
+/%button#butt-playpause.btn.btn-warning 
+
+/[ ".big-play", "play", 0 ],
+/[ "#butt-playpause", "playPause", 0 ],
+/[ "#butt-pause", "pause", 0 ],
+/[ "#butt-play", "play", 0 ],
+/[ "#butt-togglequality", "toggleQuality", 0 ],
+/[ "#butt-togglefullscreen", "toggleFullscreen", 0 ],
+/[ "#butt-gofullscreen", "goFullscreen", 0 ],
+/[ "#butt-leavefullscreen", "leaveFullscreen", 0 ],
+/[ "#butt-next", "next", 0 ],
+/[ "#butt-prev", "prev", 0 ],
+/[ "#butt-seekfwd", "seekForward", 10 ],
+/[ "#butt-seekbwd", "seekBackward", 10 ],
+/[ "#butt-vol", "volume", 0 ],
+/[ "#butt-volup", "volUp", 0.1 ],
+/[ "#butt-voldown", "volDown", 0.1 ],
+/[ "#butt-mute", "mute", 0 ],
+/[ "#butt-unmute", "unmute", 0 ],
+/[ "#butt-togglemute", "toggleMute", 0 ]
+
+
+/%button#butt-playpause.btn.btn-warning
+.play-button_scrub-bar
+  %button#butt-playpause.playpausebutton.transition
+    %span.glyphicon.glyphicon-play.primary-color-hover
+    
+  %div#scrubbar.progress
+    %div.bar.progressbar
+    %div.progress-bar.playhead.primary-background-color.bar{"role"=>"progressbar", "aria-valuenow"=>"60", "aria-valuemin"=>"0", "aria-valuemax"=>"100"}
+    %div.marqers.bar
+  .videotime
+    %span.glyphicon.glyphicon-time
+    #time.label.label-default
+      %span.current_time
+      %span.devider 0:00 / -:--
+      %span.duration
+
+.quality-switcher
+  %button#butt-togglequality.quality-switch-button.transition.primary-color-hover
+    HD
+    
+.expander-switcher
+  %button#butt-togglefullscreen.expand-switcher-button.transition
+    %span.glyphicon.glyphicon-resize-full.primary-color-hover
+    
+.mute-switcher
+  %button#butt-togglemute.mute-switcher-button.transition
+    %span.glyphicon.glyphicon-volume-off.display.primary-color-hover
+    %span.glyphicon.glyphicon-volume-up.primary-color-hover
+    
+    

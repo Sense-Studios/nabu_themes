@@ -24,7 +24,13 @@
         <td><%= image_tag theme.logo, :width=>'32px' %>
         <td><%= theme.title %></td>
         <td><%= theme.theme %></td>
-        <td><%= link_to NabuThemes::Menu.find( theme.menu ).name, edit_menu_path(theme.menu) unless theme.menu.blank?  %></td>
+        <td>
+          <% begin %>
+          <%= link_to NabuThemes::Menu.find( theme.menu ).name, edit_menu_path(theme.menu) unless theme.menu.blank?  %>
+          <% rescue %>
+            [ Menu not found ]
+          <% end %>
+        </td>
         <td><%= theme.slug %></td>
         <td><%= theme.created_at %></td>        
         <td>

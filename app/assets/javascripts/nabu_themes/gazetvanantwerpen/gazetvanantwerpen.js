@@ -13,6 +13,12 @@ resetMarqers
 
 var analytics_urchin = null;
 var pop_under_set = false;
+var menu_toggle = 0;
+var side_menu = 0;
+var mouseTimer = null;
+var controlsVisible = true;
+var playtoggle = false;
+var videoToggle = false;
 
 var ss_options = {
   minColumns: 2,
@@ -24,7 +30,7 @@ var ss_options = {
   paddingY: 0
 };
   
-var lastprogram = null
+var lastprogram = null;
 
 // Note that this function is a little different from the original resizer in embed.haml
 var program;
@@ -122,6 +128,17 @@ function loadProgram( p ) {
   $('.video_background_hider').css('pointer-events','none');
   $('.program_list').shapeshift(ss_options);
   
+  //Aanpassingen andre
+  $('.custom_navbar_navbar').fadeOut();
+  $('.custom_navbar_home').fadeIn();
+  $('.custom_navbar_brand').addClass('hidden_navbar_brand');
+  $('.custom_navbar_home').css('background-color','#D21522');
+  $('.custom_navbar_home span').css('color','#FFF');
+  $('.side_menu').fadeIn();
+  $('.control_holder').fadeIn();
+
+
+  
   buildProgram(p)
 }
 
@@ -133,15 +150,20 @@ function buildProgram( p ) {
   }
 
   console.log("BASICWHITE SET INFO: ", p )
-
+  //SET INFO
   if ( p !== undefined ) {
+    var time = p.created_at;
+    time = new Date(time);
+    time = time.toLocaleString();
     var t = "";
     t += "<h3> NOW: <strong>" + p.meta.moviedescription.title + "</strong></h3>";
-    t += "<small class='code'>" + p.created_at + "</small>";
+    t += "<small class='code'>" + time + "</small>";
     t += "<p>"+  p.meta.moviedescription.description + "</p>";
-    $('#definition').html('');
-    $('#definition').append(t);
-    $('#definition').hide().fadeIn('slow');
+    $('#info').html('');
+    $('#info').append(t);
+    $('#info p').html( urlifyLinks( $('#info p').html()));
+    $('#info p a').addClass('primary-color-links');
+    $('#info').hide().fadeIn('slow');
   }
   
   console.log("BASICWHITE SET MARQERS: ", p )
@@ -159,7 +181,7 @@ function buildProgram( p ) {
   pop.playbackRate(1);
   
   console.log("BASICWHITE add hidden")
-  $('.control_holder').addClass('hidden')
+  $('.control_holder').fadeOut()
 
   console.log("BASICWHITE ADD LISTENERS: ", pop, p )
   
@@ -176,7 +198,8 @@ function buildProgram( p ) {
   pop.on('canplay', function() {
     console.log("BASICWHITE: canplay ... ")
     showControls()
-  })  
+    $('.sense-layer').fadeIn();
+  });
   
   console.log("BASICWHITE ZUT: ", pop, p )
   // connect play/pause
@@ -188,14 +211,23 @@ function buildProgram( p ) {
   console.log("BASICWHITE ZUT: ", pop, p )
   pop.on('play', function() {
     console.log("BASICWHITE: play ... ")
+    $('.control_holder .play-button_scrub-bar .playpausebutton span').addClass('glyphicon-pause');
+    closeSideMenu();
     showControls()
-  })  
+  })
+  
+  console.log("BASICWHITE ZUT: ", pop, p )
+  pop.on('pause', function() {
+    console.log("BASICWHITE: pause ... ")
+    $('.control_holder .play-button_scrub-bar .playpausebutton span').removeClass('glyphicon-pause');
+    showControls()
+  })    
 
   console.log("BASICWHITE MEERZUT: ", pop, p )
   // turn big play button back on (unless yotube ?)
   if ( program.program_items[0].asset._type == "Video" ) {
     $(".big-play").removeClass('hidden')  
-    $('.control_holder').removeClass('hidden')
+    $('.control_holder').fadeIn()
   }
 
   
@@ -219,7 +251,7 @@ function buildProgram( p ) {
   var temp = p.marqers;
   var originalDuration = 0;
   resetMarqers( marqers, originalDuration );  
-
+  console.log('test p' + p.meta.moviedescription);
   setTimeout( function() {
     setMarqers( temp, originalDuration );
     $('.track_marqer').hide();
@@ -252,7 +284,6 @@ var checkPlayButton = function() {
 */
 
 var showControls = function() {    
-  $('.control_holder').removeClass('hidden')
   $('.control_holder').fadeIn();
   checkPlayButton() ; 
 }
@@ -264,7 +295,7 @@ var toggleSite = function() {
     // show videos
     $('.big-play').removeClass('hidden');
     $('.control_holder').fadeIn('slow'); 
-    
+
     // why the fuck is this reloading here?
     loadProgram();
 
@@ -279,7 +310,7 @@ var toggleSite = function() {
     $('.control_holder').fadeOut('slow');  
 
     $('.brandbox').fadeIn('slow');
-    $('.custom_navbar').animate({'background-color':'rgba(255,255,255,1)'}, 600);
+
     $('.middle').css('pointer-events','all');
     $('.video_background_hider').css('pointer-events','all');
     $('.bottom').removeClass('show_bottom');
@@ -287,9 +318,20 @@ var toggleSite = function() {
     $('.video_background_hider').animate({'opacity':1}, 1200 );
     $('.marqer').addClass('hidden');
     $('.moar_button').fadeOut('slow');
-
+    $('.control_holder .play-button_scrub-bar .playpausebutton span').removeClass('glyphicon-pause');
+    
+    
+    $('.custom_navbar_navbar').fadeIn();
+    $('.custom_navbar_home').fadeOut();
+    $('.custom_navbar_brand').removeClass('hidden_navbar_brand');
+    $('.custom_navbar_home').css('background-color','#FFF');
+    $('.custom_navbar_home span').css('color','#D21522');
+    //Just in case
+    closeSideMenu();
+    $('.side_menu').fadeOut();
     $('.program_list').shapeshift(ss_options); // failsafe, re-init shapeshift
-
+    videoToggle = false;
+    window.clearTimeout(mouseTimer);
     pop.volume(0);
     pop.playbackRate(0.3);
 
@@ -307,8 +349,11 @@ function lookUpProgram(id) {
 }
 
 function loadProgramById(id) {
+  // close menu, just in case
+  closeSideMenu();
+  videoToggle = true;
+  pop.play();
   loadProgram( lookUpProgram( id ) );
-  $('.side_menu').animate({right: '-300px'} ); // close menu, just in case
 }
 
 var curr = 0;
@@ -323,7 +368,9 @@ function createMainContent() {
   if ( menudata.menu !== undefined ) { 
     // ### Make Menu Categories!
     $.each( menudata.menu, function(key, menu_category ) {
-      
+      if(key == 0) {
+        $('.custom_navbar_brand .navbar-brand h1').text(menu_category.name);
+      }
       // category
       var category = "";
       category += '<div class="content category'+key+'">';
@@ -331,7 +378,7 @@ function createMainContent() {
       category += ' <div class="program_list"/>';
       category += '</div>';
       $('.brandbox').append( category );
-      $('.category'+key).css('left', ((100*key)+8)+'%');
+      $('.category'+key).css('left', ((100*key)+50)+'%');
       
       $.each( menu_category.items, function( item_key, item_value ) {
         
@@ -341,19 +388,29 @@ function createMainContent() {
         if ( p == undefined ) return;
 
         if ( item_value.emphasize ) {
-          item += '<div class="item" data-ss-colspan=2>';
+          item += '<div class="item item_big" data-ss-colspan=2>';
           item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
-          item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="406px" height="239px" >';
+          item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="550px" height="319px" >';
+          var title = p.title;
+          title = title.substring(0, 120);
         }else{
-          item += '<div class="item" data-ss-colspan=1>';
+          item += '<div class="item item_smal" data-ss-colspan=1>';
           item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
-          item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="198px" height="112px" >';
+          item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="280px" height="152px" >';
+          var title = p.title;
+          title = title.substring(0, 60);
         }
-
-        item += '</a>';
+        var created = new Date(p.created_at);
+        var fulldate = created.getDate() + '-' + created.getMonth() + '-' + created.getFullYear();
+        var ms = p.meta.moviedescription.duration_in_ms;
+        var seconds = Math.floor((ms / 1000) % 60);
+        var minutes = Math.floor((ms / (60 * 1000)) % 60);
+        var duration = minutes + ":" + seconds;
+        item += '<div class="playtime"><span class="glyphicon glyphicon-play"></span><div class="time">' + duration + '</div></div>';
         item += ' <div class="image_gradient"/>';
         item += ' <div class="video_duration_bottom_left"/>';
-        item += ' <h4 class="ontopof">'+p.title+'</h4';
+        item += ' <div class="ontopof"><strong class="title">'+ title +'</strong><date>' + fulldate + '</date></div>';
+        item += '</a>';
         item += '</div>';
 
         // append it to this category
@@ -381,7 +438,8 @@ function createMainContent() {
     $('.cat_item a').removeClass('primary-color');
     $('.cat_item:eq('+curr+')').addClass('active');
     $('.cat_item:eq('+curr+') a').addClass('primary-color');
-    
+    var navbarTitle = $('.cat_group .active').text();
+    $('.custom_navbar_brand .navbar-brand h1').text(navbarTitle);
     checkButtons()
   });
   
@@ -394,6 +452,8 @@ function createMainContent() {
     $('.cat_item a').removeClass('primary-color');
     $('.cat_item:eq('+curr+')').addClass('active');
     $('.cat_item:eq('+curr+') a').addClass('primary-color');
+    var navbarTitle = $('.cat_group .active').text();
+    $('.custom_navbar_brand .navbar-brand h1').text(navbarTitle);
     checkButtons()
   });
   
@@ -412,6 +472,8 @@ function createMainContent() {
     $('.cat_item a').removeClass('primary-color');
     $('.cat_item:eq('+curr+')').addClass('active');
     $('.cat_item:eq('+curr+') a').addClass('primary-color');
+    var navbarTitle = $('.cat_group .active').text();
+    $('.custom_navbar_brand .navbar-brand h1').text(navbarTitle);
     checkButtons()
   });
   
@@ -420,7 +482,6 @@ function createMainContent() {
   $('.cat_item:first a').addClass('primary-color');
   $('.left_button').hide();  
 }
-
 function createMenu() {
   // ### GET ACTUAL DATA!
   // filter out the categories and fill them  
@@ -527,7 +588,7 @@ function createFooter() {
 	
 	//SEARCH FOR URLS IN DESCRIPTION TEXT
 	//MAKE THOSE URLS PRIMARY-COLOR
-  $('.moviedescription p').html( urlifyLinks( $('.moviedescription p').html()));
+
   $(".moviedescriptionp *").addClass("primary-color");
   
   
@@ -595,11 +656,93 @@ $(function() {
   
   // ### SIDE MENU
   // set buttons
-  $('.menu_button').click(function() { $('.side_menu').animate({right: '0px'} ); } );  
-  $('.close_butt').click(function() { $('.side_menu').animate({right: '-300px'} ); } );  
-  $('.side_menu').css({right: '-300px'});
+  $('.menu_button').click(function() {  $('.side_menu').animate({'transform': 'translateX(300px)'} ); } );  
+  $('.close_butt').click(function() { $('.side_menu').animate({'transform': 'translateX(300px)'} ); } );  
+  $('.side_menu').css('transform', 'translatex(300px)' );
 
   // ### MAIN
   $('.program_list').shapeshift(ss_options);
   
+});
+
+//Aanpassingen Andre
+$('.custom_navbar_menu').click( function() { toggleMenuHeader(); });
+$('.custom_navbar_home').click( function() { toggleSite(); videoToggle = false; window.clearTimeout(mouseTimer);});
+$('.tabpanel ul li').click( function() { openSideMenu(); });
+$('.fa-close').click( function() { closeSideMenu(); });
+//$('div:not(.item,.top)').click( function() { 
+//  if ( $('.brandbox').is(":visible") ) { 
+//    toggleSite(); videoToggle = false; window.clearTimeout(mouseTimer);
+//  } 
+//});
+$('.sense-layer').css('display','block');
+$('.sense-layer').click(function() {
+  if(playtoggle == false) {
+    pop.play(); 
+    playtoggle = true;
+  } else {
+    pop.pause();
+    playtoggle = false;
+  }
+})
+
+
+var toggleMenuHeader = function() {
+  
+  if(menu_toggle == 0){
+    $('.brandbox .content').css('top', '65px');
+    $('.custom_navbar_menu').css('background-color','#D21522');
+    $('.custom_navbar_menu span').css('color','#FFF');
+    setTimeout(function() {
+      $('.brandbox .header').fadeIn();
+    }, 300)
+    menu_toggle = 1;
+  } else if (menu_toggle == 1) {
+    $('.brandbox .header').fadeOut();
+    $('.custom_navbar_menu').removeAttr("style");
+    $('.custom_navbar_menu span').removeAttr("style");
+    setTimeout(function() {
+      $('.brandbox .content').css('top', '15px');
+    }, 300)
+    menu_toggle = 0;
+  }
+  
+};
+
+var openSideMenu = function() {
+    $('.side_menu').css('transform', 'translateX(0)');
+    videoToggle = false;
+    window.clearTimeout(mouseTimer);
+}
+
+var closeSideMenu = function() {
+    $('.side_menu').css('transform', 'translateX(300px)');
+    videoToggle = true;
+    window.clearTimeout(mouseTimer);
+}
+
+
+//HIDE CONTROLS SIDE MENU AND NAVBAR WHILE PLAYING
+//AFTER .. SECONDS MOUSE INACTIVITY
+var disappearControls = function() {
+    mouseTimer = null;
+    $('.custom_navbar').addClass('fadeOutHidden');
+    $('.side_menu').addClass('fadeOutHidden');
+    $('.control_holder').addClass('fadeOutHidden');
+    controlsVisible = false;
+}
+
+$(document).mousemove(function(){ 
+  if(videoToggle == true){
+    if (mouseTimer) {
+      window.clearTimeout(mouseTimer);
+    }
+    if (!controlsVisible) {
+      $('.custom_navbar').removeClass('fadeOutHidden');
+      $('.side_menu').removeClass('fadeOutHidden');
+      $('.control_holder').removeClass('fadeOutHidden');
+      cursorVisible = true;
+    }
+    mouseTimer = window.setTimeout(disappearControls, 3000);
+  }
 });

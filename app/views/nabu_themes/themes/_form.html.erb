@@ -49,8 +49,8 @@
   </div>
   
   <div class="field">
-    <%= f.label :home_program %><br>
-    <%= f.collection_select(:home_program, @programs, :id, :title) %>
+    <%= f.label :home_program %><br>    
+    <%= f.collection_select(:home_program, @programs, :id, :title, { :include_blank => ' - selecteer automatisch - ' } ) %>
   </div>
     
   <div class="field">

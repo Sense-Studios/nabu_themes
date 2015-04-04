@@ -334,7 +334,7 @@ function createMainContent() {
       $('.category'+key).css('left', ((100*key)+8)+'%');
       
       $.each( menu_category.items, function( item_key, item_value ) {
-        
+
         // item
         var item = "";
         var p = lookUpProgram( item_value.id );
