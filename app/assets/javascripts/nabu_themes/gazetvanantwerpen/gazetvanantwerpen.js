@@ -24,7 +24,7 @@ var ss_options = {
   minColumns: 2,
   enableDrag: false,
   align: 'left',
-  gutterX: 10,
+  gutterX: 15,
   gutterY: 15,
   paddingX: 0,
   paddingY: 0
@@ -166,7 +166,7 @@ function buildProgram( p ) {
     $('#info').hide().fadeIn('slow');
   }
   
-  console.log("BASICWHITE SET MARQERS: ", p )
+  console.log("GAZETVANANTWERPEN SET MARQERS: ", p )
   
   clearInterval( marqercheckup );
   $('.marqer').removeClass('hidden');
@@ -175,15 +175,15 @@ function buildProgram( p ) {
   
   $('.moar_button').fadeIn('slow');
   
-  console.log("BASICWHITE SET MUTES: ", p )
+  console.log("GAZETVANANTWERPEN SET MUTES: ", p )
   pop.mute(false);
   pop.volume(1);
   pop.playbackRate(1);
   
-  console.log("BASICWHITE add hidden")
+  console.log("GAZETVANANTWERPEN add hidden")
   $('.control_holder').fadeOut()
 
-  console.log("BASICWHITE ADD LISTENERS: ", pop, p )
+  console.log("GAZETVANANTWERPEN ADD LISTENERS: ", pop, p )
   
   console.log("LOADED DATA: ", pop, p )
   
@@ -193,37 +193,37 @@ function buildProgram( p ) {
     showControls()    
   })
   
-  console.log("BASICWHITE CANPLAY: ", pop, p )
+  console.log("GAZETVANANTWERPEN CANPLAY: ", pop, p )
   // failsave
   pop.on('canplay', function() {
-    console.log("BASICWHITE: canplay ... ")
+    console.log("GAZETVANANTWERPEN: canplay ... ")
     showControls()
     $('.sense-layer').fadeIn();
   });
   
-  console.log("BASICWHITE ZUT: ", pop, p )
+  console.log("GAZETVANANTWERPEN ZUT: ", pop, p )
   // connect play/pause
   pop.on( 'playing', function() { checkPlayButton() } )
   pop.on( 'play', function() { checkPlayButton() } )
   pop.on( 'pause', function() { checkPlayButton() } )
   //pop.on( 'ended', function() { checkPlayButton() } )
 
-  console.log("BASICWHITE ZUT: ", pop, p )
+  console.log("GAZETVANANTWERPEN ZUT: ", pop, p )
   pop.on('play', function() {
-    console.log("BASICWHITE: play ... ")
+    console.log("GAZETVANANTWERPEN: play ... ")
     $('.control_holder .play-button_scrub-bar .playpausebutton span').addClass('glyphicon-pause');
     closeSideMenu();
     showControls()
   })
   
-  console.log("BASICWHITE ZUT: ", pop, p )
+  console.log("GAZETVANANTWERPEN ZUT: ", pop, p )
   pop.on('pause', function() {
-    console.log("BASICWHITE: pause ... ")
+    console.log("GAZETVANANTWERPEN: pause ... ")
     $('.control_holder .play-button_scrub-bar .playpausebutton span').removeClass('glyphicon-pause');
     showControls()
   })    
 
-  console.log("BASICWHITE MEERZUT: ", pop, p )
+  console.log("GAZETVANANTWERPEN MEERZUT: ", pop, p )
   // turn big play button back on (unless yotube ?)
   if ( program.program_items[0].asset._type == "Video" ) {
     $(".big-play").removeClass('hidden')  
@@ -236,13 +236,13 @@ function buildProgram( p ) {
   //if ( program.program_items[0].asset._type != "Video" ) {
   //  $(".quality-switcher").addClass('hidden')  
   //}
-  console.log("BASIC WHITE toggleMUTE");
+  console.log("GAZETVANANTWERPEN toggleMUTE");
   pop.on( 'mute', function() { 
-    console.log("BASIC WHITE toggleMUTED");
+    console.log("GAZETVANANTWERPEN toggleMUTED");
   })
   
   if(pop.mute()){
-    console.log("BASIC WHITE toggleMUTED");
+    console.log("GAZETVANANTWERPEN toggleMUTED");
   }
 
   // reset and set marqers here with program p?
@@ -265,7 +265,7 @@ function buildProgram( p ) {
 }
   
 var toggleMuteButton = function() {    
-  console.log("BASIC WHITE toggleMUTED");
+  console.log("GAZETVANANTWERPEN toggleMUTED");
 }  
   
 /*
@@ -326,6 +326,7 @@ var toggleSite = function() {
     $('.custom_navbar_brand').removeClass('hidden_navbar_brand');
     $('.custom_navbar_home').css('background-color','#FFF');
     $('.custom_navbar_home span').css('color','#D21522');
+    
     //Just in case
     closeSideMenu();
     $('.side_menu').fadeOut();
@@ -390,15 +391,15 @@ function createMainContent() {
         if ( item_value.emphasize ) {
           item += '<div class="item item_big" data-ss-colspan=2>';
           item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
-          item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="550px" height="319px" >';
+          item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="570px" height="319px" >';
           var title = p.title;
-          title = title.substring(0, 120);
+          title = title.substring(0, 80);
         }else{
           item += '<div class="item item_smal" data-ss-colspan=1>';
           item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
           item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="280px" height="152px" >';
           var title = p.title;
-          title = title.substring(0, 60);
+          title = title.substring(0, 42);
         }
         var created = new Date(p.created_at);
         var fulldate = created.getDate() + '-' + created.getMonth() + '-' + created.getFullYear();
@@ -439,7 +440,9 @@ function createMainContent() {
     $('.cat_item:eq('+curr+')').addClass('active');
     $('.cat_item:eq('+curr+') a').addClass('primary-color');
     var navbarTitle = $('.cat_group .active').text();
-    $('.custom_navbar_brand .navbar-brand h1').text(navbarTitle);
+    $(".custom_navbar_brand .navbar-brand h1").fadeOut('fast', function() {
+      $(this).text(navbarTitle).fadeIn('fast');
+    });
     checkButtons()
   });
   
@@ -453,7 +456,9 @@ function createMainContent() {
     $('.cat_item:eq('+curr+')').addClass('active');
     $('.cat_item:eq('+curr+') a').addClass('primary-color');
     var navbarTitle = $('.cat_group .active').text();
-    $('.custom_navbar_brand .navbar-brand h1').text(navbarTitle);
+    $(".custom_navbar_brand .navbar-brand h1").fadeOut('fast', function() {
+      $(this).text(navbarTitle).fadeIn('fast');
+    });
     checkButtons()
   });
   
@@ -473,7 +478,9 @@ function createMainContent() {
     $('.cat_item:eq('+curr+')').addClass('active');
     $('.cat_item:eq('+curr+') a').addClass('primary-color');
     var navbarTitle = $('.cat_group .active').text();
-    $('.custom_navbar_brand .navbar-brand h1').text(navbarTitle);
+    $(".custom_navbar_brand .navbar-brand h1").fadeOut('fast', function() {
+      $(this).text(navbarTitle).fadeIn('fast');
+    });
     checkButtons()
   });
   

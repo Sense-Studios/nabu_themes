@@ -19,7 +19,8 @@
           = Time.at(seconds).strftime("%M:%S")
       .image_gradient
       .ontopof
-        %strong.latest_title= p.meta.moviedescription.title[0,60].gsub(/\s\w+\s*$/,'...')
+        %strong.latest_title
+          = p.meta.moviedescription.title.length > 45 ? p.meta.moviedescription.title[0..45] + '...' : p.meta.moviedescription.title
         %date
           /= distance_of_time_in_words(p.created_at, Time.now)
           = Date.strptime(p.created_at);

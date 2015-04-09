@@ -256,6 +256,7 @@ body {
         height: 90px;
         margin-bottom: 5px!important;
         background-color: #FFF;
+        border-right: 2px solid #D21522;
         cursor: pointer!important;
         a {
           display: table;
@@ -289,6 +290,9 @@ body {
         position: absolute;
         h3 {
           margin-top: 0;
+        }
+        p {
+          word-wrap: break-word;
         }
       }
     }
