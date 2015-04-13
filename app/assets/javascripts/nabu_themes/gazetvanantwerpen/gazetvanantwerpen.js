@@ -402,7 +402,9 @@ function createMainContent() {
           title = title.substring(0, 42);
         }
         var created = new Date(p.created_at);
-        var fulldate = created.getDate() + '-' + created.getMonth() + '-' + created.getFullYear();
+        var months = [ "JAN", "FEB", "MRT", "APR", "MEI", "JUN", "JUL", "AUG", "SEP", "OKT", "NOV", "DEC" ];
+        var monthName = months[created.getMonth()];
+        var date = created.getDate();
         var ms = p.meta.moviedescription.duration_in_ms;
         var seconds = Math.floor((ms / 1000) % 60);
         var minutes = Math.floor((ms / (60 * 1000)) % 60);
@@ -410,7 +412,7 @@ function createMainContent() {
         item += '<div class="playtime"><span class="glyphicon glyphicon-play"></span><div class="time">' + duration + '</div></div>';
         item += ' <div class="image_gradient"/>';
         item += ' <div class="video_duration_bottom_left"/>';
-        item += ' <div class="ontopof"><strong class="title">'+ title +'</strong><date>' + fulldate + '</date></div>';
+        item += ' <div class="ontopof"><strong class="title">'+ title +'</strong><date><div class="month">' + monthName + '</div><div class="day">' + date + '</div></date></div>';
         item += '</a>';
         item += '</div>';
 
