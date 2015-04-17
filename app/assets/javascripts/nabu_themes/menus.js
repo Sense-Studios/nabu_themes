@@ -117,7 +117,11 @@ function updateMenuData() {
     var some_category = { "name": $(this).find('.category_name').val(), "items":[] };
     $(this).find('li').each( function( i_key, item ) {
       console.log($(item).prop('id'));
-      some_category.items.push( { "name": $(item).find('.program_title').text(), "emphasize": $(item).find('.emphasize').is(':checked'),"id": $(item).prop('id') } )
+      some_category.items.push( { 
+        "name": $(item).find('.program_title').text(), 
+        "emphasize": $(item).find('.emphasize').is(':checked'),"id": $(item).prop('id'),
+        "thumb": $(item).find('img').attr('src') 
+      });
     });
     
     menudata.menu.push( some_category )

@@ -2,14 +2,14 @@
   #myCarousel.myCarousel.carousel.fdi-Carousel.slide
     #eventCarousel.myCarousel.carousel.fdi-Carousel.slide{:data=>{:interval=>"1000"}}
       .carousel-inner.onebyone-carosel.slide
-  
-        - @programs[0..8].each_with_index do |p, index|
+
+        - @related_programs[0..8].each_with_index do |p, index|
           - active = ""
-          - if index == 0 
+          - if index == 0
             - active = "active"
-    
-          .item{ :class=> active } 
-            .latest_item      
+
+          .item{ :class=> active }
+            .latest_item
               / TODO UPDATE THIS TO SOMETHING THEMEY
               / like /theme/theme_name/#{p.id} ?
               = link_to "#{}", p.id ,{ :target=>"_top", :class=>"relatedvideolink"}
@@ -23,10 +23,9 @@
                 %date
                   = distance_of_time_in_words(p.created_at, Time.now)
 
-                  
-    
+
+
       .left.carousel-control.primary-color.carousel_custom{:href=>"#myCarousel", :data=>{:slide=>"prev"} }
         %span.glyphicon.glyphicon-chevron-left.custom_navigation_carousel
       .right.carousel-control.primary-color.carousel_custom{:href=>"#myCarousel", :data=>{:slide=>"next"} }
         %span.glyphicon.glyphicon-chevron-right.custom_navigation_carousel
-   

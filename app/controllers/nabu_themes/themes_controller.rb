@@ -2,9 +2,9 @@ require_dependency "nabu_themes/application_controller"
 
 module NabuThemes
   class ThemesController < ApplicationController
-    before_action :set_theme, only: [:show, :edit, :update, :destroy] 
-    before_filter :authenticate_user!, except: [:render_theme] 
-    layout "layouts/admin"    
+    before_action :set_theme, only: [:show, :edit, :update, :destroy]
+    before_filter :authenticate_user!, except: [:render_theme]
+    layout "layouts/admin"
 
     # check and find a slug, then find the themeuser and fill # the theme
     # note that slug checking is done in the routes
@@ -12,16 +12,17 @@ module NabuThemes
 
       @slug = params[:slug]
       @theme = Theme.where( { "slug"=>params[:slug] } ).first()
-      @menudata = NabuThemes::Menu.find( @theme.menu ).items      
+      @menudata = NabuThemes::Menu.find( @theme.menu ).items
       if params[:id].blank?
-        @program = MarduqResource::Program.find( @theme.home_program ) # home program      
+        @program = MarduqResource::Program.find( @theme.home_program ) # home program
       else
-        @program = MarduqResource::Program.find( params[:id] ) # home program      
+        @program = MarduqResource::Program.find( params[:id] ) # home program
       end
 
-      @programs = MarduqResource::Program.where( "client_id" => User.find( @theme.owner ).client_id )           
-      @page = 'nabu_themes/' + @theme.theme + '/index'        
-
+      @programs = MarduqResource::Program.where( "client_id" => User.find( @theme.owner ).client_id )
+      @page = 'nabu_themes/' + @theme.theme + '/index'
+      @related_programs = @programs.select { |p| p.tags.any? { |t| @program.tags.include? t } }
+      @related_programs = @programs if @related_programs.blank?
       # get a page if supplied
       if !params[:page].blank?
         @page = 'nabu_themes/' + @theme.theme + '/' + params[:page].to_s
@@ -40,10 +41,23 @@ module NabuThemes
     def index
       get_account_owner
       @themes = Theme.where( :owner => @account_id )
+      respond_to do |format|
+        format.html
+        format.json{
+          render :json => @themes.to_json
+        }
+      end
     end
 
     # GET /themes/1
     def show
+      #format.json render json: @theme
+      respond_to do |format|
+        format.html
+        format.json{
+          render :json => @theme.to_json
+        }
+      end
     end
 
     # GET /themes/new
@@ -63,8 +77,8 @@ module NabuThemes
     end
 
     # POST /themes
-    def create      
-      @theme = Theme.new(theme_params)      
+    def create
+      @theme = Theme.new(theme_params)
       if @theme.save
         redirect_to @theme, notice: 'Theme was successfully created.'
       else
@@ -92,12 +106,12 @@ module NabuThemes
         # find owner and account id through clipcard
         @owner = current_user
         if !@owner.account_id.nil?
-          @account_id = User.find( @owner.id ).account_id 
+          @account_id = User.find( @owner.id ).account_id
         else
           @account_id = @owner.id
         end
       end
-    
+
       # Use callbacks to share common setup or constraints between actions.
       def set_theme
         @theme = Theme.find(params[:id])

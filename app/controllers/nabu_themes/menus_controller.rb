@@ -53,6 +53,13 @@ module NabuThemes
 
     # GET /menus/1
     def show
+      #format.json render json: @theme
+      respond_to do |format|
+        format.html
+        format.json{
+          render :json => @menu.to_json
+        }     
+      end 
     end
 
     # GET /menus/new

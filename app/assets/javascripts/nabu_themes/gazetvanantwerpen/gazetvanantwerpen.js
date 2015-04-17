@@ -64,7 +64,6 @@ function doVideoResize() {
   document.getElementsByTagName("body")[0].style.background = "#aaaaaa";  // background black
 }
 
-
 function initResize() {
   if ( program !== undefined && pop !== null ) {
     
@@ -106,7 +105,7 @@ function fadeInVideo() {
 
 function loadProgram( p ) {
   
-  console.log("BASICWHITE LOAD PROGRAM: ", p )
+  console.log("GAZETVANANTWERPEN LOAD PROGRAM: ")
   $('.track_marqer').remove() // is not removed initially, so a failsafe
   
   if ( p !== undefined && p.id != lastprogram ) { // the program id isnt actually switched anymore
@@ -117,7 +116,7 @@ function loadProgram( p ) {
     fadeInVideo()
   }
   
-  console.log("BASICWHITE RESET ANIMATION: ", p )
+  console.log("GAZETVANANTWERPEN RESET ANIMATION: ", p )
   
   $('.brandbox').fadeOut('slow');
   $('.middle').css('pointer-events','none');
@@ -125,8 +124,12 @@ function loadProgram( p ) {
   $('.bottom').removeClass('show_bottom');
   $('.control_holder').removeClass('control_holder_higher');
   $('.video_background_hider').animate({'opacity':0}, 1200 );
-  $('.video_background_hider').css('pointer-events','none');
-  $('.program_list').shapeshift(ss_options);
+  $('.video_background_hider').css('pointer-events','none');  
+  try {
+    $('.program_list').shapeshift(ss_options);
+  }catch(e){
+    // fuch it
+  }
   
   //Aanpassingen andre
   $('.custom_navbar_navbar').fadeOut();
@@ -136,22 +139,22 @@ function loadProgram( p ) {
   $('.custom_navbar_home span').css('color','#FFF');
   $('.side_menu').fadeIn();
   $('.control_holder').fadeIn();
-
-
   
-  buildProgram(p)
+  //console.log("GAZETVANANTWERPEN BUILDS PROGRAM ... : ", p )
+  buildProgram(p)  
 }
 
 function buildProgram( p ) {
+  
+  console.log("BUILDING PROGRAM")
   
   if ( pop == null || pop == undefined ) {
     setTimeout( function() { buildProgram( p ) }, 500 )
     return;
   }
-
-  console.log("BASICWHITE SET INFO: ", p )
-  //SET INFO
+  
   if ( p !== undefined ) {
+    // Set Info    
     var time = p.created_at;
     time = new Date(time);
     time = time.toLocaleString();
@@ -164,66 +167,94 @@ function buildProgram( p ) {
     $('#info p').html( urlifyLinks( $('#info p').html()));
     $('#info p a').addClass('primary-color-links');
     $('#info').hide().fadeIn('slow');
+
+    var related_programs = []
+    $.each( p.tags, function(k, t) { 
+      $.each( programs, function( pk, rp ) {
+        if ( rp.tags.toString().indexOf(t) != -1 ) { // || p.title.indexOf(t) ) {
+          console.log("match!", t, rp.tags.toString() )
+          related_programs.push( rp )
+        }
+      });
+    });
+
+    // Set Related
+    $('.video_list').html("")
+    var months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec' ]
+    $.each( related_programs, function( i, p ) { 
+      var related = ""
+      var d = new Date( p.created_at )
+      var t = toTime(p.meta.moviedescription.duration_in_ms/1000)
+      related += '<div class="item">'
+      related += '  <a class="relatedvideolink" href="javascript:loadProgramById(\''+p.id+'\');" target="_top"></a>'
+      related += '  <img alt="'+p.title+'" height="100%" src="'+p.meta.moviedescription.thumbnail+'" width="100%">'
+      related += '  <div class="relatedvideohover"></div>'
+      related += '  <div class="playtime"><span class="glyphicon glyphicon-play"></span><div class="time">' + t.m + ':' + t.s + '</div></div>'
+      related += '  <div class="image_gradient"></div>'
+      related += '  <div class="ontopof"><strong class="latest_title">'+truncate(p.title, 64)+'</strong>'            
+      related += ' <date><div class="month">'+ months[ d.getMonth() ] + '</div><div class="day">' + d.getDate() + '</div></date>'
+      related += '</div></div>'
+      $('.video_list').append(related)
+    });
+
+    // if we got none
+    if ( related_programs.length == 0 ) $('.video_list').append('<h3>Geen gerelateerde videos</h3>')
   }
-  
-  console.log("GAZETVANANTWERPEN SET MARQERS: ", p )
   
   clearInterval( marqercheckup );
   $('.marqer').removeClass('hidden');
   $('.marqer').hide();
   $('.marqer').fadeIn(2400);
-  
   $('.moar_button').fadeIn('slow');
   
-  console.log("GAZETVANANTWERPEN SET MUTES: ", p )
+  //console.log("GAZETVANANTWERPEN SET MUTES: ", p )
   pop.mute(false);
+  doControl("unmute")
   pop.volume(1);
   pop.playbackRate(1);
   
-  console.log("GAZETVANANTWERPEN add hidden")
+  //console.log("GAZETVANANTWERPEN add hidden")
   $('.control_holder').fadeOut()
-
-  console.log("GAZETVANANTWERPEN ADD LISTENERS: ", pop, p )
-  
-  console.log("LOADED DATA: ", pop, p )
   
   // hide controls, before play
   pop.on('loadeddata', function() {
-    console.log("BASICWHITE: loaded data ... ")
+    //console.log("GAZETVANANTWERPEN: loaded data ... ")
     showControls()    
   })
   
-  console.log("GAZETVANANTWERPEN CANPLAY: ", pop, p )
+  // console.log("GAZETVANANTWERPEN CANPLAY: ", pop, p )
   // failsave
   pop.on('canplay', function() {
-    console.log("GAZETVANANTWERPEN: canplay ... ")
+    //console.log("GAZETVANANTWERPEN: canplay ... ")
     showControls()
-    $('.sense-layer').fadeIn();
+    $('.sense-layer').fadeIn();    
   });
   
-  console.log("GAZETVANANTWERPEN ZUT: ", pop, p )
+  //console.log("GAZETVANANTWERPEN ZUT: ", pop, p )
   // connect play/pause
   pop.on( 'playing', function() { checkPlayButton() } )
   pop.on( 'play', function() { checkPlayButton() } )
   pop.on( 'pause', function() { checkPlayButton() } )
   //pop.on( 'ended', function() { checkPlayButton() } )
 
-  console.log("GAZETVANANTWERPEN ZUT: ", pop, p )
+  //console.log("GAZETVANANTWERPEN ZUT: ", pop, p )
   pop.on('play', function() {
-    console.log("GAZETVANANTWERPEN: play ... ")
+    //console.log("GAZETVANANTWERPEN: play ... ")
     $('.control_holder .play-button_scrub-bar .playpausebutton span').addClass('glyphicon-pause');
     closeSideMenu();
     showControls()
+    pop.mute(false);
+    doControl("unmute")
   })
   
-  console.log("GAZETVANANTWERPEN ZUT: ", pop, p )
+  //console.log("GAZETVANANTWERPEN ZUT: ", pop, p )
   pop.on('pause', function() {
-    console.log("GAZETVANANTWERPEN: pause ... ")
+    //console.log("GAZETVANANTWERPEN: pause ... ")
     $('.control_holder .play-button_scrub-bar .playpausebutton span').removeClass('glyphicon-pause');
     showControls()
   })    
 
-  console.log("GAZETVANANTWERPEN MEERZUT: ", pop, p )
+  //console.log("GAZETVANANTWERPEN MEERZUT: ", pop, p )
   // turn big play button back on (unless yotube ?)
   if ( program.program_items[0].asset._type == "Video" ) {
     $(".big-play").removeClass('hidden')  
@@ -236,13 +267,13 @@ function buildProgram( p ) {
   //if ( program.program_items[0].asset._type != "Video" ) {
   //  $(".quality-switcher").addClass('hidden')  
   //}
-  console.log("GAZETVANANTWERPEN toggleMUTE");
+  //console.log("GAZETVANANTWERPEN toggleMUTE");
   pop.on( 'mute', function() { 
-    console.log("GAZETVANANTWERPEN toggleMUTED");
+    //console.log("GAZETVANANTWERPEN toggleMUTED");
   })
   
   if(pop.mute()){
-    console.log("GAZETVANANTWERPEN toggleMUTED");
+    //console.log("GAZETVANANTWERPEN toggleMUTED");
   }
 
   // reset and set marqers here with program p?
@@ -251,7 +282,7 @@ function buildProgram( p ) {
   var temp = p.marqers;
   var originalDuration = 0;
   resetMarqers( marqers, originalDuration );  
-  console.log('test p' + p.meta.moviedescription);
+  //console.log('test p' + p.meta.moviedescription);
   setTimeout( function() {
     setMarqers( temp, originalDuration );
     $('.track_marqer').hide();
@@ -259,13 +290,18 @@ function buildProgram( p ) {
     $('.marqer').hide();
     $('.marqer').fadeIn("slow");
   }, 100 );
+    
+  setTimeout( function() { 
+    console.log( isPlaying, program.program_items[0].asset._type )
+    if (!isPlaying && program.program_items[0].asset._type == 'Video') $('.big-play').removeClass('hidden');    
+  }, 800 ) 
   
   //
-  $('.program_list').shapeshift(ss_options); // failsafe
+  $('.program_list').shapeshift(ss_options); // failsafe 
 }
   
 var toggleMuteButton = function() {    
-  console.log("GAZETVANANTWERPEN toggleMUTED");
+  //console.log("GAZETVANANTWERPEN toggleMUTED");
 }  
   
 /*
@@ -290,20 +326,24 @@ var showControls = function() {
 
 var toggleSite = function() { 
   if ( $('.brandbox').is(":visible") ) {    
-    console.log("BASICWHITE SHOW VIDEO")
+    //console.log("GAZETVANANTWERPEN SHOW VIDEO")
 
     // show videos
-    $('.big-play').removeClass('hidden');
+    if (!isPlaying && program.program_items[0].asset._type == 'Video') $('.big-play').removeClass('hidden');
     $('.control_holder').fadeIn('slow'); 
 
     // why the fuck is this reloading here?
+    // chill, its doing nothing when no progam is loading
     loadProgram();
 
-    //pop.volume(1);
-    //pop.playbackRate(1);
+    pop.volume(1);
+    pop.playbackRate(1);
+    pop.mute(false);
+    doControl("unmute")
+
 
   }else{
-    console.log("BASICWHITE SHOW MENU etc.")
+    //console.log("GAZETVANANTWERPEN SHOW MENU etc.")
 
     // show menus
     $('.big-play').addClass('hidden');
@@ -351,6 +391,7 @@ function lookUpProgram(id) {
 
 function loadProgramById(id) {
   // close menu, just in case
+  console.log("load program by id ...")
   closeSideMenu();
   videoToggle = true;
   pop.play();

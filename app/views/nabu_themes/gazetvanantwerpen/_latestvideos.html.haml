@@ -1,29 +1,7 @@
-.video_list  
-  - @programs[0..8].each_with_index do |p, index|
-    - active = ""
-    - if index == 0 
-      - active = "active"
+.video_list
+  /- @related_programs[0..8].each_with_index do |p, index|
+  /  - active = ""
+  /  - if index == 0
+  /    - active = "active"
 
-    .item
-      / TODO UPDATE THIS TO SOMETHING THEMEY
-      / like /theme/theme_name/#{p.id} ?
-      = link_to "#{}", "javascript:loadProgramById(\'" + p.id + "'\); ",{ :target=>"_top", :class=>"relatedvideolink"}
-      = image_tag p.meta.moviedescription.thumbnail, :width=>'100%', :height=>'100%'
-      .relatedvideohover
-      .playtime
-        %span.glyphicon.glyphicon-play
-        .time 
-          /= p.meta.moviedescription.duration_in_ms
-          - miliseconds = p.meta.moviedescription.duration_in_ms
-          - seconds = miliseconds.to_i / 1000
-          = Time.at(seconds).strftime("%M:%S")
-      .image_gradient
-      .ontopof
-        %strong.latest_title
-          = p.meta.moviedescription.title.length > 45 ? p.meta.moviedescription.title[0..45] + '...' : p.meta.moviedescription.title
-        %date
-          .month
-            /= distance_of_time_in_words(p.created_at, Time.now)
-            = DateTime.parse(p.created_at).strftime('%b');
-          .day
-            = DateTime.parse(p.created_at).strftime('%d');
+
