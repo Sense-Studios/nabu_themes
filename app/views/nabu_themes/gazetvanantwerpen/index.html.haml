@@ -15,33 +15,28 @@
 .top
   .custom_navbar
     .custom_navbar_menu.custom_navbar_left
-      %span.glyphicon.glyphicon-menu-hamburger
-    .custom_navbar_home.custom_navbar_left
-      %span.glyphicon.glyphicon-home
+      %span.glyphicon.glyphicon-menu-hamburger.background-color
     .custom_navbar_brand
       = link_to "javascript:", :target=>"_top" , :class => 'navbar-brand primary-color ' do
-        = image_tag @theme.logo, :class => 'pull-left'                
+        = image_tag @theme.logo, :class => 'pull-left primary-border-color'                
         %h1
 
       
   
-  .side_menu
+  .side_menu.primary-border-color
     .side_menu_header
-      %i.fa.fa-close
+      %i.fa.fa-close.primary-background-color
     %div.tabpanel{:role=>"tabpanel"}
       %ul#tabs.nav.nav-tabs.nav_tabs_custom.primary-bottom-border-color-active{:role=>"tablist"}
-        %li.tabtitlewrapper.active{:role=>"presentation"}
-          %a.primary-border-color-active{:href=>"#info", :aria=>{:controls=>"info"}, :role=>"tab" , :data=>{:toggle=>"tab"}} 
-            %i.fa.fa-info-circle
-        %li.tabtitlewrapper{:role=>"presentation"}
-          %a.primary-border-color-active{:href=>"#share", :aria=>{:controls=>"share"}, :role=>"tab" , :data=>{:toggle=>"tab"}} 
-            %i.fa.fa-share-alt
-        /%li.tabtitlewrapper{:role=>"presentation"}
-        /%a.primary-border-color-active{:href=>"#comments", :aria=>{:controls=>"comments"}, :role=>"tab" , :data=>{:toggle=>"tab"}} 
-        /%i.fa.fa-comments
-        %li.tabtitlewrapper{:role=>"presentation"}
-          %a.primary-border-color-active{:href=>"#related", :aria=>{:controls=>"related"}, :role=>"tab" , :data=>{:toggle=>"tab"}} 
-            %i.fa.fa-lightbulb-o        
+        %li.tabtitlewrapper.primary-border-color.active{:role=>"presentation"}
+          %a.primary-border-color-active.primary-background-color-hover{:href=>"#info", :aria=>{:controls=>"info"}, :role=>"tab" , :data=>{:toggle=>"tab"}} 
+            %i.fa.fa-info-circle.primary-color
+        %li.tabtitlewrapper.primary-border-color{:role=>"presentation"}
+          %a.primary-border-color-active.primary-background-color-hover{:href=>"#share", :aria=>{:controls=>"share"}, :role=>"tab" , :data=>{:toggle=>"tab"}} 
+            %i.fa.fa-share-alt.primary-color
+        %li.tabtitlewrapper.primary-border-color{:role=>"presentation"}
+          %a.primary-border-color-active.primary-background-color-hover{:href=>"#related", :aria=>{:controls=>"related"}, :role=>"tab" , :data=>{:toggle=>"tab"}} 
+            %i.fa.fa-lightbulb-o.primary-color   
 
       
       .tab-content
@@ -62,7 +57,7 @@
       %span
         %span.glyphicon.glyphicon-chevron-left.custom_navigation_video.glyph.primary-color-hover
 
-    .header{:style=>"margin-left: 100px; display: none;"}
+    .header{:style=>"margin-left: 9%;"}
       %ul.cat_group
 
     .content
@@ -94,14 +89,19 @@
 :css
   .primary-color { color: #{@theme.main_color } !important; } 
   .primary-color-links { color: #{@theme.main_color } !important; text-decoration: underline; } 
-  .secondary-color { color: #{@theme.support_color } !important; }
   .background-color { background-color: #{@theme.background_color } !important; }
   .primary-border-color { border-color: #{@theme.main_color } !important; } 
   .primary-background-color { background-color: #{@theme.main_color } !important; }
   .primary-background-color-hover:hover { background-color: #{@theme.main_color } !important; } 
-  .primary-color-hover:hover { color: #{@theme.main_color } !important; }  
+  .primary-color-hover:hover { color: #{@theme.main_color } !important; } 
   .active .primary-border-color-active { border-color: #{@theme.main_color }!important; border-bottom-color: transparent!important; }
   .primary-bottom-border-color-active { border-color: #{@theme.main_color }!important; }
+  .primary-border-color { border-color: #{@theme.main_color }!important; }
+  #tabs .active { background-color: #{@theme.main_color } !important; }
+
+
+  .secondary-color { color: #{@theme.support_color } !important; }
+  .secondary-color-links { color: #{@theme.support_color } !important; text-decoration: underline; }
 
 /*
 :javascript

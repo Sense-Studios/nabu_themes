@@ -24,8 +24,8 @@ var ss_options = {
   minColumns: 2,
   enableDrag: false,
   align: 'left',
-  gutterX: 15,
-  gutterY: 15,
+  gutterX: 16,
+  gutterY: 16,
   paddingX: 0,
   paddingY: 0
 };
@@ -120,7 +120,6 @@ function loadProgram( p ) {
   
   $('.brandbox').fadeOut('slow');
   $('.middle').css('pointer-events','none');
-  $('.custom_navbar').animate({'background-color':'rgba(0,0,0,0)'}, 600);
   $('.bottom').removeClass('show_bottom');
   $('.control_holder').removeClass('control_holder_higher');
   $('.video_background_hider').animate({'opacity':0}, 1200 );
@@ -133,10 +132,11 @@ function loadProgram( p ) {
   
   //Aanpassingen andre
   $('.custom_navbar_navbar').fadeOut();
-  $('.custom_navbar_home').fadeIn();
+  $('.custom_navbar_menu').fadeIn();
   $('.custom_navbar_brand').addClass('hidden_navbar_brand');
-  $('.custom_navbar_home').css('background-color','#D21522');
-  $('.custom_navbar_home span').css('color','#FFF');
+  $('.custom_navbar_menu').addClass('background-color');
+  $('.custom_navbar_menu span').removeClass('primary-color');
+  $('.custom_navbar_menu span').css('color','#FFF');
   $('.side_menu').fadeIn();
   $('.control_holder').fadeIn();
   
@@ -165,7 +165,7 @@ function buildProgram( p ) {
     $('#info').html('');
     $('#info').append(t);
     $('#info p').html( urlifyLinks( $('#info p').html()));
-    $('#info p a').addClass('primary-color-links');
+    $('#info p a').addClass('secondary-color-links');
     $('#info').hide().fadeIn('slow');
 
     var related_programs = []
@@ -189,10 +189,10 @@ function buildProgram( p ) {
       related += '  <a class="relatedvideolink" href="javascript:loadProgramById(\''+p.id+'\');" target="_top"></a>'
       related += '  <img alt="'+p.title+'" height="100%" src="'+p.meta.moviedescription.thumbnail+'" width="100%">'
       related += '  <div class="relatedvideohover"></div>'
-      related += '  <div class="playtime"><span class="glyphicon glyphicon-play"></span><div class="time">' + t.m + ':' + t.s + '</div></div>'
+      related += '  <div class="playtime"><span class="glyphicon glyphicon-play background-color"></span><div class="time secondary-color">' + t.m + ':' + t.s + '</div></div>'
       related += '  <div class="image_gradient"></div>'
-      related += '  <div class="ontopof"><strong class="latest_title">'+truncate(p.title, 64)+'</strong>'            
-      related += ' <date><div class="month">'+ months[ d.getMonth() ] + '</div><div class="day">' + d.getDate() + '</div></date>'
+      related += '  <div class="ontopof"><strong class="latest_title secondary-color">'+truncate(p.title, 64)+'</strong>'            
+      related += ' <date class="primary-color"><div class="month background-color">'+ months[ d.getMonth() ] + '</div><div class="day">' + d.getDate() + '</div></date>'
       related += '</div></div>'
       $('.video_list').append(related)
     });
@@ -362,10 +362,10 @@ var toggleSite = function() {
     
     
     $('.custom_navbar_navbar').fadeIn();
-    $('.custom_navbar_home').fadeOut();
+    $('.custom_navbar_menu').fadeOut();
     $('.custom_navbar_brand').removeClass('hidden_navbar_brand');
-    $('.custom_navbar_home').css('background-color','#FFF');
-    $('.custom_navbar_home span').css('color','#D21522');
+    $('.custom_navbar_menu').css('background-color','#FFF');
+    $('.custom_navbar_menu span').addClass('primary-color');
     
     //Just in case
     closeSideMenu();
@@ -374,7 +374,8 @@ var toggleSite = function() {
     videoToggle = false;
     window.clearTimeout(mouseTimer);
     pop.volume(0);
-    pop.playbackRate(0.3);
+    //pop.pause();
+    pop.playbackRate(0.1);
 
   }
 };
@@ -407,6 +408,7 @@ function checkButtons() {
 }
 
 function createMainContent() {
+    
   if ( menudata.menu !== undefined ) { 
     // ### Make Menu Categories!
     $.each( menudata.menu, function(key, menu_category ) {
@@ -417,11 +419,65 @@ function createMainContent() {
       var category = "";
       category += '<div class="content category'+key+'">';
       category += ' <h2>'+ menu_category.name +'</h2>';
+      category += '<div class="contentwrapper contentwrapper'+key+'">';
       category += ' <div class="program_list"/>';
-      category += '</div>';
+      category += '</div></div>';
       $('.brandbox').append( category );
-      $('.category'+key).css('left', ((100*key)+50)+'%');
-      
+      $('.category'+key).css('left', ((100*key)+10)+'%');
+    
+      //Create dynamic thumbnails for different screens. 
+      var screenHeight = $(document).height();
+      var screenWidth = $(document).width() - 400;
+      var contentHeight = $('.brandbox .content').height();
+      var contentWidth = $('.brandbox .content').width();
+      var colspan;
+      if (contentWidth < 500){
+        //Big thumbs
+        var bigThumbWidth = contentWidth;
+        var bigThumbHeight = (bigThumbWidth / 16) * 9;
+        //Small thumbs
+        var smallThumbWidth = bigThumbWidth;
+        var smallThumbHeight = bigThumbHeight;
+        colspan = 2;
+      }
+      else if (contentWidth < 700) {
+        //Big thumbs
+        var bigWidth = Math.floor((contentWidth / 2) - 10);
+        var bigThumbWidth = 2 * Math.round(bigWidth / 2);
+        var bigHeight = (bigThumbWidth / 16) * 9;
+        var bigThumbHeight = 2 * Math.round(bigHeight / 2);
+        //Small thumbs
+        var smallThumbWidth = bigThumbWidth;
+        var smallThumbHeight = bigThumbHeight;
+        colspan = 2;
+      }
+      else if(screenWidth > screenHeight) 
+      {
+        //Big thumbs
+        var bigHeight = Math.floor((contentHeight / 2) - 8);
+        var bigThumbHeight = 2 * Math.round(bigHeight  / 2);
+        var bigWidth = (bigThumbHeight / 9) * 16;
+        var bigThumbWidth = 2 * Math.round(bigWidth / 2);
+        //Small thumbs
+        var smallThumbWidth = (bigThumbWidth / 2) - 8;
+        var smallThumbHeight = (bigThumbHeight / 2) - 8;
+        colspan = 1;
+      } 
+      else 
+      {
+        //Big thumbs
+        var bigWidth = Math.floor((contentWidth / 2) - 10);
+        var bigThumbWidth = 2 * Math.round(bigWidth / 2);
+        var bigHeight = (bigThumbWidth / 16) * 9;
+        var bigThumbHeight = 2 * Math.round(bigHeight / 2);
+        //Small thumbs
+        var smallThumbWidth = (bigThumbWidth / 2) - 8;
+        var smallThumbHeight = (bigThumbHeight / 2) - 8;
+        colspan = 1;
+      }
+      var contentHeight = (bigThumbHeight * 2) + 20; 
+      //Count the items to check if an "More video" button needs to be added
+      var videoCount = 0;
       $.each( menu_category.items, function( item_key, item_value ) {
         
         // item
@@ -432,15 +488,17 @@ function createMainContent() {
         if ( item_value.emphasize ) {
           item += '<div class="item item_big" data-ss-colspan=2>';
           item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
-          item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="570px" height="319px" >';
+          item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="' + bigThumbWidth + '" height="' + bigThumbHeight + '" >';
           var title = p.title;
           title = title.substring(0, 80);
+          videoCount = videoCount + 4;
         }else{
-          item += '<div class="item item_smal" data-ss-colspan=1>';
+          item += '<div class="item item_smal" data-ss-colspan=' + colspan + '>';
           item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
-          item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="280px" height="152px" >';
+          item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="' + smallThumbWidth + '" height="' + smallThumbHeight + '" >';
           var title = p.title;
           title = title.substring(0, 42);
+          videoCount = videoCount + 1;
         }
         var created = new Date(p.created_at);
         var months = [ "JAN", "FEB", "MRT", "APR", "MEI", "JUN", "JUL", "AUG", "SEP", "OKT", "NOV", "DEC" ];
@@ -449,19 +507,54 @@ function createMainContent() {
         var ms = p.meta.moviedescription.duration_in_ms;
         var seconds = Math.floor((ms / 1000) % 60);
         var minutes = Math.floor((ms / (60 * 1000)) % 60);
+        //Seconds always 2 digits.
+        if(seconds.toString().length <= 1) { seconds = '0' + seconds; }
         var duration = minutes + ":" + seconds;
-        item += '<div class="playtime"><span class="glyphicon glyphicon-play"></span><div class="time">' + duration + '</div></div>';
+        item += '<div class="playtime"><span class="glyphicon glyphicon-play background-color"></span><div class="time secondary-color">' + duration + '</div></div>';
         item += ' <div class="image_gradient"/>';
         item += ' <div class="video_duration_bottom_left"/>';
-        item += ' <div class="ontopof"><strong class="title">'+ title +'</strong><date><div class="month">' + monthName + '</div><div class="day">' + date + '</div></date></div>';
+        item += ' <div class="ontopof"><strong class="title secondary-color">'+ title +'</strong><date class="primary-color"><div class="month background-color">' + monthName + '</div><div class="day ">' + date + '</div></date></div>';
         item += '</a>';
         item += '</div>';
 
         // append it to this category
         $('.category'+key+' .program_list').append(item);
       });
-    });
+      if(videoCount > 16 && contentWidth > 500) {
+        var button = "";
+        button += "<div class='moreVideosButton moreVideosButton" + key + " primary-color' >";
+        button += "<p>Meer videos</p>";
+        button += "<span class='glyphicon glyphicon-menu-down' aria-hidden='true'></span>";
+        button += "</div><div class='clear'></div>";
+        $('.category' + key).append(button);
+      
+        $(".moreVideosButton" + key ).click(function(){
+          var contentwrapper = $('.contentwrapper' + key + ' .program_list').height();
+          var contentwrapperCheck = $('.contentwrapper' + key).height();
 
+          if(contentHeight >= contentwrapperCheck) {
+            $('.contentwrapper' + key).css('height', contentwrapper);
+            $('.category' + key).css({'height': 'auto', 'padding-bottom': '40px'});
+            $('p', this).text('Minder videos');
+            $('span', this).css({'transform': 'rotateX(180deg)','-webkit-transform':'rotateX(180deg)'})
+            var scroller = contentHeight + 65;
+            $('.brandbox').animate({scrollTop: scroller}, 1000);
+          } else {
+            $('.contentwrapper' + key).css('height', contentHeight);
+            $('p', this).text('Meer videos');
+            $('span', this).css({'transform': 'rotateX(0deg)','-webkit-transform':'rotateX(0deg)'})
+            setTimeout(function(){  $('.category' + key).css({'height': '', 'padding-bottom': '0px'});},1000);
+          }
+        });
+      }
+      //Content div height
+      if(contentWidth > 500) {
+        $('.contentwrapper' + key).css('height', contentHeight);
+      } else {
+        $('.contentwrapper' + key).css('padding-bottom', '40px');
+      }
+    });
+    
     // APPEND AND ADD INTERACTION
     $.each( menudata.menu, function(key, menu_category ) {
       // category header
@@ -473,10 +566,11 @@ function createMainContent() {
     });
   }
   
+  
   $('.right_button').click( function() {
     $('.content').animate({
       'left': '-=100%'
-    }, 800, "easeOutBack" );
+    }, 1000, "easeOutBack" );
     curr++;
     $('.cat_item').removeClass('active');
     $('.cat_item a').removeClass('primary-color');
@@ -492,7 +586,7 @@ function createMainContent() {
   $('.left_button').click( function() {
     $('.content').animate({
       'left': '+=100%'
-    }, 800, "easeOutBack" );
+    }, 1000, "easeOutBack" );
     curr--;
     $('.cat_item').removeClass('active');
     $('.cat_item a').removeClass('primary-color');
@@ -504,6 +598,8 @@ function createMainContent() {
     });
     checkButtons()
   });
+  
+  
   
   // set interaction
   $('.cat_item').click( function(e){
@@ -637,9 +733,9 @@ function createFooter() {
 	
 	
 	//SEARCH FOR URLS IN DESCRIPTION TEXT
-	//MAKE THOSE URLS PRIMARY-COLOR
+	//MAKE THOSE URLS SECUNDAIRY-COLOR
 
-  $(".moviedescriptionp *").addClass("primary-color");
+  $(".moviedescriptionp *").addClass("secondary-color");
   
   
   //QUALITY SWITCHER TEXT REPLACE SD WITH HD WHEN SWITCH
@@ -716,8 +812,7 @@ $(function() {
 });
 
 //Aanpassingen Andre
-$('.custom_navbar_menu').click( function() { toggleMenuHeader(); });
-$('.custom_navbar_home').click( function() { toggleSite(); videoToggle = false; window.clearTimeout(mouseTimer);});
+$('.custom_navbar_menu').click( function() { toggleSite(); videoToggle = false; window.clearTimeout(mouseTimer);});
 $('.tabpanel ul li').click( function() { openSideMenu(); });
 $('.fa-close').click( function() { closeSideMenu(); });
 //$('div:not(.item,.top)').click( function() { 
@@ -737,27 +832,7 @@ $('.sense-layer').click(function() {
 })
 
 
-var toggleMenuHeader = function() {
-  
-  if(menu_toggle == 0){
-    $('.brandbox .content').css('top', '65px');
-    $('.custom_navbar_menu').css('background-color','#D21522');
-    $('.custom_navbar_menu span').css('color','#FFF');
-    setTimeout(function() {
-      $('.brandbox .header').fadeIn();
-    }, 300)
-    menu_toggle = 1;
-  } else if (menu_toggle == 1) {
-    $('.brandbox .header').fadeOut();
-    $('.custom_navbar_menu').removeAttr("style");
-    $('.custom_navbar_menu span').removeAttr("style");
-    setTimeout(function() {
-      $('.brandbox .content').css('top', '15px');
-    }, 300)
-    menu_toggle = 0;
-  }
-  
-};
+
 
 var openSideMenu = function() {
     $('.side_menu').css('transform', 'translateX(0)');

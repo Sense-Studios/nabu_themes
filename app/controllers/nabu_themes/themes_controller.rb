@@ -101,7 +101,66 @@ module NabuThemes
       redirect_to themes_url, notice: 'Theme was successfully destroyed.'
     end
 
+
+    #########################################################################
+    # FOR API, should go for some kind of xhr or json, but I have little time    
+    #########################################################################
+
+    def create_theme_api
+      @theme = Theme.new( theme_params )
+      get_account_owner
+      @theme.owner = @account_id
+
+      if hasDupes( params )        
+        render json: { "status"=> "fail", "message" => "either the slug or the title was a duplicate" } 
+        return
+      end
+
+      if @theme.save        
+        render json: @theme
+      else
+        render json: { "status"=>"fail", "message" => "there was an error creating the theme"}
+      end
+    end
+
+    def update_theme_api      
+      if hasDupes( params )        
+        render json: { "status"=> "fail", "message" => "either the slug or the title was a duplicate" } 
+        return
+      end
+      
+      @theme = Theme.find( params[:id] )
+      if @theme.update( theme_params )
+        render json: { "status"=> "ok", "message" => "theme was succesfully updated" }
+      else
+        render json: { "status"=> "error updating theme"}
+      end
+    end
+
+    def delete_theme_api
+      @theme = Theme.find( params[:id] )
+      if @theme.destroy
+        render json: { "status"=> "ok", "message" => "theme destroyed" }
+      else
+        render json: { "status"=> "fail", "message" => "error updating theme" }
+      end
+    end
+
+    # PRIVATE, Stop reading!
     private
+      def hasDupes( p )        
+        if p[:theme][:slug].blank? || p[:theme][:title].blank?  
+          return true
+        end
+
+        hasRecord = Theme.where( :id.ne => p[:id], :title=> p[:theme][:title], :slug=> p[:theme][:slug] ).count
+        if hasRecord > 0          
+          return true
+        else
+          return false
+        end
+      end
+  
       def get_account_owner
         # find owner and account id through clipcard
         @owner = current_user

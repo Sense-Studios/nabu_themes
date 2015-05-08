@@ -103,6 +103,45 @@ module NabuThemes
       redirect_to menus_url, notice: 'Menu was successfully destroyed.'
     end
 
+    #########################################################################
+    # FOR API, should go for some kind of xhr or json, but I have little time
+    #########################################################################
+
+    def create_menu_api
+      if params[:menu]
+        @menu = Menu.new(menu_params)
+      else
+        @menu = Menu.new
+      end
+
+      get_account_owner
+      @menu.owner = @account_id
+      
+      if @menu.save
+        render json: @menu
+      else
+        render json: { "status"=> "there was a problem creating the menu" }
+      end
+    end
+
+    def update_menu_api
+      @menu = Menu.find( params[:id] )
+      if @menu.update(menu_params)
+        render json: { "status"=> "ok" }
+      else
+        render json: { "status"=> "error updating menu" }
+      end
+    end
+
+    def delete_menu_api
+      @menu = Menu.find( params[:id] )
+      if @menu.destroy
+        render json: { "status"=> "menu destroyed" }
+      else
+        render json: { "status"=> "error deleting menu" }
+      end
+    end
+
     private
       def get_account_owner
         # find owner and account id through clipcard

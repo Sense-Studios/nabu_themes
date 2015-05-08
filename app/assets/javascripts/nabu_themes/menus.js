@@ -106,9 +106,9 @@ function loadMenuFromData() {
 function exportAndSaveMenu() {
   updateMenuData()
   $('.edit_menu').submit();
-  //$.post( "/admin/menu", {"menu": JSON.stringify( menudata ) }, function( data ) {      
-  //  console.log("post menu was a succes: ", data )      
-  //})
+  $.post( "/channel/menus", {"menu": { "name": "dikkevettepannekoek", "items": JSON.stringify( menudata ) } }, function( data ) {      
+    console.log("post menu was a succes: ", data )      
+  })
 };
 
 function updateMenuData() {

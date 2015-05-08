@@ -2,9 +2,23 @@ NabuThemes::Engine.routes.draw do
   
   # menu (set) management
   resources :menus  
+  post 'menu_api/create', to: 'menus#create_menu_api'
+  post 'menu_api/update(/:id)', to: 'menus#update_menu_api'
+  post 'menu_api/delete(/:id)', to: 'menus#delete_menu_api'
+
   
   # theme management
-  resources :themes  
+  resources :themes 
+  
+  # themes and chennels are identical
+  # but I'm routing both, as we've changed
+  # the naming convention later on 
+  post 'theme_api/create', to: 'themes#create_theme_api'
+  post 'theme_api/update(/:id)', to: 'themes#update_theme_api'
+  post 'theme_api/delete(/:id)', to: 'themes#delete_theme_api'
+  post 'channel_api/create', to: 'themes#create_theme_api'
+  post 'channel_api/update(/:id)', to: 'themes#update_theme_api'
+  post 'channel_api/delete(/:id)', to: 'themes#delete_theme_api'
   
   # check if the slug is available and open it, else go on with the list
   get '/(:slug)(/:page)(/:id)', to: 'themes#render_theme' , constraints: lambda { |request| NabuThemes::Theme.all.pluck(:slug).include?( request.params['slug'] ) }
