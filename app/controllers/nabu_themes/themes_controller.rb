@@ -113,7 +113,8 @@ module NabuThemes
 
       if hasDupes( params )        
         render json: { "status"=> "fail", "message" => "either the slug or the title was a duplicate" } 
-        return
+        logger.debug " >>> KON THEMA NIET MAKEN, HAS DUPES"
+        return false
       end
 
       if @theme.save        
@@ -148,12 +149,21 @@ module NabuThemes
 
     # PRIVATE, Stop reading!
     private
-      def hasDupes( p )        
+      def hasDupes( p )      
+      	logger.debug "check for slugs "  
+      	logger.debug p.inspect
+      	logger.debug "---------------"
+      	
         if p[:theme][:slug].blank? || p[:theme][:title].blank?  
+          logger.debug "leeg gelaten"
           return true
         end
 
-        hasRecord = Theme.where( :id.ne => p[:id], :title=> p[:theme][:title], :slug=> p[:theme][:slug] ).count
+        hasRecord = Theme.where( :id.ne => p[:id], :slug=> p[:theme][:slug] ).count
+        logger.debug "has records: "
+        logger.debug hasRecord
+        logger.debug "---------------"
+
         if hasRecord > 0          
           return true
         else
