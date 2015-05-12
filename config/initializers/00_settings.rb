@@ -6,7 +6,7 @@
 NABU_THEMES_MOUNT_POINT = "channel"
 
 # available themes
-NABU_THEMES_AVAILABLE_THEMES = ["sense", "basicwhite", "destandaard", "gazetvanantwerpen"]
+NABU_THEMES_AVAILABLE_THEMES = ["sense", "babylon", "basicwhite", "destandaard", "gazetvanantwerpen"]
 
 # create extra menu items
 EXTRA_ADMIN_MENU_ITEMS.push( { "title" => "Nabu Channels", "header" => true } )
