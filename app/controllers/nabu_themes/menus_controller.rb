@@ -49,6 +49,12 @@ module NabuThemes
     def index
       get_account_owner
       @menus = Menu.where( :owner => @account_id )
+      respond_to do |format|
+        format.html
+        format.json{
+          render :json => @menus.to_json
+        }
+      end
     end
 
     # GET /menus/1
