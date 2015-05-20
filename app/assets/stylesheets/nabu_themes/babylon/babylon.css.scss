@@ -1498,4 +1498,7 @@ border: none;
   transition: 0.5s
 }
 
-
+/* bad fix for the play button problem */
+.big-play {
+  z-index: 1 !important;
+}

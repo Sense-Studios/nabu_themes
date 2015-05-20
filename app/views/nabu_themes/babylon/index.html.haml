@@ -7,7 +7,7 @@
   = render :partial => "shared/player/video", locals: {height:''}
   
   #controls.control_holder.hidden
-    = render partial: 'nabu_themes/destandaard/controls'
+    = render partial: 'nabu_themes/babylon/controls'
     
 
 -### TOP: Nav and Menu ###
@@ -43,11 +43,11 @@
         #info.tab-pane.fade.in.active{:role=>"tabpanel",}
           -# Js Set info #
         #share.tab-pane.fade{:role=>"tabpanel",}
-          = render partial: 'nabu_themes/gazetvanantwerpen/share'
+          = render partial: 'nabu_themes/babylon/share'
         /#comments.tab-pane.fade{:role=>"tabpanel",}
           
         #related.tab-pane.fade{:role=>"tabpanel",}
-          = render partial: 'nabu_themes/gazetvanantwerpen/latestvideos'
+          = render partial: 'nabu_themes/babylon/latestvideos'
 
 -### MIDDLE: brandbox ###
 
@@ -78,13 +78,13 @@
 
 -# this could be moved to the actual themes using shapeshift
 %script{:src=>'/assets/jquery-shapeshift/jquery.shapeshift.js'}
-= javascript_include_tag "nabu_themes/gazetvanantwerpen/gazetvanantwerpen"
+= javascript_include_tag "nabu_themes/babylon/babylon"
 
 :javascript 
   var programs = #{@programs.to_json}
   var menudata = #{@menudata}
 
-= stylesheet_link_tag "nabu_themes/gazetvanantwerpen/gazetvanantwerpen", media: "all", "data-turbolinks-track" => true, "async" => true
+= stylesheet_link_tag "nabu_themes/babylon/babylon", media: "all", "data-turbolinks-track" => true, "async" => true
 
 :css
   .primary-color { color: #{@theme.main_color } !important; } 

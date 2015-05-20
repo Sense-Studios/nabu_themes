@@ -2,4 +2,4 @@
 # make sure these all start with 'BASICWHITE', to not conflict with 
 # other themes
 
-BASICWHITE_DEFAULT_SETTINGS = "{}"
+BABYLON_DEFAULT_SETTINGS = "{}"

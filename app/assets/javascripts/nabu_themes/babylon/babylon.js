@@ -42,6 +42,7 @@ if ( window.addEventListener ) {
   window.attachEvent("onresize", doVideoResize);
 }
 
+// initially hide the videoframe
 $('#video_frame').hide();
 
 // ########################################################################
@@ -65,6 +66,7 @@ function doVideoResize() {
 }
 
 function initResize() {
+  console.log("BABYLON INITRESIZE")
   if ( program !== undefined && pop !== null ) {
     
     // ##############################
@@ -75,9 +77,20 @@ function initResize() {
     lastprogram = program.id;
     pop.on( 'loadstart', function() { 
       $('#video_frame').delay(800).fadeIn('slow');
+      //console.log("BABYLON >>> INTERCEPT LOADSTART!")
+      $('.control_holder').hide();
+      setTimeout( function() { $('.control_holder').hide() }, 500 ) // de fuck?!
     });
     
+    //pop.on( 'canplay', function() {
+      //console.log("BABYLON >>> INTERCEPT CANPLAY!")
+      //$('.control_holder').hide();
+      //setTimeout( function() { $('.control_holder').hide() }, 500 ) // de fuck?!
+    //})
+    
     $('#video_frame').delay(800).fadeIn('slow');
+    $('.control_holder').hide();
+    setTimeout( function() { $('.control_holder').hide() }, 500 ) // de fuck?!
     $('.program_list').shapeshift(ss_options);
   }else{
     setTimeout(initResize, 300);
@@ -105,7 +118,7 @@ function fadeInVideo() {
 
 function loadProgram( p ) {
   
-  console.log("GAZETVANANTWERPEN LOAD PROGRAM: ")
+  console.log("BABYLON LOAD PROGRAM: ")
   $('.track_marqer').remove() // is not removed initially, so a failsafe
   
   if ( p !== undefined && p.id != lastprogram ) { // the program id isnt actually switched anymore
@@ -116,7 +129,7 @@ function loadProgram( p ) {
     fadeInVideo()
   }
   
-  console.log("GAZETVANANTWERPEN RESET ANIMATION: ", p )
+  console.log("BABYLON RESET ANIMATION: ", p )
   
   $('.brandbox').fadeOut('slow');
   $('.middle').css('pointer-events','none');
@@ -140,13 +153,13 @@ function loadProgram( p ) {
   $('.side_menu').fadeIn();
   $('.control_holder').fadeIn();
   
-  //console.log("GAZETVANANTWERPEN BUILDS PROGRAM ... : ", p )
+  console.log("BABYLON BUILDS PROGRAM ... : ", p )
   buildProgram(p)  
 }
 
 function buildProgram( p ) {
   
-  console.log("BUILDING PROGRAM")
+  console.log("BABYLON BUILDING PROGRAM")
   
   if ( pop == null || pop == undefined ) {
     setTimeout( function() { buildProgram( p ) }, 500 )
@@ -218,14 +231,15 @@ function buildProgram( p ) {
   
   // hide controls, before play
   pop.on('loadeddata', function() {
+    console.log("BABYLON: loaded data ... ")
     //console.log("GAZETVANANTWERPEN: loaded data ... ")
-    showControls()    
+    //showControls()
   })
   
   // console.log("GAZETVANANTWERPEN CANPLAY: ", pop, p )
   // failsave
   pop.on('canplay', function() {
-    //console.log("GAZETVANANTWERPEN: canplay ... ")
+    console.log("BABYLON: canplay ... ")
     showControls()
     $('.sense-layer').fadeIn();    
   });
@@ -830,8 +844,6 @@ $('.sense-layer').click(function() {
     playtoggle = false;
   }
 })
-
-
 
 
 var openSideMenu = function() {
