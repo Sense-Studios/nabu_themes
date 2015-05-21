@@ -53,6 +53,10 @@ body {
   overflow-y: hidden;
 }
 
+html, body {
+  height: 100vh;
+  width: 100vw;
+}
 
 
 /* ### NAVBAR ### */
@@ -1198,7 +1202,7 @@ border: none;
     }
     .ontopof {
       background-color: rgba(255,255,255,0.9);
-      bottom: -1px;
+      bottom: -39px;
       height: 40px;
       left: 0;
       width: 100%;
@@ -1400,6 +1404,8 @@ border: none;
 
 .fullscreen {
   z-index: 99999999999;
+  width: 100vw!important;
+  height: 100vh!important;
 }
 
 #info {

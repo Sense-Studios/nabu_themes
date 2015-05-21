@@ -25,7 +25,7 @@ var ss_options = {
   enableDrag: false,
   align: 'left',
   gutterX: 16,
-  gutterY: 16,
+  gutterY: 56,
   paddingX: 0,
   paddingY: 0
 };
@@ -92,6 +92,9 @@ function initResize() {
     $('.control_holder').hide();
     setTimeout( function() { $('.control_holder').hide() }, 500 ) // de fuck?!
     $('.program_list').shapeshift(ss_options);
+    var programHeight = $('.program_list').height();
+    programHeight = programHeight + 40;
+    $('.program_list').css('height', programHeight);
   }else{
     setTimeout(initResize, 300);
   }
@@ -425,6 +428,61 @@ function createMainContent() {
     
   if ( menudata.menu !== undefined ) { 
     // ### Make Menu Categories!
+    //Create dynamic thumbnails for different screens. 
+    var screenHeight = $(document).height();
+    var screenWidth = $(document).width() - 400;
+    var contentHeight = $('.brandbox .content').height();
+    var contentWidth = $('.brandbox .content').width();
+    var colspan;
+    if (contentWidth < 500){
+      //Big thumbs
+      var bigThumbWidth = contentWidth;
+      var bigThumbHeight = (bigThumbWidth / 16) * 9;
+      //Small thumbs
+      var smallThumbWidth = bigThumbWidth;
+      var smallThumbHeight = bigThumbHeight;
+      colspan = 2;
+    }
+    else if (contentWidth < 700) {
+      //Big thumbs
+      var bigWidth = Math.floor((contentWidth / 2) - 10);
+      var bigThumbWidth = 2 * Math.round(bigWidth / 2);
+      var bigHeight = (bigThumbWidth / 16) * 9;
+      var bigThumbHeight = 2 * Math.round(bigHeight / 2);
+      //Small thumbs
+      var smallThumbWidth = bigThumbWidth;
+      var smallThumbHeight = bigThumbHeight;
+      colspan = 2;
+    }
+    else if(screenWidth > screenHeight) 
+    {
+      //Big thumbs
+      var bigHeight = Math.floor((contentHeight / 2) - 8);
+      var bigThumbHeight = 2 * Math.round(bigHeight  / 2);
+      var bigWidth = (bigThumbHeight / 9) * 16;
+      var bigThumbWidth = 2 * Math.round(bigWidth / 2);
+      //Small thumbs
+      var smallThumbWidth = (bigThumbWidth / 2) - 8;
+      var smallThumbHeight = (bigThumbHeight / 2) - 8;
+      bigThumbHeight = bigThumbHeight + 41;
+      colspan = 1;
+    } 
+    else 
+    {
+      //Big thumbs
+      var bigWidth = Math.floor((contentWidth / 2) - 10);
+      var bigThumbWidth = 2 * Math.round(bigWidth / 2);
+      var bigHeight = (bigThumbWidth / 16) * 9;
+      var bigThumbHeight = 2 * Math.round(bigHeight / 2);
+      //Small thumbs
+      var smallThumbWidth = (bigThumbWidth / 2) - 8;
+      var smallThumbHeight = (bigThumbHeight / 2) - 8;
+      bigThumbHeight = bigThumbHeight + 41;
+      colspan = 1;
+    }
+    var contentHeight = (smallThumbHeight * 3) + 160; 
+
+    
     $.each( menudata.menu, function(key, menu_category ) {
       if(key == 0) {
         $('.custom_navbar_brand .navbar-brand h1').text(menu_category.name);
@@ -439,57 +497,6 @@ function createMainContent() {
       $('.brandbox').append( category );
       $('.category'+key).css('left', ((100*key)+10)+'%');
     
-      //Create dynamic thumbnails for different screens. 
-      var screenHeight = $(document).height();
-      var screenWidth = $(document).width() - 400;
-      var contentHeight = $('.brandbox .content').height();
-      var contentWidth = $('.brandbox .content').width();
-      var colspan;
-      if (contentWidth < 500){
-        //Big thumbs
-        var bigThumbWidth = contentWidth;
-        var bigThumbHeight = (bigThumbWidth / 16) * 9;
-        //Small thumbs
-        var smallThumbWidth = bigThumbWidth;
-        var smallThumbHeight = bigThumbHeight;
-        colspan = 2;
-      }
-      else if (contentWidth < 700) {
-        //Big thumbs
-        var bigWidth = Math.floor((contentWidth / 2) - 10);
-        var bigThumbWidth = 2 * Math.round(bigWidth / 2);
-        var bigHeight = (bigThumbWidth / 16) * 9;
-        var bigThumbHeight = 2 * Math.round(bigHeight / 2);
-        //Small thumbs
-        var smallThumbWidth = bigThumbWidth;
-        var smallThumbHeight = bigThumbHeight;
-        colspan = 2;
-      }
-      else if(screenWidth > screenHeight) 
-      {
-        //Big thumbs
-        var bigHeight = Math.floor((contentHeight / 2) - 8);
-        var bigThumbHeight = 2 * Math.round(bigHeight  / 2);
-        var bigWidth = (bigThumbHeight / 9) * 16;
-        var bigThumbWidth = 2 * Math.round(bigWidth / 2);
-        //Small thumbs
-        var smallThumbWidth = (bigThumbWidth / 2) - 8;
-        var smallThumbHeight = (bigThumbHeight / 2) - 8;
-        colspan = 1;
-      } 
-      else 
-      {
-        //Big thumbs
-        var bigWidth = Math.floor((contentWidth / 2) - 10);
-        var bigThumbWidth = 2 * Math.round(bigWidth / 2);
-        var bigHeight = (bigThumbWidth / 16) * 9;
-        var bigThumbHeight = 2 * Math.round(bigHeight / 2);
-        //Small thumbs
-        var smallThumbWidth = (bigThumbWidth / 2) - 8;
-        var smallThumbHeight = (bigThumbHeight / 2) - 8;
-        colspan = 1;
-      }
-      var contentHeight = (bigThumbHeight * 2) + 20; 
       //Count the items to check if an "More video" button needs to be added
       var videoCount = 0;
       $.each( menu_category.items, function( item_key, item_value ) {
@@ -822,6 +829,9 @@ $(function() {
 
   // ### MAIN
   $('.program_list').shapeshift(ss_options);
+  var programHeight = $('.program_list').height();
+  programHeight = programHeight + 40;
+  $('.program_list').css('height', programHeight);
   
 });
 
