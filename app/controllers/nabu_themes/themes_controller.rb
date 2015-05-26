@@ -14,7 +14,11 @@ module NabuThemes
       @theme = Theme.where( { "slug"=>params[:slug] } ).first()
       @menudata = NabuThemes::Menu.find( @theme.menu ).items
       if params[:id].blank?
-        @program = MarduqResource::Program.find( @theme.home_program ) # home program
+        if @theme.home_program.blank?
+          @program = MarduqResource::Program.find( JSON.parse(Menu.find(@theme.menu).items)["menu"][0]["items"][0]["id"] )
+        else
+          @program = MarduqResource::Program.find( @theme.home_program ) # home program
+         end 
       else
         @program = MarduqResource::Program.find( params[:id] ) # home program
       end

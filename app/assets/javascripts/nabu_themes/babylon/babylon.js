@@ -23,9 +23,10 @@ var videoToggle = false;
 var ss_options = {
   minColumns: 2,
   enableDrag: false,
-  align: 'left',
-  gutterX: 16,
-  gutterY: 56,
+  columns: 4,
+  align: 'center',
+  gutterX: 10,
+  gutterY: 10,
   paddingX: 0,
   paddingY: 0
 };
@@ -66,7 +67,9 @@ function doVideoResize() {
 }
 
 function initResize() {
-  console.log("BABYLON INITRESIZE")
+  console.log("BABYLON INITRESIZE");
+  console.log('set social buttons');
+  setSocial();
   if ( program !== undefined && pop !== null ) {
     
     // ##############################
@@ -312,7 +315,8 @@ function buildProgram( p ) {
     console.log( isPlaying, program.program_items[0].asset._type )
     if (!isPlaying && program.program_items[0].asset._type == 'Video') $('.big-play').removeClass('hidden');    
   }, 800 ) 
-  
+  console.log('set social buttons');
+  setSocial();
   //
   $('.program_list').shapeshift(ss_options); // failsafe 
 }
@@ -462,9 +466,8 @@ function createMainContent() {
       var bigWidth = (bigThumbHeight / 9) * 16;
       var bigThumbWidth = 2 * Math.round(bigWidth / 2);
       //Small thumbs
-      var smallThumbWidth = (bigThumbWidth / 2) - 8;
-      var smallThumbHeight = (bigThumbHeight / 2) - 8;
-      bigThumbHeight = bigThumbHeight + 41;
+      var smallThumbWidth = (bigThumbWidth / 2) - 5;
+      var smallThumbHeight = (bigThumbHeight / 2) - 5;
       colspan = 1;
     } 
     else 
@@ -475,13 +478,12 @@ function createMainContent() {
       var bigHeight = (bigThumbWidth / 16) * 9;
       var bigThumbHeight = 2 * Math.round(bigHeight / 2);
       //Small thumbs
-      var smallThumbWidth = (bigThumbWidth / 2) - 8;
-      var smallThumbHeight = (bigThumbHeight / 2) - 8;
-      bigThumbHeight = bigThumbHeight + 41;
+      var smallThumbWidth = (bigThumbWidth / 2) - 5;
+      var smallThumbHeight = (bigThumbHeight / 2) - 5;
       colspan = 1;
     }
-    var contentHeight = (smallThumbHeight * 3) + 160; 
-
+    var contentHeight = (bigThumbHeight * 2) + 16; 
+    var smallThumbClass = (smallThumbHeight < 140) ? "ontopoffsmall" : "ontopoff"; 
     
     $.each( menudata.menu, function(key, menu_category ) {
       if(key == 0) {
@@ -507,14 +509,14 @@ function createMainContent() {
         if ( p == undefined ) return;
 
         if ( item_value.emphasize ) {
-          item += '<div class="item item_big" data-ss-colspan=2>';
+          item += '<div class="item item_big" data-ss-colspan="2" data-ss-rowspan="2">';
           item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
           item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="' + bigThumbWidth + '" height="' + bigThumbHeight + '" >';
           var title = p.title;
           title = title.substring(0, 80);
           videoCount = videoCount + 4;
         }else{
-          item += '<div class="item item_smal" data-ss-colspan=' + colspan + '>';
+          item += '<div class="item item_smal ' + smallThumbClass + '" data-ss-colspan="1" data-ss-rowspan="1">';
           item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
           item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="' + smallThumbWidth + '" height="' + smallThumbHeight + '" >';
           var title = p.title;

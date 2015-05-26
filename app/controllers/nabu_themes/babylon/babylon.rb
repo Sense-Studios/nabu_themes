@@ -20,7 +20,7 @@ module NabuThemes
 
       # Why do I need to force this, If I just don't want directories like
       # nabu_themes/basicwhite/basicwhite/index
-      render "nabu_themes/Gazetvanantwerpen/index"
+      render "nabu_themes/babylon/index"
     end
   end
 end
