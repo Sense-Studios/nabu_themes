@@ -203,10 +203,10 @@ function buildProgram( p ) {
     $.each( related_programs, function( i, p ) { 
       var related = ""
       var d = new Date( p.created_at )
-      var t = toTime(p.meta.moviedescription.duration_in_ms/1000)
+      var t = toTime( p.meta.moviedescription.duration_in_ms/1000 )      
       related += '<div class="item">'
       related += '  <a class="relatedvideolink" href="javascript:loadProgramById(\''+p.id+'\');" target="_top"></a>'
-      related += '  <img alt="'+p.title+'" height="100%" src="'+p.meta.moviedescription.thumbnail+'" width="100%">'
+      related += '  <img alt="'+p.title+'" height="100%" src="'+p.meta.moviedescription.thumbnail.replace('mqdefault', 'hqdefault')+'" width="100%">'
       related += '  <div class="relatedvideohover"></div>'
       related += '  <div class="playtime"><span class="glyphicon glyphicon-play background-color"></span><div class="time secondary-color">' + t.m + ':' + t.s + '</div></div>'
       related += '  <div class="image_gradient"></div>'
@@ -438,6 +438,7 @@ function createMainContent() {
     var contentHeight = $('.brandbox .content').height();
     var contentWidth = $('.brandbox .content').width();
     var colspan;
+    console.log('contentwidth: ', contentWidth);
     if (contentWidth < 500){
       //Big thumbs
       var bigThumbWidth = contentWidth;
@@ -510,8 +511,8 @@ function createMainContent() {
 
         if ( item_value.emphasize ) {
           item += '<div class="item item_big" data-ss-colspan="2" data-ss-rowspan="2">';
-          item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
-          item += ' <img src="'+p.meta.moviedescription.thumbnail+'" width="' + bigThumbWidth + '" height="' + bigThumbHeight + '" >';
+          item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">'; 
+          item += ' <img src="'+p.meta.moviedescription.thumbnail.replace('mqdefault', 'hqdefault')+'" width="' + bigThumbWidth + '" height="' + bigThumbHeight + '" >';
           var title = p.title;
           title = title.substring(0, 80);
           videoCount = videoCount + 4;
