@@ -88,10 +88,37 @@ $(document).ready(function(){
     if ( curr > 0 ) $('.left_button').trigger('click');
   });
   
-})
+});
+
+
+var sidemenuOpen = false;
+if($(window).width() < 700) { 
+  var relatedvideoWidth = $('.video_list .item').width();
+  var relatedvideoHeight = (relatedvideoWidth / 16) * 9;
+  $('.video_list .item').css('height', relatedvideoHeight);
+  
+  
+  $('.custom_navbar_mobile_menu').click(function(){
+    if(!sidemenuOpen) {
+      $('.cat_group').css({'transform': 'translateX(-260px)','-webkit-transform': 'translateX(-260px)'}).addClass('background-color'); 
+      $('.content').css({'transform': 'translateX(-250px)','-webkit-transform': 'translateX(-250px)'}); 
+      sidemenuOpen = true; 
+    }
+    else { 
+      $('.cat_group').removeAttr('style')
+      $('.content').css({'transform': 'translateX(0)','-webkit-transform': 'translateX(0)'});
+      sidemenuOpen = false; 
+    }
+  });
+  
+  $('.custom_navbar_left span').removeClass('glyphicon-menu-hamburger').addClass('glyphicon glyphicon-arrow-left');
+}
+
+
 
 var sideMenuTop = function() {
   if($(window).width() < 700) {
+    console.log('wtf', $(window).width());
     $('.brandbox').css('background-color', secundary_color);
     var side_menuTop = $('.video_background').height();
     side_menuTop = side_menuTop + 138;
@@ -223,6 +250,8 @@ function loadProgram( p ) {
   //Aanpassingen andre
   $('.custom_navbar_navbar').fadeOut();
   $('.custom_navbar_menu').fadeIn();
+  $('.custom_navbar_mobile_menu').fadeOut();
+  $('.navbar-brand').css('margin-left', '20%');
   $('.custom_navbar_brand').addClass('hidden_navbar_brand');
   $('.custom_navbar_menu').addClass('background-color');
   $('.custom_navbar_menu span').removeClass('primary-color');
@@ -232,8 +261,7 @@ function loadProgram( p ) {
   
   console.log("BABYLON BUILDS PROGRAM ... : ", p )
   buildProgram(p)  
-  var side_menuTop = $('.video_background').height(); + 70;
-  $('.side_menu').css('top', side_menuTop);
+
   sideMenuTop();
 }
 
@@ -280,7 +308,7 @@ function buildProgram( p ) {
       var t = toTime( p.meta.moviedescription.duration_in_ms/1000 )      
       related += '<div class="item">'
       related += '  <a class="relatedvideolink" href="javascript:loadProgramById(\''+p.id+'\');" target="_top"></a>'
-      related += '  <img alt="'+p.title+'" height="100%" src="'+p.meta.moviedescription.thumbnail.replace('mqdefault', 'hqdefault')+'" width="100%">'
+      related += '  <img alt="'+p.title+'" src="'+p.meta.moviedescription.thumbnail.replace('mqdefault', 'hqdefault')+'" >'
       related += '  <div class="relatedvideohover"></div>'
       related += '  <div class="playtime"><span class="glyphicon glyphicon-play background-color"></span><div class="time secondary-color">' + t.m + ':' + t.s + '</div></div>'
       related += '  <div class="image_gradient"></div>'
@@ -458,6 +486,8 @@ var toggleSite = function() {
     
     $('.custom_navbar_navbar').fadeIn();
     $('.custom_navbar_menu').fadeOut();
+    $('.custom_navbar_mobile_menu').fadeIn();
+    $('.navbar-brand').css('margin-left', '10%');
     $('.custom_navbar_brand').removeClass('hidden_navbar_brand');
     $('.custom_navbar_menu').css('background-color','#FFF');
     $('.custom_navbar_menu span').addClass('primary-color');
@@ -487,7 +517,10 @@ function lookUpProgram(id) {
 
 function loadProgramById(id) {
   // close menu, just in case
-  console.log("load program by id ...")
+  console.log("load program by id ...");
+  if(sidemenuOpen) {
+    $('.custom_navbar_mobile_menu').trigger('click'); 
+  }
   closeSideMenu();
   videoToggle = true;
   pop.play();
@@ -658,6 +691,7 @@ function createMainContent() {
       header_item += "</li>";
       $('.cat_group').append(header_item);
     });
+    $('.cat_item').click(function(){ $('.custom_navbar_mobile_menu').trigger('click'); });
   }
   
   

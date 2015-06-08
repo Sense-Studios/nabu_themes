@@ -31,14 +31,14 @@
       %title
         = @program.title
   
-      %meta{"name"=>"description", "content"=>"Marduq - Nabu - #{@program.meta.moviedescription.description.to_s}" }
+      -#%meta{"name"=>"description", "content"=>"Marduq - Nabu - #{@program.meta.moviedescription.description.to_s}" }
       %meta{"name"=>"keywords", "content"=>"Marduq - Nabu #{@program.title} #{@program.tags.join(' ')}" }
       %meta{"name"=>"author", "content"=>"Sense-Studios"}
   
       %meta{"property"=>"og:image", "content"=> @program.program_items[0].asset.thumbnail_url  }
       %meta{"property"=>"og:url", "content"=> request.protocol + request.host_with_port + request.fullpath }
       %meta{"property"=>"og:title", "content"=> @program.title }
-      %meta{"property"=>"og:description", "content"=> @program.meta.moviedescription.description.to_s }
+      -#%meta{"property"=>"og:description", "content"=> @program.meta.moviedescription.description.to_s }
     
     - else
   
@@ -55,6 +55,7 @@
       %meta{"property"=>"og:description", "content"=>"" }
   
   %body
+    = debug @program
 
     = render 'shared/flash_messages'
 
