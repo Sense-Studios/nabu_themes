@@ -90,23 +90,26 @@ $(document).ready(function(){
   
 });
 
+$(window).on('orientationchange', function(e) {
+  location.reload();
+});
 
 var sidemenuOpen = false;
 if($(window).width() < 700) { 
   var relatedvideoWidth = $('.video_list .item').width();
   var relatedvideoHeight = (relatedvideoWidth / 16) * 9;
   $('.video_list .item').css('height', relatedvideoHeight);
-  
+  $('.brandbox').addClass('mobile-background-color');
   
   $('.custom_navbar_mobile_menu').click(function(){
     if(!sidemenuOpen) {
-      $('.cat_group').css({'transform': 'translateX(-260px)','-webkit-transform': 'translateX(-260px)'}).addClass('background-color'); 
-      $('.content').css({'transform': 'translateX(-250px)','-webkit-transform': 'translateX(-250px)'}); 
+      $('.cat_group').css({'transform': 'translateX(-260px)','-webkit-transform': 'translateX(-260px)'}).addClass('mobile-background-color'); 
+      //$('.content').css({'transform': 'translateX(-250px)','-webkit-transform': 'translateX(-250px)'}); 
       sidemenuOpen = true; 
     }
     else { 
       $('.cat_group').removeAttr('style')
-      $('.content').css({'transform': 'translateX(0)','-webkit-transform': 'translateX(0)'});
+      //$('.content').css({'transform': 'translateX(0)','-webkit-transform': 'translateX(0)'});
       sidemenuOpen = false; 
     }
   });
@@ -251,7 +254,7 @@ function loadProgram( p ) {
   $('.custom_navbar_navbar').fadeOut();
   $('.custom_navbar_menu').fadeIn();
   $('.custom_navbar_mobile_menu').fadeOut();
-  $('.navbar-brand').css('margin-left', '20%');
+  if(isMobile.any()) $('.navbar-brand').css('margin-left', '20%');
   $('.custom_navbar_brand').addClass('hidden_navbar_brand');
   $('.custom_navbar_menu').addClass('background-color');
   $('.custom_navbar_menu span').removeClass('primary-color');
@@ -487,7 +490,7 @@ var toggleSite = function() {
     $('.custom_navbar_navbar').fadeIn();
     $('.custom_navbar_menu').fadeOut();
     $('.custom_navbar_mobile_menu').fadeIn();
-    $('.navbar-brand').css('margin-left', '10%');
+    if(isMobile.any()) $('.navbar-brand').css('margin-left', '10%');
     $('.custom_navbar_brand').removeClass('hidden_navbar_brand');
     $('.custom_navbar_menu').css('background-color','#FFF');
     $('.custom_navbar_menu span').addClass('primary-color');
@@ -583,7 +586,7 @@ function createMainContent() {
       var smallThumbWidth = (bigThumbWidth / 2) - 5;
       var smallThumbHeight = (bigThumbHeight / 2) - 5;
       console.log('test 4');
-      colspanbig = 2
+      colspanbig = 2;
       colspan = 1;
     }
     var contentHeight = (bigThumbHeight * 2) + 16; 
