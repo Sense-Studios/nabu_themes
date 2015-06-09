@@ -1630,7 +1630,7 @@ border: none;
         transition: margin 0.5s;
         img {
           max-height: 40px;
-          max-width: calc(100% - 70px);
+          max-width: calc(100vh - 70px);
         }
         h1 {
           display: none;
