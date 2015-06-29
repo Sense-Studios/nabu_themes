@@ -465,14 +465,18 @@ html, body {
 }
 
 .nav_buttons {
-  height: 100%;
+  height: auto;
   width: 8%;
+  top: calc(50% - 45px);
   position: fixed;
   z-index: 2000000000;
   color: white;
   font-size: 42px;
   text-align: center;
   cursor: pointer;
+  span {
+    top: 0;
+  }
 }
 
 .left_button {
@@ -1656,20 +1660,29 @@ border: none;
         position: absolute;
         right: -260px;
         width: 260px;
+        top: -15px;
+        background-color: #fff;
         z-index: 999999999999;
-        height: calc(100vh - 80px);
+        height: calc(100vh - 65px);
         overflow-y: scroll;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
         -webkit-transition: 0.3s;
         transition: 0.3s;
+        -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
         .cat_item{
           font-size: 25px;
           width: 100%;
           margin-bottom: 5px;
+          &:first-child {
+            margin-top: 15px;
+          }
         }
         .active {
           font-size: 28px;
+          background-color: #FFF!important;
         }
       }
     }

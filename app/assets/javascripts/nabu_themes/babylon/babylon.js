@@ -100,10 +100,12 @@ if($(window).width() < 700) {
   var relatedvideoHeight = (relatedvideoWidth / 16) * 9;
   $('.video_list .item').css('height', relatedvideoHeight);
   $('.brandbox').addClass('mobile-background-color');
+
+  console.log('yay');
   
   $('.custom_navbar_mobile_menu').click(function(){
     if(!sidemenuOpen) {
-      $('.cat_group').css({'transform': 'translateX(-260px)','-webkit-transform': 'translateX(-260px)'}).addClass('mobile-background-color'); 
+      $('.cat_group').css({'transform': 'translateX(-260px)','-webkit-transform': 'translateX(-260px)'}); 
       //$('.content').css({'transform': 'translateX(-250px)','-webkit-transform': 'translateX(-250px)'}); 
       sidemenuOpen = true; 
     }
@@ -695,6 +697,9 @@ function createMainContent() {
       $('.cat_group').append(header_item);
     });
     $('.cat_item').click(function(){ $('.custom_navbar_mobile_menu').trigger('click'); });
+    if($(window).width() < 700) { 
+      $('.cat_item').addClass('mobile-background-color');
+    }
   }
   
   
@@ -707,6 +712,7 @@ function createMainContent() {
     $('.cat_item a').removeClass('primary-color');
     $('.cat_item:eq('+curr+')').addClass('active');
     $('.cat_item:eq('+curr+') a').addClass('primary-color');
+    
     var navbarTitle = $('.cat_group .active').text();
     $(".custom_navbar_brand .navbar-brand h1").fadeOut('fast', function() {
       $(this).text(navbarTitle).fadeIn('fast');
@@ -723,6 +729,7 @@ function createMainContent() {
     $('.cat_item a').removeClass('primary-color');
     $('.cat_item:eq('+curr+')').addClass('active');
     $('.cat_item:eq('+curr+') a').addClass('primary-color');
+
     var navbarTitle = $('.cat_group .active').text();
     $(".custom_navbar_brand .navbar-brand h1").fadeOut('fast', function() {
       $(this).text(navbarTitle).fadeIn('fast');
@@ -747,6 +754,7 @@ function createMainContent() {
     $('.cat_item a').removeClass('primary-color');
     $('.cat_item:eq('+curr+')').addClass('active');
     $('.cat_item:eq('+curr+') a').addClass('primary-color');
+    
     var navbarTitle = $('.cat_group .active').text();
     $(".custom_navbar_brand .navbar-brand h1").fadeOut('fast', function() {
       $(this).text(navbarTitle).fadeIn('fast');
