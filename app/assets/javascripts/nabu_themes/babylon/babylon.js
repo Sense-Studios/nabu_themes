@@ -30,7 +30,7 @@ var ss_options = {
   paddingX: 0,
   paddingY: 0
 };
-  
+
 var lastprogram = null;
 
 // Note that this function is a little different from the original resizer in embed.haml
@@ -68,26 +68,26 @@ var isMobile = {
 var categories;
 $(document).ready(function(){
   var myElement = $('.brandbox');
-  
+
   // create a simple instance
   // by default, it only adds horizontal recognizers
   var mc = new Hammer(myElement.get(0));
- 
+
   setTimeout(function(){
     categories = $('.content').length - 2;
   }, 200);
-  
+
   // listen to events...cur
   mc.on("swipeleft", function(ev) {
-    
+
     if ( curr < categories) $('.right_button').trigger('click');
   });
-  
+
   mc.on("swiperight", function(ev) {
-    
+
     if ( curr > 0 ) $('.left_button').trigger('click');
   });
-  
+
 });
 
 $(window).on('orientationchange', function(e) {
@@ -95,31 +95,27 @@ $(window).on('orientationchange', function(e) {
 });
 
 var sidemenuOpen = false;
-if($(window).width() < 700) { 
+if($(window).width() < 700) {
   var relatedvideoWidth = $('.video_list .item').width();
   var relatedvideoHeight = (relatedvideoWidth / 16) * 9;
   $('.video_list .item').css('height', relatedvideoHeight);
   $('.brandbox').addClass('mobile-background-color');
 
-  console.log('yay');
-  
   $('.custom_navbar_mobile_menu').click(function(){
     if(!sidemenuOpen) {
-      $('.cat_group').css({'transform': 'translateX(-260px)','-webkit-transform': 'translateX(-260px)'}); 
-      //$('.content').css({'transform': 'translateX(-250px)','-webkit-transform': 'translateX(-250px)'}); 
-      sidemenuOpen = true; 
+      $('.cat_group').css({'transform': 'translateX(-260px)','-webkit-transform': 'translateX(-260px)'});
+      // $('.content').css({'transform': 'translateX(-250px)','-webkit-transform': 'translateX(-250px)'});
+      sidemenuOpen = true;
     }
-    else { 
+    else {
       $('.cat_group').removeAttr('style')
-      //$('.content').css({'transform': 'translateX(0)','-webkit-transform': 'translateX(0)'});
-      sidemenuOpen = false; 
+      // $('.content').css({'transform': 'translateX(0)','-webkit-transform': 'translateX(0)'});
+      sidemenuOpen = false;
     }
   });
-  
+
   $('.custom_navbar_left span').removeClass('glyphicon-menu-hamburger').addClass('glyphicon glyphicon-arrow-left');
 }
-
-
 
 var sideMenuTop = function() {
   if($(window).width() < 700) {
@@ -127,11 +123,11 @@ var sideMenuTop = function() {
     $('.brandbox').css('background-color', secundary_color);
     var side_menuTop = $('.video_background').height();
     side_menuTop = side_menuTop + 138;
-    $('.side_menu').css('top', side_menuTop); 
+    $('.side_menu').css('top', side_menuTop);
   }
 }
 
-//secundary_color 
+//secundary_color
 var secundary_color = $('.secondary-color').css('color');
 
 if(isMobile.any()) {
@@ -157,7 +153,7 @@ function doVideoResize() {
   // check for scrubbar
   var scr = 0;
   var ipadcorr = 0;
-  if (agent.label == 'IPAD') ipadcorr = 24;    
+  if (agent.label == 'IPAD') ipadcorr = 24;
   if ( program.meta.player_options.scrubbar == "true" ) { scr = 20 }
   // vf.style.height = ( document.documentElement.clientHeight - ( 36 + scr ) - ipadcorr ) + "px";
   vf.style.height = ( document.documentElement.clientHeight - ipadcorr ) + "px";
@@ -170,26 +166,26 @@ function initResize() {
   console.log("BABYLON INITRESIZE");
   setSocial();
   if ( program !== undefined && pop !== null ) {
-    
+
     // ##############################
     // ### WHEN PROGRAM LOADED
     // ##############################
-    
+
     doVideoResize();
     lastprogram = program.id;
-    pop.on( 'loadstart', function() { 
+    pop.on( 'loadstart', function() {
       $('#video_frame').delay(800).fadeIn('slow');
       //console.log("BABYLON >>> INTERCEPT LOADSTART!")
       $('.control_holder').hide();
       setTimeout( function() { $('.control_holder').hide() }, 500 ) // de fuck?!
     });
-    
+
     //pop.on( 'canplay', function() {
       //console.log("BABYLON >>> INTERCEPT CANPLAY!")
       //$('.control_holder').hide();
       //setTimeout( function() { $('.control_holder').hide() }, 500 ) // de fuck?!
     //})
-    
+
     $('#video_frame').delay(800).fadeIn('slow');
     $('.control_holder').hide();
     setTimeout( function() { $('.control_holder').hide() }, 500 ) // de fuck?!
@@ -215,8 +211,8 @@ var marqercheckup = setInterval( function() {
 
 function fadeInVideo() {
   if (pop != null ) {
-    $('#video_frame').delay(800).fadeIn('slow'); // regular video 
-    pop.on( 'loadstart', function() { $('#video_frame').delay(800).fadeIn('slow') } ); // youtube    
+    $('#video_frame').delay(800).fadeIn('slow'); // regular video
+    pop.on( 'loadstart', function() { $('#video_frame').delay(800).fadeIn('slow') } ); // youtube
     setTimeout(function(){
       sideMenuTop();
     }, 900);
@@ -226,32 +222,32 @@ function fadeInVideo() {
 }
 
 function loadProgram( p ) {
-  
+
   console.log("BABYLON LOAD PROGRAM: ")
   $('.track_marqer').remove() // is not removed initially, so a failsafe
-  
+
   if ( p !== undefined && p.id != lastprogram ) { // the program id isnt actually switched anymore
     program = p;
     getPlayer( p, '#video_frame', agent.technology, agent.videotype );
     lastprogram = p.id;
-    $('#video_frame').hide();    
+    $('#video_frame').hide();
     fadeInVideo()
   }
-  
+
   console.log("BABYLON RESET ANIMATION: ", p )
-  
+
   $('.brandbox').fadeOut('slow');
   $('.middle').css('pointer-events','none');
   $('.bottom').removeClass('show_bottom');
   $('.control_holder').removeClass('control_holder_higher');
   $('.video_background_hider').animate({'opacity':0}, 1200 );
-  $('.video_background_hider').css('pointer-events','none');  
+  $('.video_background_hider').css('pointer-events','none');
   try {
     $('.program_list').shapeshift(ss_options);
   }catch(e){
     // fuch it
   }
-  
+
   //Aanpassingen andre
   $('.custom_navbar_navbar').fadeOut();
   $('.custom_navbar_menu').fadeIn();
@@ -263,24 +259,24 @@ function loadProgram( p ) {
   $('.custom_navbar_menu span').css('color','#FFF');
   $('.side_menu').fadeIn();
   $('.control_holder').fadeIn();
-  
+
   console.log("BABYLON BUILDS PROGRAM ... : ", p )
-  buildProgram(p)  
+  buildProgram(p)
 
   sideMenuTop();
 }
 
 function buildProgram( p ) {
-  
+
   console.log("BABYLON BUILDING PROGRAM")
-  
+
   if ( pop == null || pop == undefined ) {
     setTimeout( function() { buildProgram( p ) }, 500 )
     return;
   }
-  
+
   if ( p !== undefined ) {
-    // Set Info    
+    // Set Info
     var time = p.created_at;
     time = new Date(time);
     time = time.toLocaleString();
@@ -295,7 +291,7 @@ function buildProgram( p ) {
     $('#info').hide().fadeIn('slow');
 
     var related_programs = []
-    $.each( p.tags, function(k, t) { 
+    $.each( p.tags, function(k, t) {
       $.each( programs, function( pk, rp ) {
         if ( rp.tags.toString().indexOf(t) != -1 ) { // || p.title.indexOf(t) ) {
           console.log("match!", t, rp.tags.toString() )
@@ -307,17 +303,17 @@ function buildProgram( p ) {
     // Set Related
     $('.video_list').html("")
     var months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec' ]
-    $.each( related_programs, function( i, p ) { 
+    $.each( related_programs, function( i, p ) {
       var related = ""
       var d = new Date( p.created_at )
-      var t = toTime( p.meta.moviedescription.duration_in_ms/1000 )      
+      var t = toTime( p.meta.moviedescription.duration_in_ms/1000 )
       related += '<div class="item">'
       related += '  <a class="relatedvideolink" href="javascript:loadProgramById(\''+p.id+'\');" target="_top"></a>'
       related += '  <img alt="'+p.title+'" src="'+p.meta.moviedescription.thumbnail.replace('mqdefault', 'hqdefault')+'" >'
       related += '  <div class="relatedvideohover"></div>'
       related += '  <div class="playtime"><span class="glyphicon glyphicon-play background-color"></span><div class="time secondary-color">' + t.m + ':' + t.s + '</div></div>'
       related += '  <div class="image_gradient"></div>'
-      related += '  <div class="ontopof"><strong class="latest_title secondary-color">'+truncate(p.title, 64)+'</strong>'            
+      related += '  <div class="ontopof"><strong class="latest_title secondary-color">'+truncate(p.title, 64)+'</strong>'
       related += ' <date class="primary-color"><div class="month background-color">'+ months[ d.getMonth() ] + '</div><div class="day">' + d.getDate() + '</div></date>'
       related += '</div></div>'
       $('.video_list').append(related)
@@ -326,37 +322,37 @@ function buildProgram( p ) {
     // if we got none
     if ( related_programs.length == 0 ) $('.video_list').append('<h3>Geen gerelateerde videos</h3>')
   }
-  
+
   clearInterval( marqercheckup );
   $('.marqer').removeClass('hidden');
   $('.marqer').hide();
   $('.marqer').fadeIn(2400);
   $('.moar_button').fadeIn('slow');
-  
+
   //console.log("GAZETVANANTWERPEN SET MUTES: ", p )
   pop.mute(false);
   doControl("unmute")
   pop.volume(1);
   pop.playbackRate(1);
-  
+
   //console.log("GAZETVANANTWERPEN add hidden")
   $('.control_holder').fadeOut()
-  
+
   // hide controls, before play
   pop.on('loadeddata', function() {
     console.log("BABYLON: loaded data ... ")
     //console.log("GAZETVANANTWERPEN: loaded data ... ")
     //showControls()
   })
-  
+
   // console.log("GAZETVANANTWERPEN CANPLAY: ", pop, p )
   // failsave
   pop.on('canplay', function() {
     console.log("BABYLON: canplay ... ")
     showControls()
-    $('.sense-layer').fadeIn();    
+    $('.sense-layer').fadeIn();
   });
-  
+
   //console.log("GAZETVANANTWERPEN ZUT: ", pop, p )
   // connect play/pause
   pop.on( 'playing', function() { checkPlayButton() } )
@@ -373,32 +369,32 @@ function buildProgram( p ) {
     pop.mute(false);
     doControl("unmute")
   })
-  
+
   //console.log("GAZETVANANTWERPEN ZUT: ", pop, p )
   pop.on('pause', function() {
     //console.log("GAZETVANANTWERPEN: pause ... ")
     $('.control_holder .play-button_scrub-bar .playpausebutton span').removeClass('glyphicon-pause');
     showControls()
-  })    
+  })
 
   //console.log("GAZETVANANTWERPEN MEERZUT: ", pop, p )
   // turn big play button back on (unless yotube ?)
   if ( program.program_items[0].asset._type == "Video" ) {
-    $(".big-play").removeClass('hidden')  
+    $(".big-play").removeClass('hidden')
     $('.control_holder').fadeIn()
   }
 
-  
+
   //CHECK IF VIDEO IS YOUTUBE????????
   //??????????????????????
   //if ( program.program_items[0].asset._type != "Video" ) {
-  //  $(".quality-switcher").addClass('hidden')  
+  //  $(".quality-switcher").addClass('hidden')
   //}
   //console.log("GAZETVANANTWERPEN toggleMUTE");
-  pop.on( 'mute', function() { 
+  pop.on( 'mute', function() {
     //console.log("GAZETVANANTWERPEN toggleMUTED");
   })
-  
+
   if(pop.mute()){
     //console.log("GAZETVANANTWERPEN toggleMUTED");
   }
@@ -408,7 +404,7 @@ function buildProgram( p ) {
 
   var temp = p.marqers;
   var originalDuration = 0;
-  resetMarqers( marqers, originalDuration );  
+  resetMarqers( marqers, originalDuration );
   //console.log('test p' + p.meta.moviedescription);
   setTimeout( function() {
     setMarqers( temp, originalDuration );
@@ -417,21 +413,21 @@ function buildProgram( p ) {
     $('.marqer').hide();
     $('.marqer').fadeIn("slow");
   }, 100 );
-    
-  setTimeout( function() { 
+
+  setTimeout( function() {
     console.log( isPlaying, program.program_items[0].asset._type )
-    if (!isPlaying && program.program_items[0].asset._type == 'Video') $('.big-play').removeClass('hidden'); 
-    sideMenuTop();   
-  }, 800 ) 
+    if (!isPlaying && program.program_items[0].asset._type == 'Video') $('.big-play').removeClass('hidden');
+    sideMenuTop();
+  }, 800 )
   setSocial();
   //
-  $('.program_list').shapeshift(ss_options); // failsafe 
+  $('.program_list').shapeshift(ss_options); // failsafe
 }
-  
-var toggleMuteButton = function() {    
+
+var toggleMuteButton = function() {
   //console.log("GAZETVANANTWERPEN toggleMUTED");
-}  
-  
+}
+
 /*
 var checkPlayButton = function() {
   if ( pop.paused() ) {
@@ -447,18 +443,18 @@ var checkPlayButton = function() {
 }
 */
 
-var showControls = function() {    
+var showControls = function() {
   $('.control_holder').fadeIn();
-  checkPlayButton() ; 
+  checkPlayButton() ;
 }
 
-var toggleSite = function() { 
-  if ( $('.brandbox').is(":visible") ) {    
+var toggleSite = function() {
+  if ( $('.brandbox').is(":visible") ) {
     //console.log("GAZETVANANTWERPEN SHOW VIDEO")
 
     // show videos
     if (!isPlaying && program.program_items[0].asset._type == 'Video') $('.big-play').removeClass('hidden');
-    $('.control_holder').fadeIn('slow'); 
+    $('.control_holder').fadeIn('slow');
 
     // why the fuck is this reloading here?
     // chill, its doing nothing when no progam is loading
@@ -475,7 +471,7 @@ var toggleSite = function() {
 
     // show menus
     $('.big-play').addClass('hidden');
-    $('.control_holder').fadeOut('slow');  
+    $('.control_holder').fadeOut('slow');
 
     $('.brandbox').fadeIn('slow');
 
@@ -487,8 +483,8 @@ var toggleSite = function() {
     $('.marqer').addClass('hidden');
     $('.moar_button').fadeOut('slow');
     $('.control_holder .play-button_scrub-bar .playpausebutton span').removeClass('glyphicon-pause');
-    
-    
+
+
     $('.custom_navbar_navbar').fadeIn();
     $('.custom_navbar_menu').fadeOut();
     $('.custom_navbar_mobile_menu').fadeIn();
@@ -496,7 +492,7 @@ var toggleSite = function() {
     $('.custom_navbar_brand').removeClass('hidden_navbar_brand');
     $('.custom_navbar_menu').css('background-color','#FFF');
     $('.custom_navbar_menu span').addClass('primary-color');
-    
+
     //Just in case
     closeSideMenu();
     $('.side_menu').fadeOut();
@@ -505,7 +501,7 @@ var toggleSite = function() {
     window.clearTimeout(mouseTimer);
     pop.volume(0);
     //pop.pause();
-    pop.playbackRate(0.1);
+    pop.playbackRate(0.4);
 
   }
 };
@@ -524,7 +520,7 @@ function loadProgramById(id) {
   // close menu, just in case
   console.log("load program by id ...");
   if(sidemenuOpen) {
-    $('.custom_navbar_mobile_menu').trigger('click'); 
+    $('.custom_navbar_mobile_menu').trigger('click');
   }
   closeSideMenu();
   videoToggle = true;
@@ -541,10 +537,10 @@ function checkButtons() {
 }
 
 function createMainContent() {
-    
-  if ( menudata.menu !== undefined ) { 
+
+  if ( menudata.menu !== undefined ) {
     // ### Make Menu Categories!
-    //Create dynamic thumbnails for different screens. 
+    //Create dynamic thumbnails for different screens.
     var screenHeight = $(document).height();
     var screenWidth = $(document).width() - 400;
     var contentHeight = $('.brandbox .content').height();
@@ -562,8 +558,8 @@ function createMainContent() {
       var smallThumbHeight = bigThumbHeight;
       colspanbig = 4
       colspan = 4;
-    } 
-    else if(screenWidth > screenHeight) 
+    }
+    else if(screenWidth > screenHeight)
     {
       //Big thumbs
       var bigHeight = Math.floor((contentHeight / 2) - 8);
@@ -576,8 +572,8 @@ function createMainContent() {
       console.log('test 3');
       colspanbig = 2;
       colspan = 1;
-    } 
-    else 
+    }
+    else
     {
       //Big thumbs
       var bigWidth = Math.floor((contentWidth / 2) - 10);
@@ -591,9 +587,9 @@ function createMainContent() {
       colspanbig = 2;
       colspan = 1;
     }
-    var contentHeight = (bigThumbHeight * 2) + 16; 
-    var smallThumbClass = (smallThumbHeight < 140) ? "ontopoffsmall" : "ontopoff"; 
-    
+    var contentHeight = (bigThumbHeight * 2) + 16;
+    var smallThumbClass = (smallThumbHeight < 140) ? "ontopoffsmall" : "ontopoff";
+
     $.each( menudata.menu, function(key, menu_category ) {
       if(key == 0) {
         $('.custom_navbar_brand .navbar-brand h1').text(menu_category.name);
@@ -607,11 +603,11 @@ function createMainContent() {
       category += '</div></div>';
       $('.brandbox').append( category );
       $('.category'+key).css('left', ((100*key)+10)+'%');
-    
+
       //Count the items to check if an "More video" button needs to be added
       var videoCount = 0;
       $.each( menu_category.items, function( item_key, item_value ) {
-        
+
         // item
         var item = "";
         var p = lookUpProgram( item_value.id );
@@ -619,7 +615,7 @@ function createMainContent() {
 
         if ( item_value.emphasize ) {
           item += '<div class="item item_big" data-ss-colspan="' + colspanbig + '" data-ss-rowspan="2">';
-          item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">'; 
+          item += ' <a href="javascript:loadProgramById(\'' + p.id + '\');" target="_top">';
           item += ' <img src="'+p.meta.moviedescription.thumbnail.replace('mqdefault', 'hqdefault')+'" width="' + bigThumbWidth + '" height="' + bigThumbHeight + '" >';
           var title = p.title;
           title = title.substring(0, 80);
@@ -659,7 +655,7 @@ function createMainContent() {
         button += "<span class='glyphicon glyphicon-menu-down' aria-hidden='true'></span>";
         button += "</div><div class='clear'></div>";
         $('.category' + key).append(button);
-      
+
         $(".moreVideosButton" + key ).click(function(){
           var contentwrapper = $('.contentwrapper' + key + ' .program_list').height();
           var contentwrapperCheck = $('.contentwrapper' + key).height();
@@ -686,7 +682,7 @@ function createMainContent() {
         $('.contentwrapper' + key).css('padding-bottom', '40px');
       }
     });
-    
+
     // APPEND AND ADD INTERACTION
     $.each( menudata.menu, function(key, menu_category ) {
       // category header
@@ -697,12 +693,12 @@ function createMainContent() {
       $('.cat_group').append(header_item);
     });
     $('.cat_item').click(function(){ $('.custom_navbar_mobile_menu').trigger('click'); });
-    if($(window).width() < 700) { 
+    if($(window).width() < 700) {
       $('.cat_item').addClass('mobile-background-color');
     }
   }
-  
-  
+
+
   $('.right_button').click( function() {
     $('.content').animate({
       'left': '-=100%'
@@ -712,14 +708,14 @@ function createMainContent() {
     $('.cat_item a').removeClass('primary-color');
     $('.cat_item:eq('+curr+')').addClass('active');
     $('.cat_item:eq('+curr+') a').addClass('primary-color');
-    
+
     var navbarTitle = $('.cat_group .active').text();
     $(".custom_navbar_brand .navbar-brand h1").fadeOut('fast', function() {
       $(this).text(navbarTitle).fadeIn('fast');
     });
     checkButtons()
   });
-  
+
   $('.left_button').click( function() {
     $('.content').animate({
       'left': '+=100%'
@@ -736,12 +732,12 @@ function createMainContent() {
     });
     checkButtons()
   });
-  
-  
-  
+
+
+
   // set interaction
   $('.cat_item').click( function(e){
-    
+
     // FIX THIS
     var cli = $('.cat_item').index( $(this) );
     var gotopos = (cli * 100 ) - ( curr * 100 );
@@ -754,22 +750,22 @@ function createMainContent() {
     $('.cat_item a').removeClass('primary-color');
     $('.cat_item:eq('+curr+')').addClass('active');
     $('.cat_item:eq('+curr+') a').addClass('primary-color');
-    
+
     var navbarTitle = $('.cat_group .active').text();
     $(".custom_navbar_brand .navbar-brand h1").fadeOut('fast', function() {
       $(this).text(navbarTitle).fadeIn('fast');
     });
     checkButtons()
   });
-  
+
   // activate the first
   $('.cat_item:first').addClass('active');
   $('.cat_item:first a').addClass('primary-color');
-  $('.left_button').hide();  
+  $('.left_button').hide();
 }
 function createMenu() {
   // ### GET ACTUAL DATA!
-  // filter out the categories and fill them  
+  // filter out the categories and fill them
   $.each( menudata.menu, function(key, c) {
     var categorie = ''
     categorie += '<ul id="' + c.name.toLowerCase().split(' ').join('_') + '" class="side_menu_category">'
@@ -782,27 +778,32 @@ function createMenu() {
       // item += '<img src="' + i.name + '" height="32px" width="48px"/>';
       item += i.name;
       item += '</a>';
-      item += '</li>';      
-      $('.side_menu_category:last').append( item );   
+      item += '</li>';
+      $('.side_menu_category:last').append( item );
     })
   });
-  
+
+  // make sure that the content 'fits'
+  if (!isMobile) {
+    //.content
+  }
+
   // activate & open the first (?)
   $('ul:first').addClass('active');
-  
+
   // init search interaction
-  $('#search_field').on('input', function() { 
+  $('#search_field').on('input', function() {
   });
-  
+
   // set interaction
   $('.side_menu_category').find('li:first').css('box-shadow', 'inset 0px 2px 4px rgba(0,0,0,0.3)');
   $('.side_menu_category li:even').css('background-color', '#e8e8e8');
   $('.side_menu_category li:odd').css('background-color', '#dcdcdc');
-  $('.side_menu_category li').mouseenter( function() {     
+  $('.side_menu_category li').mouseenter( function() {
     $( this ).addClass('side_menu_over')
     $( this ).addClass('primary-background-color')
 
-  }).mouseleave( function() {     
+  }).mouseleave( function() {
     $('.side_menu_category li:even').css('background-color', '#e8e8e8');
     $('.side_menu_category li:odd').css('background-color', '#dcdcdc');
     $( this ).removeClass('side_menu_over')
@@ -826,24 +827,24 @@ function createFooter() {
             next = $(this).siblings(':first');
         }
         next.children(':first-child').clone().appendTo($(this));
-        
+
 
       for (var i=0;i<4;i++) {
           next=next.next();
           if (!next.length) {
           	next = $(this).siblings(':first');
         	}
-          
+
           next.children(':first-child').clone().appendTo($(this));
         }
     });
-    
-  /* HIDE CONTROLS AFTER INACTIVITY 2000MS 
+
+  /* HIDE CONTROLS AFTER INACTIVITY 2000MS
   NOT WORKING PROPERLY
   var onmousestop = function(){
     $("#controls").hide();
   }
-  
+
   $("*").mousemove(function(e){
     $("#controls").show();
     clearTimeout(timer);
@@ -852,7 +853,7 @@ function createFooter() {
   */
 
 	//ANIMATE SIDE-MENU ITEMS TO AUTO HEIGHT
-	 var clicked = 0; 
+	 var clicked = 0;
    $(".side_menu_category_title").click(function(){
     var curheight = $(this).parent().height();
       if(curheight > 40){
@@ -866,17 +867,17 @@ function createFooter() {
         var clickeddiv = $(this).parent().height();
         $(this).parent().css('height', '33px');
         $(this).parent().animate({height: clickeddiv}, 500);
-        clicked = 1; 
+        clicked = 1;
       }
-	}); 
-	
-	
+	});
+
+
 	//SEARCH FOR URLS IN DESCRIPTION TEXT
 	//MAKE THOSE URLS SECUNDAIRY-COLOR
 
   $(".moviedescriptionp *").addClass("secondary-color");
-  
-  
+
+
   //QUALITY SWITCHER TEXT REPLACE SD WITH HD WHEN SWITCH
   //AND BACK
   $(".quality-switch-button").click(function(){
@@ -889,16 +890,16 @@ function createFooter() {
       (this).innerHTML = "SD";
     }
   });
-  
+
   //SWITCH ICON MUTE IF CLICKED
   $("#butt-togglemute").click(function() {
     $(".glyphicon-volume-off").toggleClass("display");
     $(".glyphicon-volume-up").toggleClass("display");
   });
-  
+
   //SCRUBBER
   //popProgress();
-  
+
 };
 
 
@@ -907,23 +908,23 @@ function createFooter() {
 // ########################################################################
 
 $(function() {
-  
+
   // ### MAIN VIEWS
-  var menu = "";  
+  var menu = "";
   createMainContent();
   createMenu();
   createFooter();
 
   // NAVBAR
   $('.navbar-brand').click( toggleSite );
-  
+
   // MOAR (depricated)
-  $('.moar_button').click( toggleSite );   
-  $('.moar_button').hide();  
-  
+  $('.moar_button').click( toggleSite );
+  $('.moar_button').hide();
+
   // FOOTER
-  $('.show_info').click( function() {  
-    $('.bottom').toggleClass('show_bottom'); 
+  $('.show_info').click( function() {
+    $('.bottom').toggleClass('show_bottom');
     $('.control_holder').toggleClass('control_holder_higher');
   } );
   $('.play_now').click( toggleSite );
@@ -935,14 +936,14 @@ $(function() {
     $('h3', this).addClass('primary-color');
     e.preventDefault()
     $(this).tab('show')
-  }); 
+  });
 
   $('.go_to_video').click( toggleSite );
-  
+
   // ### SIDE MENU
   // set buttons
-  $('.menu_button').click(function() {  $('.side_menu').removeClass('open_side_menu'); } );  
-  $('.close_butt').click(function() { $('.side_menu').removeClass('open_side_menu'); } );  
+  $('.menu_button').click(function() {  $('.side_menu').removeClass('open_side_menu'); } );
+  $('.close_butt').click(function() { $('.side_menu').removeClass('open_side_menu'); } );
   $('.side_menu').removeClass('open_side_menu');
 
   // ### MAIN
@@ -950,22 +951,22 @@ $(function() {
   var programHeight = $('.program_list').height();
   programHeight = programHeight + 40;
   $('.program_list').css('height', programHeight);
-  
+
 });
 
 //Aanpassingen Andre
 $('.custom_navbar_menu').click( function() { toggleSite(); videoToggle = false; window.clearTimeout(mouseTimer);});
 $('.tabpanel ul li').click( function() { openSideMenu(); });
 $('.fa-close').click( function() { closeSideMenu(); });
-//$('div:not(.item,.top)').click( function() { 
-//  if ( $('.brandbox').is(":visible") ) { 
+//$('div:not(.item,.top)').click( function() {
+//  if ( $('.brandbox').is(":visible") ) {
 //    toggleSite(); videoToggle = false; window.clearTimeout(mouseTimer);
-//  } 
+//  }
 //});
 $('.sense-layer').css('display','block');
 $('.sense-layer').click(function() {
   if(playtoggle == false) {
-    pop.play(); 
+    pop.play();
     playtoggle = true;
   } else {
     pop.pause();
@@ -997,7 +998,7 @@ var disappearControls = function() {
     controlsVisible = false;
 }
 
-$(document).mousemove(function(){ 
+$(document).mousemove(function(){
   if(videoToggle == true){
     if (mouseTimer) {
       window.clearTimeout(mouseTimer);

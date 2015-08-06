@@ -12,7 +12,6 @@
   src: url( '/clients/AgriMedia/fonts/ITCAvantGardeStd-Demi_0.otf' );
 }
 
-
 @font-face {
   font-family: OpenSans;
   src: url( '/clients/AgriMedia/fonts/OpenSans-Regular.ttf' );
@@ -208,9 +207,16 @@ html, body {
         border-left: 1px solid;
         font-size: 18px;
         vertical-align: middle;
+        max-width: 256px;
       }
     }
   }
+}
+
+.smaller_background {
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 460px;
+  height: 90px;
 }
 
 .hidden_navbar_brand {
@@ -578,7 +584,8 @@ html, body {
   position: absolute;
   width: 80vw;
   height: calc(90% - 65px);
-  top: 65px;
+  //top: 65px;
+  margin-top: 8px;
   z-index: 100000;
 }
 
