@@ -83,7 +83,7 @@
 = javascript_include_tag "nabu_themes/babylon/babylon"
 
 :javascript
-  var programs = #{@programs.to_json}
+  var programs = #{@filtered_programs.to_json}
   var menudata = #{@menudata}
 
 = stylesheet_link_tag "nabu_themes/babylon/babylon", media: "all", "data-turbolinks-track" => true, "async" => true

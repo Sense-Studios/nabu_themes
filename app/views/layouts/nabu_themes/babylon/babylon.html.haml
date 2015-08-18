@@ -11,49 +11,54 @@
       var test = "#{@program.id}";
       window.t = #{raw @t.to_json}
       if (!window.console) console = {log: function() {}};   // ie8 fix
-  
+
     -# meta-tags and viewport
     = csrf_meta_tags
     %meta{"name"=>"apple-mobile-web-app-capable", "content"=>"yes"}
     %meta{"name"=>"apple-mobile-web-app-status-bar-style", "content"=>"black-translucent"}
     %meta{"name"=>"viewport", "content"=>"width=device-width, initial-scale=0.75, maximum-scale=0.75, minimum-scale=0.75, user-scalable=no"}
     %meta{"http-equiv"=>"X-UA-Compatible", "content"=>"IE=9"}
-  
+
     -# set current program, if any
     - if @program
-  
+
       :javascript
         var program_id = "#{@program.id}";
+        var show_site = true
+        if ( window.location.hash != "" ) {
+          program_id = window.location.hash.substring(1, 100)
+          var show_site = false // toggles the site
+        }
         var clipcard_id = "#{@clipcard.id unless @clipcard.nil?}";
         var client_id = "#{@program.client_id}" ;
-        var account_id = "#{@account_id}" ;      
-  
+        var account_id = "#{@account_id}" ;
+
       %title
         = @program.title
-  
+
       %meta{"name"=>"description", "content"=>"Marduq - Nabu - #{@program.meta.moviedescription.description.to_s}" }
       %meta{"name"=>"keywords", "content"=>"Marduq - Nabu #{@program.title} #{@program.tags.join(' ')}" }
       %meta{"name"=>"author", "content"=>"Sense-Studios"}
-  
+
       %meta{"property"=>"og:image", "content"=> @program.program_items[0].asset.thumbnail_url  }
       %meta{"property"=>"og:url", "content"=> request.protocol + request.host_with_port + request.fullpath }
       %meta{"property"=>"og:title", "content"=> @program.title }
       %meta{"property"=>"og:description", "content"=> @program.meta.moviedescription.description.to_s }
-    
+
     - else
-  
-      %title 
+
+      %title
         Marduq - Nabu
-  
+
       %meta{"name"=>"description", "content"=>"Marduq - Nabu" }
       %meta{"name"=>"keywords", "content"=>"Marduq - Nabu" }
       %meta{"name"=>"author", "content"=>"Sense-Studios" }
-  
+
       %meta{"property"=>"og:image", "content"=>"" }
       %meta{"property"=>"og:url", "content"=> request.protocol + request.host_with_port + request.fullpath }
       %meta{"property"=>"og:title", "content"=>"Marduq - Nabu" }
       %meta{"property"=>"og:description", "content"=>"" }
-  
+
   %body
 
 

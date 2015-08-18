@@ -16,15 +16,20 @@ module NabuThemes
       @menudata = NabuThemes::Menu.find( @theme.menu ).items
       if params[:id].blank?
         if @theme.home_program.blank?
-          @program = MarduqResource::Program.find( JSON.parse(Menu.find(@theme.menu).items)["menu"][0]["items"][0]["id"] )
+          @program = appMarduqResource::Program.find( JSON.parse( Menu.find(@theme.menu).items)["menu"][0]["items"][0]["id"] )
         else
           @program = MarduqResource::Program.find( @theme.home_program ) # home program
-         end 
+         end
       else
         @program = MarduqResource::Program.find( params[:id] ) # home program
       end
 
       @programs = MarduqResource::Program.where( "client_id" => User.find( @theme.owner ).client_id )
+      @filtered_programs = @programs.map do |program|
+        md = program.meta.moviedescription
+        { id: program.id, title: program.title, tags: program.tags, created_at: program.created_at, meta: { moviedescription: { duration_in_ms: md.try(:duration_in_ms), thumbnail: md.try(:thumbnail) } } }
+      end
+      #.pluck( title, meta.to_json().moviedescription.duration_in_ms, created_at, meta.moviedescription.thumbnail)
       @page = 'nabu_themes/' + @theme.theme + '/index'
       @related_programs = @programs.select { |p| p.tags.any? { |t| @program.tags.include? t } }
       @related_programs = @programs if @related_programs.blank?
@@ -108,7 +113,7 @@ module NabuThemes
 
 
     #########################################################################
-    # FOR API, should go for some kind of xhr or json, but I have little time    
+    # FOR API, should go for some kind of xhr or json, but I have little time
     #########################################################################
 
     def create_theme_api
@@ -116,25 +121,25 @@ module NabuThemes
       get_account_owner
       @theme.owner = @account_id
 
-      if hasDupes( params )        
-        render json: { "status"=> "fail", "message" => "either the slug or the title was a duplicate" } 
+      if hasDupes( params )
+        render json: { "status"=> "fail", "message" => "either the slug or the title was a duplicate" }
         logger.debug " >>> KON THEMA NIET MAKEN, HAS DUPES"
         return false
       end
 
-      if @theme.save        
+      if @theme.save
         render json: @theme
       else
         render json: { "status"=>"fail", "message" => "there was an error creating the theme"}
       end
     end
 
-    def update_theme_api      
-      if hasDupes( params )        
-        render json: { "status"=> "fail", "message" => "either the slug or the title was a duplicate" } 
+    def update_theme_api
+      if hasDupes( params )
+        render json: { "status"=> "fail", "message" => "either the slug or the title was a duplicate" }
         return
       end
-      
+
       @theme = Theme.find( params[:id] )
       if @theme.update( theme_params )
         render json: { "status"=> "ok", "message" => "theme was succesfully updated" }
@@ -154,12 +159,12 @@ module NabuThemes
 
     # PRIVATE, Stop reading!
     private
-      def hasDupes( p )      
-      	logger.debug "check for slugs "  
+      def hasDupes( p )
+      	logger.debug "check for slugs "
       	logger.debug p.inspect
       	logger.debug "---------------"
-      	
-        if p[:theme][:slug].blank? || p[:theme][:title].blank?  
+
+        if p[:theme][:slug].blank? || p[:theme][:title].blank?
           logger.debug "leeg gelaten"
           return true
         end
@@ -169,13 +174,13 @@ module NabuThemes
         logger.debug hasRecord
         logger.debug "---------------"
 
-        if hasRecord > 0          
+        if hasRecord > 0
           return true
         else
           return false
         end
       end
-  
+
       def get_account_owner
         # find owner and account id through clipcard
         @owner = current_user

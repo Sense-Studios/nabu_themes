@@ -4,7 +4,7 @@ module NabuThemes
   class Gazetvanantwerpen::GazetvanantwerpenController < ApplicationController
 
     # otherwise it uses its own
-    layout 'nabu_themes/application'  
+    layout 'nabu_themes/application'
 
     # before_action :menu_items
 

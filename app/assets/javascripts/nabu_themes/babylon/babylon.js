@@ -224,31 +224,26 @@ function fadeInVideo() {
 function loadProgram( p ) {
 
   console.log("BABYLON LOAD PROGRAM: ")
+
+  // RESET stuff
   $('.track_marqer').remove() // is not removed initially, so a failsafe
 
-  if ( p !== undefined && p.id != lastprogram ) { // the program id isnt actually switched anymore
-    program = p;
-    getPlayer( p, '#video_frame', agent.technology, agent.videotype );
-    lastprogram = p.id;
-    $('#video_frame').hide();
-    fadeInVideo()
-  }
-
   console.log("BABYLON RESET ANIMATION: ", p )
-
   $('.brandbox').fadeOut('slow');
   $('.middle').css('pointer-events','none');
   $('.bottom').removeClass('show_bottom');
   $('.control_holder').removeClass('control_holder_higher');
   $('.video_background_hider').animate({'opacity':0}, 1200 );
   $('.video_background_hider').css('pointer-events','none');
+
   try {
     $('.program_list').shapeshift(ss_options);
   }catch(e){
-    // fuch it
+    // fuck it
   }
 
-  //Aanpassingen andre
+  // Aanpassingen andre
+  // Reset more stuff
   $('.custom_navbar_navbar').fadeOut();
   $('.custom_navbar_menu').fadeIn();
   $('.custom_navbar_mobile_menu').fadeOut();
@@ -260,10 +255,28 @@ function loadProgram( p ) {
   $('.side_menu').fadeIn();
   $('.control_holder').fadeIn();
 
-  console.log("BABYLON BUILDS PROGRAM ... : ", p )
-  buildProgram(p)
+  // console.log("BABYLON (RE)BUILDS PROGRAM")
+  if ( p !== undefined && p.id != lastprogram ) { // the program id isnt actually switched anymore
+    $.get( "/marduq_api/programs/" + p.id, function( begotton_program ) {
+      // backward compatibility
+      program = begotton_program;
+      p = begotton_program;
 
-  sideMenuTop();
+      // get the player
+      getPlayer( begotton_program, '#video_frame', agent.technology, agent.videotype );
+      lastprogram = begotton_program.id;
+      $('#video_frame').hide();
+      fadeInVideo()
+
+      // build the program
+      buildProgram(begotton_program)
+      sideMenuTop();
+    });
+
+  }else{
+    buildProgram(p)
+    sideMenuTop();
+  }
 }
 
 function buildProgram( p ) {
@@ -276,6 +289,13 @@ function buildProgram( p ) {
   }
 
   if ( p !== undefined ) {
+
+    // set the Hash
+    window.location.hash = p.id
+
+    // set meta
+    $('title').text( p.title )
+
     // Set Info
     var time = p.created_at;
     time = new Date(time);
@@ -294,8 +314,10 @@ function buildProgram( p ) {
     $.each( p.tags, function(k, t) {
       $.each( programs, function( pk, rp ) {
         if ( rp.tags.toString().indexOf(t) != -1 ) { // || p.title.indexOf(t) ) {
-          console.log("match!", t, rp.tags.toString() )
-          related_programs.push( rp )
+          // check if it was added already
+          var wasAdded = false
+          $.each( related_programs, function( rpk, rpp ) { if ( rpp.id == rp.id ) wasAdded = true } )
+          if (!wasAdded) related_programs.push( rp )
         }
       });
     });
@@ -309,7 +331,7 @@ function buildProgram( p ) {
       var t = toTime( p.meta.moviedescription.duration_in_ms/1000 )
       related += '<div class="item">'
       related += '  <a class="relatedvideolink" href="javascript:loadProgramById(\''+p.id+'\');" target="_top"></a>'
-      related += '  <img alt="'+p.title+'" src="'+p.meta.moviedescription.thumbnail.replace('mqdefault', 'hqdefault')+'" >'
+      related += '  <img width="100%" height="100%" alt="'+p.title+'" src="'+p.meta.moviedescription.thumbnail.replace('mqdefault', 'hqdefault')+'" >'
       related += '  <div class="relatedvideohover"></div>'
       related += '  <div class="playtime"><span class="glyphicon glyphicon-play background-color"></span><div class="time secondary-color">' + t.m + ':' + t.s + '</div></div>'
       related += '  <div class="image_gradient"></div>'
@@ -903,57 +925,6 @@ function createFooter() {
 };
 
 
-// ########################################################################
-// ### INIT
-// ########################################################################
-
-$(function() {
-
-  // ### MAIN VIEWS
-  var menu = "";
-  createMainContent();
-  createMenu();
-  createFooter();
-
-  // NAVBAR
-  $('.navbar-brand').click( toggleSite );
-
-  // MOAR (depricated)
-  $('.moar_button').click( toggleSite );
-  $('.moar_button').hide();
-
-  // FOOTER
-  $('.show_info').click( function() {
-    $('.bottom').toggleClass('show_bottom');
-    $('.control_holder').toggleClass('control_holder_higher');
-  } );
-  $('.play_now').click( toggleSite );
-
-  //PRIMARY COLORS FOR TAB TITLE
-  $('h3','.active').addClass('primary-color');
-  $('#tabs a').click(function (e) {
-    $('h3').removeClass('primary-color');
-    $('h3', this).addClass('primary-color');
-    e.preventDefault()
-    $(this).tab('show')
-  });
-
-  $('.go_to_video').click( toggleSite );
-
-  // ### SIDE MENU
-  // set buttons
-  $('.menu_button').click(function() {  $('.side_menu').removeClass('open_side_menu'); } );
-  $('.close_butt').click(function() { $('.side_menu').removeClass('open_side_menu'); } );
-  $('.side_menu').removeClass('open_side_menu');
-
-  // ### MAIN
-  $('.program_list').shapeshift(ss_options);
-  var programHeight = $('.program_list').height();
-  programHeight = programHeight + 40;
-  $('.program_list').css('height', programHeight);
-
-});
-
 //Aanpassingen Andre
 $('.custom_navbar_menu').click( function() { toggleSite(); videoToggle = false; window.clearTimeout(mouseTimer);});
 $('.tabpanel ul li').click( function() { openSideMenu(); });
@@ -1018,3 +989,57 @@ $(document).mousemove(function(){
 setTimeout(function(){
   sideMenuTop();
 },2000);
+
+
+// ########################################################################
+// ### INIT
+// ########################################################################
+
+$(function() {
+
+  // ### MAIN VIEWS
+  var menu = "";
+  createMainContent();
+  createMenu();
+  createFooter();
+
+  // NAVBAR
+  $('.navbar-brand').click( toggleSite );
+
+  // MOAR (depricated)
+  $('.moar_button').click( toggleSite );
+  $('.moar_button').hide();
+
+  // FOOTER
+  $('.show_info').click( function() {
+    $('.bottom').toggleClass('show_bottom');
+    $('.control_holder').toggleClass('control_holder_higher');
+  } );
+  $('.play_now').click( toggleSite );
+
+  //PRIMARY COLORS FOR TAB TITLE
+  $('h3','.active').addClass('primary-color');
+  $('#tabs a').click(function (e) {
+    $('h3').removeClass('primary-color');
+    $('h3', this).addClass('primary-color');
+    e.preventDefault()
+    $(this).tab('show')
+  });
+
+  $('.go_to_video').click( toggleSite );
+
+  // ### SIDE MENU
+  // set buttons
+  $('.menu_button').click(function() {  $('.side_menu').removeClass('open_side_menu'); } );
+  $('.close_butt').click(function() { $('.side_menu').removeClass('open_side_menu'); } );
+  $('.side_menu').removeClass('open_side_menu');
+
+  // ### MAIN
+  $('.program_list').shapeshift(ss_options);
+  var programHeight = $('.program_list').height();
+  programHeight = programHeight + 40;
+  $('.program_list').css('height', programHeight);
+
+  // race error :(
+  // if ( !show_site ) toggleSite()
+});
