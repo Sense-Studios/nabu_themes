@@ -1,0 +1,117 @@
+body {
+	font-family: 'Strait', sans-serif;
+	background-color: #161616;
+	color: #fff;
+	margin: 0px;
+	overflow: hidden;
+	letter-spacing:1px;
+	font-size:13px;
+}
+
+#logo {
+	width:50px;
+	height:50px;
+	padding:10px;
+	position:absolute;
+	top:0px;
+	right:0px;
+	cursor:pointer;
+	background-color:rgba(0,0,0,0.4);
+	background-image:url(nabu_themes/oculus/oculus_bridge.png);
+	background-repeat:no-repeat;
+	background-position:10px 10px;
+}
+
+#logo.offline{
+	background-image:url(nabu_themes/oculus/oculus_bridge_offline.png);
+}
+
+.button {
+	font: 'Strait', sans-serif;
+	cursor:pointer;
+	display:inline-block;
+	background:#404040;
+	padding:10px;
+	color:#a0a0a0;
+}
+
+.button:hover{
+	color:white;
+}
+
+#info{
+	padding:10px;
+	color:#fff;
+	position:absolute;
+	background-color:rgba(0,0,0,0.4);
+	z-index: 100000;
+}
+
+#help-text H1 {
+	font-size:18px;
+	margin-top:15px;
+
+}
+
+#help-text DIV{
+	margin-bottom:5px;
+}
+
+#help-text DIV LABEL{
+	display:inline-block;
+	width:160px;
+}
+
+#help-text SECTION {
+	margin-top:20px;
+}
+
+#generic_error,
+#security_error{
+	padding-top:200px;
+	width:500px;
+	margin-left:auto;
+	margin-right:auto;
+	display:none;
+}
+
+#le_video {
+	display:block;
+	height: 80vh;
+	width: 100vw;
+	z-index: 100000;
+	top: 10vh;
+	position:absolute;
+}
+
+#cssContainer {
+	position: absolute;
+	top: 0;
+}
+
+#helloworld {
+}
+
+#label_figuur_1 {
+	font-family: 'oswald', sans-serif;
+	font-variant: small-caps;
+	line-height: 60px;
+	font-size: 24px;
+	text-shadow: 4px 0px 4px #646464;
+
+	small {
+		line-height: 0em;
+    font-size: 0.75em;
+	}
+
+	a {
+		padding: 0px 12px;
+		color: white;
+		background-color: #4488AA;
+		text-decoration: none;
+		&:hover {
+			background-color: #f5f5f5;
+			color: #444444;
+		}
+	}
+}

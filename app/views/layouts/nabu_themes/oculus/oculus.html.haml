@@ -1,0 +1,53 @@
+!!!
+%head
+
+  - if @program
+    %title= @program.title
+
+    - owner = User.find( @program.client_id )
+    - if !owner.account_id.nil?
+      - @account_id = User.find( owner.id ).account_id
+    - else
+      - @account_id = owner.id
+
+  -# translations and client settings
+  :javascript
+    // translations
+    window.t = #{raw @t.to_json}
+
+    // account and program
+    program_id = "#{@program.id}";
+    client_id = "#{@program.client_id}";
+    account_id = "#{@account_id}";
+
+    program = #{raw @program.to_json}
+
+    // tracking
+    analytics_urchin = "#{owner.urchin}";
+    analytics_woopra_id  = "#{owner.woopra_id}"
+
+  =# stylesheet_link_tag "nabu_themes/oculus/oculus", media: "all", "data-turbolinks-track" => true
+  = stylesheet_link_tag "nabu_themes/oculus/style"
+  = stylesheet_link_tag "nabu_themes/oculus/oculus"
+  =# javascript_include_tag "nabu_themes/oculus/oculus", "data-turbolinks-track" => true
+  = csrf_meta_tags
+
+  = javascript_include_tag "application"
+
+  =# javascript_include_tag "nabu_themes/oculus/OculusBridge.min"
+  = javascript_include_tag "nabu_themes/oculus/lib/three.min"
+  = javascript_include_tag "nabu_themes/oculus/threejs/CSS3DRenderer"
+  = javascript_include_tag "nabu_themes/oculus/threejs/tween.min"
+  = javascript_include_tag "nabu_themes/oculus/lib/OrbitControls"
+  = javascript_include_tag "nabu_themes/oculus/lib/RiftCamera"
+
+%body
+
+
+  =# render 'nabu_themes/oculus/header'
+  =# render 'nabu_themes/oculus/menu'
+  = yield
+  =# render 'nabu_themes/oculus/footer'
+
+
+  = javascript_include_tag "nabu_themes/oculus/first_person"

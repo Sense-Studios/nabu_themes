@@ -1,0 +1,43 @@
+
+#tester
+%a#logo.offline{:href=>"https://github.com/Instrument/oculus-bridge"}
+#info
+  .button#toggle-render toggle render mode
+  .button#help help
+
+%video#le_video
+#viewport
+#cssContainer
+
+.hidden{:style=>"display:none"}
+  #label_figuur_1
+    %h1
+      Gast van
+      %br
+      = link_to "PointlessBlogTv","https://www.youtube.com/user/PointlessBlogTv", :target=>"_blank"
+      %br
+      op
+      = link_to "YouTube", "http://www.youtube.com", :target=>"_blank"
+      %br
+      %small
+        en degene
+        %br
+        die het meest
+        %br
+        aan het woord is
+  #label_figuur_2
+    %h1
+      Gast met Dreadlocks
+      %br
+      %small Die ook af en toe wat mag zeggen
+  #youtube_embed_test{:style=>"width:480px;height:300px"}
+    %iframe{:width=>"100%", :height=>"100%", :src=>"https://www.youtube.com/embed/XzD_m-Pkfqw", :frameborder=>"0", :allowfullscreen=>true}
+
+#security_error
+  %p This file must be served via HTTP to support the use of textures.
+  %p Please host this content via a web server of some kind and try again.
+#generic_error
+  %p Oh dang, something went wrong while trying to render the scene.
+  %p
+    Exception:
+    %span#exception_message

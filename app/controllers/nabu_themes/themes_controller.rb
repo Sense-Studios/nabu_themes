@@ -20,8 +20,9 @@ module NabuThemes
         else
           @program = MarduqResource::Program.find( @theme.home_program ) # home program
          end
+
       else
-        @program = MarduqResource::Program.find( params[:id] ) # home program
+        @program = MarduqResource::Program.find( params[:id] ) # any id
       end
 
       @programs = MarduqResource::Program.where( "client_id" => User.find( @theme.owner ).client_id )
