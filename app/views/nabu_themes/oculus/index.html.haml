@@ -10,28 +10,74 @@
 #cssContainer
 
 .hidden{:style=>"display:none"}
-  #label_figuur_1
-    %h1
-      Gast van
-      %br
-      = link_to "PointlessBlogTv","https://www.youtube.com/user/PointlessBlogTv", :target=>"_blank"
-      %br
-      op
-      = link_to "YouTube", "http://www.youtube.com", :target=>"_blank"
-      %br
-      %small
-        en degene
+
+  / PointlessBlogTv 1
+  - if @program.id == "56009b1964657647f8000005"
+    #label_figuur_1
+      %h1
+        Gast van
         %br
-        die het meest
+        = link_to "PointlessBlogTv","https://www.youtube.com/user/PointlessBlogTv", :target=>"_blank"
         %br
-        aan het woord is
-  #label_figuur_2
-    %h1
-      Gast met Dreadlocks
-      %br
-      %small Die ook af en toe wat mag zeggen
-  #youtube_embed_test{:style=>"width:480px;height:300px"}
-    %iframe{:width=>"100%", :height=>"100%", :src=>"https://www.youtube.com/embed/XzD_m-Pkfqw", :frameborder=>"0", :allowfullscreen=>true}
+        op
+        = link_to "YouTube", "http://www.youtube.com", :target=>"_blank"
+        %br
+        %small
+          en degene
+          %br
+          die het meest
+          %br
+          aan het woord is
+
+    #label_figuur_2
+      %h1
+        Gast met Dreadlocks
+        %br
+        %small Die ook af en toe wat mag zeggen
+
+    #youtube_embed_test{:style=>"width:480px;height:300px"}
+      %iframe{:width=>"100%", :height=>"100%", :src=>"https://www.youtube.com/embed/XzD_m-Pkfqw", :frameborder=>"0", :allowfullscreen=>true}
+
+  // Sphericam360  beach
+  -if @program.id == "5601da6e6465763b2c00000b"
+    #scoreboard
+      %h1
+        home team:
+        = link_to "11", "http://www.volleybal.nl/toernooien", :target=>"_blank"
+        \-
+        away team:
+        = link_to "15", "http://www.volleybal.nl/toernooien", :target=>"_blank"
+
+    #pavilion_site{:style=>"width:1200px;height:800px"}
+      %iframe{:width=>"100%", :height=>"100%", "data-src"=>"http://www.dehavenvanzandvoort.nl/", :frameborder=>"0", :allowfullscreen=>true}
+
+    #youtube_holland_casino{:style=>"width:480px;height:300px"}
+      %iframe{:width=>"100%", :height=>"100%", :src=>"https://www.youtube.com/embed/gsxzboKssZA", :frameborder=>"0", :allowfullscreen=>true}
+
+    #youtube_sphericam{:style=>"width:480px;height:300px"}
+      %iframe{:width=>"100%", :height=>"100%", :src=>"https://www.youtube.com/embed/VYfZPgna3S0", :frameborder=>"0", :allowfullscreen=>true}
+
+    / Doesnt work :(
+    /#sphericam_video_embed{:style=>"width:480px;height:300px"}
+    /  /%video.has_webm.landscape{:controls=>true, :preload=>"none", style:"display: inline;"}
+    /    %source{:src=>"https://d2pq0u4uni88oo.cloudfront.net/projects/1507055/video-556791-h264_high.mp4", :type=>"video/mp4", :codecs=>"&quot;avc1.64001E, mp4a.40.2&quot;"}
+    /    <source src="https://d2pq0u4uni88oo.cloudfront.net/projects/1507055/video-556791-h264_base.mp4" type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;">
+    /    <source src="https://d2pq0u4uni88oo.cloudfront.net/projects/1507055/video-556791-webm.webm" type="video/webm">
+
+
+    /de strandtent: http://www.dehavenvanzandvoort.nl/
+    /video casino: https://www.youtube.com/user/HollandCasino
+
+    /sphericam video: https://www.kickstarter.com/projects/1996234044/sphericam-2-the-4k-360o-video-camera-for-virtual-r/description
+
+    /Graag een score invullen bij het voetvolley, en aanpassen als er een punt wordt gemaakt.
+    /Daaronder graag een plaatje van een time-line waar je op kunt klikken om een sprong te maken naar het matchpunt.
+    /Dit hoeft niet echt te werken, maar moet duidelijk zijn wat de mogelijkheid is.
+
+
+
+
+
 
 #security_error
   %p This file must be served via HTTP to support the use of textures.
