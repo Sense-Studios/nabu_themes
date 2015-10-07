@@ -165,7 +165,9 @@ function createCanvasVideo( w, h, x, y, z, stream ) {
 	video.addEventListener('progress',myHandler,false);
 	video.addEventListener('loadstart',myHandler,false);
 	video.addEventListener('loadeddata',myHandler,false);
-	video.addEventListener('canplay',myHandler,false);
+	video.addEventListener('canplay', function() {
+    video.play();
+  });
   video.addEventListener('play', function() {
     $('#viewport').show();
     $('#le_video').hide();

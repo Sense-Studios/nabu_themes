@@ -90,7 +90,7 @@ var Objects3d = [
       console.log(" -- pavilion_site dit post render")
       setTimeout( function() {
         $('#pavilion_site iframe').attr('src', $('#pavilion_site iframe').data('src'))
-      }, 8000)
+      }, 3000)
     }
   },
   {

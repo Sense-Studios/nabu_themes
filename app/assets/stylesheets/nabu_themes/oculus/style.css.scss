@@ -89,6 +89,17 @@ body {
 	top: 0;
 }
 
+#fake_controls {
+	background-image: url(fake_control_bar.png);
+	position: absolute;
+	left: 50%;
+	margin-left: -319px;
+	width: 638px;
+	height: 30px;
+	bottom: 3%;
+	z-index: 1000;
+}
+
 #helloworld {
 }
 
