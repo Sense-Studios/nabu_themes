@@ -3,27 +3,29 @@
     .content.unskew
 
       - if defined?(news)
-        .showcase-info.full.news
+        .showcase-info.full.news{ style: "background-image: url(#{ current_program.meta.moviedescription.thumbnail })"}
           .showcase-info-text
             = current_program.meta.moviedescription.title
-          .showcase-info-Meer
-            .imported_content
-              :javascript                     
-                var url = '#{SENSE_BLOG}?feed=json&category_name=#{category.downcase}&r=' + Math.random()
-                $('.showcase-info-Meer:last').addClass('#{category.downcase}')
-                $.get( url, function(d) {
-                  if ( d.length > 0) $('.#{category.downcase} .imported_content').append('<p>' + truncate( d[0].excerpt, 120 ) + '</p>');
-                })
-              
-            = link_to "Meer #{category}-news >".html_safe, sense_news_path
-              
-                            
-      - elsif defined?(more)
 
+          .showcase-info-Meer
+            /.imported_content
+            /  :javascript
+            /    var url = '#{SENSE_BLOG}?feed=json&category_name=#{category.downcase}&r=' + Math.random()
+            /    $('.showcase-info-Meer:last').addClass('#{category.downcase}')
+            /    $.get( url, function(d) {
+            /      if ( d.length > 0) $('.#{category.downcase} .imported_content').append('<p>' + truncate( d[0].excerpt, 120 ) + '</p>');
+            /    })
+
+            = link_to "Meer #{category}-news >".html_safe, sense_news_path
+
+
+      - elsif defined?(more)
+        /%pre= items.sample.to_yml
+        - i = items.sample
         /- tag = current_program.tags.reject{|tag| tag == 'home'}.first || nil
-        .showcase-info.full.Meer{ style: "background-image: url(#{ current_program.meta.moviedescription.thumbnail })"}
+        .showcase-info.full.Meer{ style: "background-image: url(#{ i["thumb"] })"}
           .showcase-info-text
-            = "MEER MEER ... ?"
+            = i['name']
           .showcase-info-Meer
             =# link_to "Meer >".html_safe, sense_showcases_path(tag)
             = link_to "Meer meer > #{category}", "/"
@@ -31,10 +33,11 @@
 
       - else
 
-        .showcase-header-image{ style: "background-image: url(#{ current_program.meta.moviedescription.thumbnail })"}
+        - i = items.sample
+        .showcase-header-image{ style: "background-image: url(#{ i["thumb"] })"}
           = link_to 'showcase', 'showcase/' + current_program.id.to_s
         .showcase-info
           .showcase-info-text
-            = current_program.meta.moviedescription.title
+            = i["name"]
           .showcase-info-Meer
             = link_to "Meer SHOWCASE >".html_safe, '/' + NABU_THEMES_MOUNT_POINT + '/' + @slug + '/showcase/' + current_program.id.to_s

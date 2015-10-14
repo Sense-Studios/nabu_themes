@@ -12,7 +12,8 @@
           - current_program = MarduqResource::Program.find( item['items'][0]['id'] )
           %li{ 'data-idx' => index, style: "background-image: url( #{ current_program.meta.moviedescription.thumbnail} )"}
             .player
-              /%iframe{ src: "/#{NABU_THEMES_MOUNT_POINT}/#{@slug}/embed/#{item[1][0].id}", scrolling: 'no', frameborder: 0, allowfullscreen: false, width: '100%', height: '100%' }
+              %iframe{ src: "", scrolling: 'no', frameborder: 0, allowfullscreen: false, width: '100%', height: '100%' }
+              / "/embed/#{ current_program.id }"
               %span{:class=>'glyphicon glyphicon-play item-play'}
 
             .item
@@ -20,7 +21,7 @@
                 %div{ class: "block #{b}" }
                   = render partial: 'nabu_themes/sense/item', locals: { current_program: current_program, "#{b}".to_sym => true, items: item['items'], category: item['name'] }
         - rescue
-          
+          %h1 You broke it
 
 #category
   %ul

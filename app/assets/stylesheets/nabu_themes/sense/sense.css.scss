@@ -28,9 +28,9 @@ $primary-text-color: white;
   box-shadow:         4px 4px 5px 0px rgba(0, 0, 0, 0.5);
 }
 
-@mixin skew {      
+@mixin skew {
   -webkit-transform:    skewX(-30deg);
-  transform:    skewX(-30deg);  
+  transform:    skewX(-30deg);
 }
 
 @mixin unskew {
@@ -38,7 +38,7 @@ $primary-text-color: white;
   transform:    skewX(30deg);
 }
 
-@mixin rounded {  
+@mixin rounded {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
@@ -69,7 +69,7 @@ html, body {
   margin: 0;
 }
 
-body {  
+body {
   background: $grey;
   color: white;
   font-family: 'PT Sans', sans-serif;
@@ -82,7 +82,7 @@ body {
   height: 50px;
   padding-left: 15px;
   padding-right: 15px;
-  
+
   .search {
     float: right;
   }
@@ -119,11 +119,11 @@ body {
   background-size: 100%;
   background-repeat: no-repeat;
   background-position: 50%;
-  
+
   &.video {
     position: static;
   }
-  
+
   img.content-background {
     position: fixed;
     top: 0;
@@ -132,20 +132,20 @@ body {
     height: 100%;
     opacity: .2;
   }
-  
+
   > div {
     position: relative;
   }
-  
+
   #showcases {
     margin-top: 65px;
     margin-bottom: 50px;
   }
-  
+
   #video {
     height: 100%;
   }
-  
+
   .more-btn {
     position: absolute;
     bottom: 30px;
@@ -154,7 +154,7 @@ body {
     width: 40px;
     text-align: center;
   }
-  
+
   #scrubbar {
     position: absolute;
     bottom: -10px;
@@ -162,12 +162,12 @@ body {
     right: 0;
     margin: 0;
   }
-  
+
   #controls {
     position: absolute;
     bottom: 50px;
   }
-  
+
   #more {
     background-color: white;
     color: black;
@@ -181,14 +181,14 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  ul {    
+  ul {
     position: relative;
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
     list-style: none;
-    
+
     li {
       position: relative;
       display: block;
@@ -201,7 +201,7 @@ body {
       background-repeat: no-repeat;
       background-size: cover;
       background-position: 50%;
-      
+
       .item-play {
         position: absolute;
         top: 42%;
@@ -213,7 +213,7 @@ body {
 
   .item {
     position: absolute;
-    bottom: 50px;
+    bottom: 142px;
     width: 100%;
     .block {
       display: inline-block;
@@ -226,7 +226,7 @@ body {
   bottom: 50px;
   width: 100%;
   height: 180px;
-  
+
   .galleria-container {
     background: none;
     overflow: initial;
@@ -251,15 +251,15 @@ body {
     font-family: 'PT Sans', sans-serif;
     font-style: initial;
     font-size: 14pt;
-  }  
-  
+  }
+
 }
 
 #category {
   position: relative;
-  top: 50px;
-  max-width: 20%;
-  ul {
+  top: 126px;
+  left: 41px;
+  max-width: 20%;  ul {
     li {
       @include rounded;
       &.skew { @include skew; }
@@ -268,14 +268,26 @@ body {
       margin: 10px 0;
       padding: 10px 20px;
       cursor: pointer;
-      transition: font-size 1s;
+      transition: font-size 1s, background 0.6s;
+
+      &:hover {
+        background: rgba(50,50,50,.8);
+      }
+
       &.active {
         font-size: xx-large;
+        background: rgba(50,50,50,.52);
       }
       > div {
         &.unskew { @include unskew; }
       }
     }
+  }
+
+  opacity: 0.6;
+  transition-duration: 1.3s;
+  &:hover {
+    opacity: 1;
   }
 }
 
@@ -290,7 +302,7 @@ body {
   float: left;
   position: relative;
   color: $primary-text-color;
-    
+
   .background {
     &.skew { @include skew }
     @include rounded;
@@ -311,7 +323,7 @@ body {
         position: absolute;
         left: -13%;
         background-repeat: no-repeat;
-        background-position: 50%;
+        background-position: 50% 31%;
         background-size: 100%;
         a {
           position: absolute;
@@ -340,7 +352,7 @@ body {
           @include links($primary-color);
         }
         &.full {
-          width: 126%;          
+          width: 126%;
           height: 100%;
           left: -13%;
           padding: 5px 26%;
@@ -356,9 +368,9 @@ body {
             background-blend-mode: darken;
           }
         }
-      }            
+      }
     }
-  }  
+  }
 }
 
 #menu {
@@ -392,7 +404,7 @@ body {
   }
   &.closed {
     transform: translateX(100%);
-  }  
+  }
   .close-btn {
     cursor: pointer;
     margin-bottom: 15px;
@@ -401,14 +413,14 @@ body {
 
 #video_container {
   height: 100%;
-  
+
   #video_frame {
     width: 100%;
     height: 100%!important;
   }
 }
 
-#footer {  
+#footer {
   z-index: 2;
   height: 40px;
   line-height: 40px;
