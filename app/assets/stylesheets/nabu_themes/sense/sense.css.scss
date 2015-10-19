@@ -213,7 +213,7 @@ body {
 
   .item {
     position: absolute;
-    bottom: 142px;
+    bottom: 10%;
     width: 100%;
     .block {
       display: inline-block;
@@ -257,8 +257,8 @@ body {
 
 #category {
   position: relative;
-  top: 126px;
-  left: 41px;
+  top: 64px;
+  left: 24px;
   max-width: 20%;  ul {
     li {
       @include rounded;
@@ -269,6 +269,7 @@ body {
       padding: 10px 20px;
       cursor: pointer;
       transition: font-size 1s, background 0.6s;
+      text-align: center;
 
       &:hover {
         background: rgba(50,50,50,.8);
@@ -295,6 +296,25 @@ body {
   clear: both;
 }
 
+@mixin embossed {
+  box-shadow: 2px 2px 5px rgba(0,0,0, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+  border-right: 2px solid rgba(0, 0, 0, 0.2);
+  background-color: rgba(0,0,0,0.6);
+}
+
+@mixin lowered {
+  box-shadow: 2px 2px 5px rgba(0,0,0, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+  border-right: 2px solid rgba(0, 0, 0, 0.2);
+  background-color: rgba(0,0,0,0.6);
+}
+
+
 .showcase_item {
   width: 350px;
   height: 150px;
@@ -304,7 +324,10 @@ body {
   color: $primary-text-color;
 
   .background {
-    &.skew { @include skew }
+    &.skew {
+      @include skew;
+      @include embossed;
+    }
     @include rounded;
     height: 100%;
     overflow: hidden;
@@ -357,6 +380,9 @@ body {
           left: -13%;
           padding: 5px 26%;
           background: none;
+          background-size: cover;
+          background-position: 100%;
+
           .showcase-info-more {
             right: 26%;
           }

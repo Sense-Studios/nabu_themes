@@ -27,4 +27,4 @@
   %ul
     - @items.each_with_index do |n, index|
       %li.skew{ 'data-idx' => index }
-        .unskew= "#{index.to_s}&nbsp;#{n['name']}".html_safe
+        .unskew= "#{n['name']}".html_safe

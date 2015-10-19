@@ -1043,3 +1043,23 @@ $(function() {
   // race error :(
   // if ( !show_site ) toggleSite()
 });
+
+// Override Time update// popcorn is playing or seeking
+function popTimeUpdate() {
+  if (pop === null) return;
+  if ( ( !isNaN( pop.currentTime() ) && !isNaN( pop.duration() ) )) {
+    var playhead = "00:00";
+    var duration = "--:--";
+    playhead = toTime( pop.currentTime() ).m + ":" + toTime( pop.currentTime() ).s
+    duration = toTime( pop.duration() ).m + ":" + toTime( pop.duration() ).s
+    $('#time .current_time').html( playhead );
+    $('#time .devider').html( " / " );
+    $('#time .duration').html( duration );
+    var wp = ( pop.currentTime() / pop.duration() ) * 100;
+    $('#scrubbar .playhead').css({'width': wp + '%'});
+    if ( program.meta.moviedescription["out-point"] !== undefined && program.meta.moviedescription["out-point"] !== "" && program.meta.moviedescription["out-point"] < pop.currentTime() ) {
+      pop.currentTime( pop.duration() - 1 ); // with inclusion of marquers use -~8s
+      pop.pause();
+    }
+  }
+}
