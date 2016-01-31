@@ -1,0 +1,227 @@
+
+:css
+  #map {
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+
+  .well.info_block1 {
+    position: absolute;
+    z-index: 100;
+    top: 10px;
+    left: 10px;
+  }
+
+  .well.info_block2 {
+    position: absolute;
+    z-index: 100;
+    left: 10px;
+    bottom: 24px
+  }
+
+:javascript
+  var map
+  function initMap() {
+    // Specify features and elements to define styles.
+    window.styleArray = [
+      {
+        featureType: "all",
+        stylers: [
+         { saturation: -80 }
+        ]
+      },{
+        featureType: "road.arterial",
+        elementType: "geometry",
+        stylers: [
+          { hue: "#00ffee" },
+          { saturation: 50 }
+        ]
+      },{
+        featureType: "poi.business",
+        elementType: "labels",
+        stylers: [
+          { visibility: "off" }
+        ]
+      }
+    ];
+
+    window.styleArray2 = [{"elementType":"labels","stylers":[{"visibility":"off"}]},{"elementType":"geometry","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"geometry","stylers":[{"visibility":"on"},{"color":"#000000"}]},{"featureType":"landscape","stylers":[{"color":"#ffffff"},{"visibility":"on"}]},{}]
+    window.styleArray3 = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#000000"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"weight":"4"}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"on"},{"saturation":"-100"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":20},{"visibility":"on"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":17},{"weight":1.2}]},{"featureType":"administrative.locality","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"administrative.neighborhood","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"administrative.land_parcel","elementType":"all","stylers":[{"visibility":"on"},{"lightness":"80"}]},{"featureType":"landscape","elementType":"all","stylers":[{"visibility":"simplified"},{"color":"#797979"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":20}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"landscape.natural.landcover","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"landscape.natural.terrain","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#dfdfdf"},{"lightness":21},{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#fed41c"},{"visibility":"on"},{"weight":"3.00"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#fed41c"},{"gamma":"0.6"}]},{"featureType":"road.highway.controlled_access","elementType":"geometry","stylers":[{"visibility":"on"},{"color":"#fed41c"},{"weight":"4.00"}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.stroke","stylers":[{"weight":"1"},{"gamma":"0.6"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#b8b8b8"},{"lightness":18},{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#b6b6b6"}]},{"featureType":"road.local","elementType":"all","stylers":[{"visibility":"on"},{"color":"#656565"}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#cdcdcd"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry.stroke","stylers":[{"color":"#b6b6b6"},{"visibility":"on"}]},{"featureType":"road.local","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#c5c5c5"},{"lightness":19},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#c0d8e3"},{"lightness":17},{"visibility":"on"}]}]
+    window.styleArray4 = [{"featureType": "road","elementType": "all","stylers": [{"lightness": "-39"},{"gamma": "1.63"},{"visibility": "simplified"},{"saturation": "-32"}]},{"featureType": "road.highway","elementType": "all","stylers": [{"saturation": "-1"}]}]
+
+    window.menudata = JSON.parse('#{@menudata}')
+    window.menuconfig = JSON.parse('#{@menuconfig}')
+    // map center coordinates
+    var turnhoutsebaan = new google.maps.LatLng(51.2151361,4.4382217);
+
+    // marker coordinates
+    var museum = new google.maps.LatLng(51.2151361,4.4322217);
+
+    // Create a map object and specify the DOM element for display.
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: turnhoutsebaan,
+      scrollwheel: false,
+
+      disableDefaultUI: true,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+
+      // Apply the map style array to the map.
+      styles: styleArray,
+      zoom: 17
+    });
+
+    var strictBounds = new google.maps.LatLngBounds(
+      // south-west -> north-east
+      new google.maps.LatLng(51.2129728,4.4277095),
+      new google.maps.LatLng(51.2196805,4.4738757)
+    );
+
+    var content = '<div id="iw_container">' +
+      '<div class="iw_title">haha je hebt op play gedrukt</div>' +
+      '<iframe src="http://nabu.sense-studios.com/chromeless/557c49b26465763a3b000019?mobile=true" width="320px" height="240"></iframe>' +
+      '<div class="iw_content">En nu lees je pas dat er helemaal geen stop of pauze knop is.</div>' +
+      '</div>';
+
+    var infowindow = new google.maps.InfoWindow({
+      content: content
+    });
+
+
+    // ########################################################################
+
+    var spots = [
+      {
+        name: "spot1",
+        lat: 51.2152361,
+        lng: 4.4324217,
+        title: "1 hic locus est 1",
+        content: "1 <h1>ole ole 1/h1>",
+        icon: "http://orig01.deviantart.net/a37a/f/2013/306/8/5/free_icon___avatar___hello_kitty_reindeer_by_sarilain-d6stfy2.gif"
+      },
+      {
+        name: "spot2",
+        lat: 51.2154361,
+        lng: 4.4326217,
+        title: "2 hic locus est",
+        content: "2 <h1>ole ole</h1>",
+        icon: "http://avatarbox.net/avatars/img24/pink_floyd_dsotm_avatar_picture_86742.jpeg"
+      },
+      {
+        name: "wok van antwerpen",
+        lat: 51.217861,
+        lng: 4.427245,
+        title: "3 hic locus est",
+        content: "3 <h1>Nioet mokken lekker wokken</h1>",
+        icon: "http://orig03.deviantart.net/c77d/f/2012/105/6/4/free_avatar_korra_icon_by_sukithe3rd-d4w7p0d.gif"
+      },
+      {
+        name: "spot4",
+        lat: 51.2156361,
+        lng: 4.4320217,
+        title: "4 hic locus est",
+        content: "4 <h1>ole ole</h1>",
+        icon: "http://orig02.deviantart.net/a47e/f/2015/331/a/0/star_by_r0se_designs-d9i85at.gif"
+      }
+    ]
+
+    var active_spots = []
+
+    spots.forEach(function(spot) {
+
+      console.log(spot, spot.name, spot.lat, spot.lng)
+
+      var loc = new google.maps.LatLng(spot.lat,spot.lng);
+      var mark = new google.maps.Marker({
+        position: loc, // variable with the coordinates Lat and Lng
+        map: map,
+        title:spot.title,
+        icon: spot.icon
+      });
+
+      var info = new google.maps.InfoWindow({
+        content: spot.content
+      });
+
+      active_spots.push([loc,mark,info])
+
+      // procedure to show the Info Window using a click on the marker
+      google.maps.event.addListener(mark, 'click', function() {
+        info.open(map,mark); // map and marker are the variables defined previously
+      });
+
+      // event to close the infowindow with a click on the map
+      google.maps.event.addListener(map, 'click', function() {
+        info.close();
+      });
+    })
+
+
+    var museum = new google.maps.LatLng(51.2151361,4.4322217);
+
+    // variable to define the options of the marker
+    var marker = new google.maps.Marker({
+      position: museum, // variable with the coordinates Lat and Lng
+      map: map,
+      title:"zomaar een plek"
+    });
+
+
+    // procedure to show the Info Window using a click on the marker
+    google.maps.event.addListener(marker, 'click', function() {
+      infowindow.open(map,marker); // map and marker are the variables defined previously
+    });
+
+    // event to close the infowindow with a click on the map
+    google.maps.event.addListener(map, 'click', function() {
+        infowindow.close();
+    });
+
+    // ######
+
+
+    // ###### restrict boundries ##############################################
+
+    // Listen for the dragend event
+    google.maps.event.addListener(map, 'dragend', function() {
+
+      if (strictBounds.contains(map.getCenter())) return;
+
+      // We're out of bounds - Move the map back within the bounds
+
+      var c = map.getCenter(),
+        x = c.lng(),
+        y = c.lat(),
+        maxX = strictBounds.getNorthEast().lng(),
+        maxY = strictBounds.getNorthEast().lat(),
+        minX = strictBounds.getSouthWest().lng(),
+        minY = strictBounds.getSouthWest().lat();
+
+      if (x < minX) x = minX;
+      if (x > maxX) x = maxX;
+      if (y < minY) y = minY;
+      if (y > maxY) y = maxY;
+
+      map.setCenter(new google.maps.LatLng(y, x));
+    });
+
+  }
+
+/#############################################################################
+
+#map
+%script{:src=>"https://maps.googleapis.com/maps/api/js?key=#{GEO_GOOGLE_API_KEY}&callback=initMap", :async=>true, :defer=>true}
+
+.well.info_block1
+  %h2
+    Gazette van Antwerpen
+    %br
+    %small turnhoutsebaan
+
+
+.well.info_block2
+  %h6
+    Lorem ipsum victor dolit fortuna esse quot mandar.
+    %br
+    Non in volit voluba besse.

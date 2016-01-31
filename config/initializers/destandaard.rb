@@ -1,5 +1,5 @@
-# these are specific settings for the BASICWHITE theme
-# make sure these all start with 'BASICWHITE', to not conflict with 
+# these are specific settings for the DESTANDAARD theme
+# make sure these all start with 'DESTANDAARD', to not conflict with
 # other themes
 
 DESTANDAARD_DEFAULT_SETTINGS = "{}"

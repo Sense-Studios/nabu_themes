@@ -3,7 +3,7 @@ require_dependency "nabu_themes/application_controller"
 module NabuThemes
   class MenusController < ApplicationController
     before_action :set_menu, only: [:show, :edit, :update, :destroy]
-    layout "layouts/admin"   
+    layout "layouts/admin"
 
     # ajax/post (not used currently)
     def menu_update
@@ -23,28 +23,28 @@ module NabuThemes
       # depricated, menus have their own id
       # so all we need is a menu-id and update the items of that
       # but for now, this is also handled through the menu/update
-      
+
       # save it
       # owner = User.find( current_user.client_id )
       # owner.menu = params[:menu]
       # owner.save
-      
+
       render :text => "Depricated"
     end
-    
+
     # original menu editor
     # get
     def menu_editor
       # @programs = MarduqResource::Program.all
       @programs = MarduqResource::Program.where(client_id: current_user.client_id) || []
-      
+
       # change this part to work with and like a scaffold
-      # menus will be seperate entities, joining in a 
-      # has_many/ belongs_to channel or theme 
+      # menus will be seperate entities, joining in a
+      # has_many/ belongs_to channel or theme
       u = User.find( current_user.client_id )
       @menu_data = u.menu
     end
-    
+
     # GET /menus
     def index
       get_account_owner
@@ -64,19 +64,19 @@ module NabuThemes
         format.html
         format.json{
           render :json => @menu.to_json
-        }     
-      end 
+        }
+      end
     end
 
     # GET /menus/new
     def new
-      get_account_owner      
+      get_account_owner
       @menu = Menu.new
       @menu.owner = @account_id
     end
 
     # GET /menus/1/edit
-    def edit      
+    def edit
       @programs = MarduqResource::Program.where(client_id: current_user.client_id) || []
       @menu_data = @menu.items
     end
@@ -87,7 +87,7 @@ module NabuThemes
       get_account_owner
       @menu.owner = @account_id
 
-      if @menu.save                
+      if @menu.save
         redirect_to edit_menu_path(@menu), notice: 'Menu was successfully created.'
       else
         render action: 'new'
@@ -122,7 +122,7 @@ module NabuThemes
 
       get_account_owner
       @menu.owner = @account_id
-      
+
       if @menu.save
         render json: @menu
       else
@@ -154,7 +154,7 @@ module NabuThemes
         @owner = current_user
         if !@owner.account_id.nil?
           @account = User.find( @owner.id )
-          @account_id = @account.account_id 
+          @account_id = @account.account_id
         else
           @account = @owner
           @account_id = @owner.id
@@ -168,7 +168,7 @@ module NabuThemes
 
       # Only allow a trusted parameter "white list" through.
       def menu_params
-        params.require(:menu).permit(:name, :items)
+        params.require(:menu).permit(:name, :items, :config)
       end
   end
 end

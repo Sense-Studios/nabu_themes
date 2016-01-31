@@ -6,7 +6,7 @@
 NABU_THEMES_MOUNT_POINT = "channel"
 
 # available themes
-NABU_THEMES_AVAILABLE_THEMES = [ "babylon", "sense", "oculus" ]
+NABU_THEMES_AVAILABLE_THEMES = [ "babylon", "sense", "oculus", "geo" ]
 # "sense", "babylon", "basicwhite", "destandaard", "gazetvanantwerpen", oculus
 
 # create extra menu items

@@ -13,6 +13,7 @@ module NabuThemes
 
       @slug = params[:slug]
       @theme = Theme.where( { "slug"=>params[:slug] } ).first()
+      @menuconfig = NabuThemes::Menu.find( @theme.menu ).config
       @menudata = NabuThemes::Menu.find( @theme.menu ).items
       if params[:id].blank?
         if @theme.home_program.blank?
