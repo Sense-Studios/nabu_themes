@@ -13,8 +13,10 @@ module NabuThemes
 
       @slug = params[:slug]
       @theme = Theme.where( { "slug"=>params[:slug] } ).first()
+      @channelsettings = @theme.settings
       @menuconfig = NabuThemes::Menu.find( @theme.menu ).config
       @menudata = NabuThemes::Menu.find( @theme.menu ).items
+
       if params[:id].blank?
         if @theme.home_program.blank?
           @program = appMarduqResource::Program.find( JSON.parse( Menu.find(@theme.menu).items)["menu"][0]["items"][0]["id"] )

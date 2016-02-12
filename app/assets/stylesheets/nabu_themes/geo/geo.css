@@ -1,0 +1,159 @@
+@font-face {
+    font-family: montserrat;
+    src: url(/fonts/Montserrat-Bold.otf);
+}
+
+.well.info_block1 {
+  position: absolute;
+  z-index: 100;
+  top: 10px;
+  left: 10px;
+}
+
+.well.info_block2 {
+  position: absolute;
+  z-index: 100;
+  left: 10px;
+  bottom: 24px
+}
+
+/* my own styling for the map, not sure if that is canvas or not */
+#map {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+/* styling for the actual map */
+#map-canvas {
+	margin: 0;
+	padding: 0;
+	height: 400px;
+	max-width: none;
+}
+
+#map-canvas img {
+	max-width: none !important;
+}
+
+/* extra styling for the popup/ infowindow */
+.gm-style-iw {
+	width: 450px !important;
+	top: 15px !important;
+	left: 0px !important;
+	background-color: #fff;
+	box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);
+
+  border-radius: 0 0 0 0;
+  border-width: 5px;
+  border-style: solid;
+  border-color: white;
+  -webkit-border-image: -webkit-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 48%,#da291c 48.1%,#da291c 100%) 1 49%;
+  -webkit-border-image: -webkit-linear-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 48%,#da291c 48.1%,#da291c 100%) 1 49%;
+  -moz-border-image: -moz-linear-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 48%,#da291c 48.1%,#da291c 100%) 1 49%;
+  -o-border-image: -o-linear-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 48%,#da291c 48.1%,#da291c 100%) 1 49%;
+  border-image: linear-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 48%,#da291c 48.1%,#da291c 100%) 1 49%;
+
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+1,ffffff+89,ffffff+89,da291c+90,da291c+90 */
+  background: #ffffff; /* Old browsers */
+  background: -moz-linear-gradient(top,  #ffffff 1%, #ffffff 89%, #ffffff 89%, #da291c 91%, #da291c 91%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #ffffff 1%,#ffffff 89%,#ffffff 89%,#da291c 91%,#da291c 91%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #ffffff 1%,#ffffff 89%,#ffffff 89%,#da291c 91%,#da291c 91%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#da291c',GradientType=0 ); /* IE6-9 */
+}
+
+#iw-container {
+	margin-bottom: 10px;
+  height: 160px;
+}
+
+#iw-container .iw-title {
+	font-family: montserrat, sans-serif;
+  /*font-weight: 400;*/
+	font-size: 22px;
+	padding: 10px;
+	background-color: #DA291C;
+	color: white;
+	margin: 0;
+	border-radius: 0 0 0 0;
+}
+
+#iw-container .iw-content {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  margin-right: 0px;
+  padding: 0px 5px 0px 0px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  width: 445px;
+}
+
+.iw-content .main_title {
+  position: absolute;
+  top: 46%;
+  left: 0px;
+  max-width: 60%;
+  line-height: 28px;
+  letter-spacing: 0.8px;
+}
+
+.iw-content .main_title h1 {
+  font-family: 'montserrat', sans-serif;
+  display: inline-block;
+  color: white;
+  background-color: #DA291C;
+  font-size: 16px;
+  padding: 2px 4px;
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.iw-content .content_left {
+  float:left;
+  width:61.8%;
+  background-color: black;
+  height: 158px;
+}
+
+.iw-content .content_right {
+  float:right;
+  width: 38.2%;
+  padding-left:4px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 158px;
+}
+
+.iw-content .content_right  h1 {
+  color: #DA291C;
+  font-size: 14px;
+  margin-top: 1px;
+}
+
+.iw-content img {
+	float: right;
+	margin: 0 5px 5px 10px;
+}
+
+.iw-subTitle {
+	font-size: 16px;
+	font-weight: 700;
+	padding: 5px 0;
+}
+
+.iw-bottom-gradient {
+  display: none;
+  position: absolute;
+  width: 326px;
+  height: 25px;
+  bottom: 15px;
+  right: 0px;
+	background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+	background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+	background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+}
