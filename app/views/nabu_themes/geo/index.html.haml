@@ -7,10 +7,12 @@
   window.menuconfig = #{@menuconfig};
   window.channelsettings = #{@channelsettings};
 
-/ necc. files, let's keep this small
-= javascript_include_tag "//code.jquery.com/jquery-2.2.0.min.js"
 = javascript_include_tag "nabu_themes/geo/geo"
 = stylesheet_link_tag "nabu_themes/geo/geo", media: "all", "data-turbolinks-track" => true, "async" => true
+
+/ le video overlay, initially we hide this
+%div#video_player
+  = render :partial => "shared/player/video", locals: { height: '100%' }
 
 / le map (and as you notice, the only actual html here)
 #map
@@ -18,6 +20,7 @@
 / Google script
 %script{:src=>"https://maps.googleapis.com/maps/api/js?key=#{GEO_GOOGLE_API_KEY}&callback=initMap", :async=>true, :defer=>true}
 
+/ Any and all overlays on top of the map; should go under the video
 /.well.info_block1
 /  %h2
 /    Gazette van Antwerpen

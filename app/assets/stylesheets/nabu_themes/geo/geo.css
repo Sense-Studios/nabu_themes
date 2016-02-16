@@ -1,8 +1,11 @@
 @font-face {
     font-family: montserrat;
-    src: url(/fonts/Montserrat-Bold.otf);
+    src: url(/assets/Montserrat-Regular.otf);
 }
 
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800);
+
+/*
 .well.info_block1 {
   position: absolute;
   z-index: 100;
@@ -15,6 +18,21 @@
   z-index: 100;
   left: 10px;
   bottom: 24px
+}*/
+
+#video_player {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 1;
+  background-color: rgba(42,42,42,0.82);
+}
+
+#video_frame {
+  top: calc( 50% - 240px );
 }
 
 /* my own styling for the map, not sure if that is canvas or not */
@@ -38,7 +56,8 @@
 }
 
 /* extra styling for the popup/ infowindow */
-.gm-style-iw {
+/*.gm-style-iw { */
+.gva_style {
 	width: 450px !important;
 	top: 15px !important;
 	left: 0px !important;
@@ -49,17 +68,17 @@
   border-width: 5px;
   border-style: solid;
   border-color: white;
-  -webkit-border-image: -webkit-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 48%,#da291c 48.1%,#da291c 100%) 1 49%;
-  -webkit-border-image: -webkit-linear-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 48%,#da291c 48.1%,#da291c 100%) 1 49%;
-  -moz-border-image: -moz-linear-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 48%,#da291c 48.1%,#da291c 100%) 1 49%;
-  -o-border-image: -o-linear-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 48%,#da291c 48.1%,#da291c 100%) 1 49%;
-  border-image: linear-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 48%,#da291c 48.1%,#da291c 100%) 1 49%;
+  -webkit-border-image: -webkit-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 59%,#da291c 59%,#da291c 58.1%) 1 49%;
+  -webkit-border-image: -webkit-linear-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 59%,#da291c 58.1%,#da291c 100%) 1 49%;
+  -moz-border-image: -moz-linear-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 59%,#da291c 58.1%,#da291c 100%) 1 49%;
+  -o-border-image: -o-linear-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 59%,#da291c 58.1%,#da291c 100%) 1 49%;
+  border-image: linear-gradient(to bottom, #ffffff 0%,#ffffff 48%,#ffffff 59%,#da291c 58.1%,#da291c 100%) 1 49%;
 
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+1,ffffff+89,ffffff+89,da291c+90,da291c+90 */
   background: #ffffff; /* Old browsers */
-  background: -moz-linear-gradient(top,  #ffffff 1%, #ffffff 89%, #ffffff 89%, #da291c 91%, #da291c 91%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  #ffffff 1%,#ffffff 89%,#ffffff 89%,#da291c 91%,#da291c 91%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  #ffffff 1%,#ffffff 89%,#ffffff 89%,#da291c 91%,#da291c 91%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  background: -moz-linear-gradient(top,  #ffffff 1%, #ffffff 91%, #ffffff 91%, #da291c 91%, #da291c 91%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #ffffff 1%,#ffffff 91%,#ffffff 91%,#da291c 91%,#da291c 91%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #ffffff 1%,#ffffff 91%,#ffffff 91%,#da291c 91%,#da291c 91%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#da291c',GradientType=0 ); /* IE6-9 */
 }
 
@@ -91,13 +110,34 @@
   width: 445px;
 }
 
-.iw-content .main_title {
-  position: absolute;
-  top: 46%;
+.iw-content  .play_trailer {
+  color: #DA291C;
+  background-color: white;
+  top: 44%;
   left: 0px;
   max-width: 60%;
-  line-height: 28px;
+  line-height: 22px;
   letter-spacing: 0.8px;
+  font-size: 11px;
+  position: absolute;
+  font-weight: 700;
+  padding: 0px 5px 0px 8px;
+  pointer-events: none;
+  /* text-shadow: 0px 1px black; */
+  /* opacity: 0.82; */
+  z-index:2;
+}
+
+.iw-content .main_title {
+  position: absolute;
+  top: 58%;
+  left: 0px;
+  max-width: 60%;
+  line-height: 22px;
+  letter-spacing: 0.8px;
+  font-size: 14px;
+  pointer-events: none;
+  z-index:2;
 }
 
 .iw-content .main_title h1 {
@@ -105,11 +145,12 @@
   display: inline-block;
   color: white;
   background-color: #DA291C;
-  font-size: 16px;
-  padding: 2px 4px;
+  padding: 2px 10px 2px 8px;
+  font-size: inherit;
   margin: 0;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 100;
+  pointer-events: none;
 }
 
 .iw-content .content_left {
@@ -122,7 +163,7 @@
 .iw-content .content_right {
   float:right;
   width: 38.2%;
-  padding-left:4px;
+  padding: 0px 2px 0px 10px;
   overflow-y: auto;
   overflow-x: hidden;
   height: 158px;
@@ -132,6 +173,49 @@
   color: #DA291C;
   font-size: 14px;
   margin-top: 1px;
+  font-weight: 600;
+  letter-spacing: 1.1px;
+}
+
+.iw-content .content_right  #full_movie_play {
+  color: #DA291C;
+  box-shadow: 0px 2px 9px rgba(0,0,0,0.18);
+  text-align: center;
+  padding: 8px 12px;
+  z-index:2;
+  /* border: solid 1px #EEE; */
+  /* width: 16px; */
+  /* margin: 0; */
+}
+
+.iw-content .content_right .info_block {
+  display: inline-block;
+  float: right;
+  color: #AAA;
+  font-size: 10px;
+  display: inline-block;
+  padding: 10px 4px;
+  width: 95px;
+  line-height: 12px;
+  width: 95px;
+  overflow: hidden;
+  /* float: right; */
+}
+
+.iw-content .content_right a {
+  color: #DA291C;
+}
+
+.iw-content .shadow_helper {
+  position: absolute;
+  /* background-color: red; */
+  top: 0;
+  left: 0;
+  width: 61.8%;
+  height: 158px;
+  box-shadow: inset 0px -24px 59px black;
+  pointer-events: none;
+  /* z-index: -1; */
 }
 
 .iw-content img {

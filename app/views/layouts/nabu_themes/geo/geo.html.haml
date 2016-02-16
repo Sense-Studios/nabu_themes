@@ -48,7 +48,7 @@
     - else
 
       %title
-        Marduq - Nabu
+        Marduq - GEO Channel - Nabu
 
       %meta{"name"=>"description", "content"=>"Marduq - Nabu" }
       %meta{"name"=>"keywords", "content"=>"Marduq - Nabu" }
@@ -75,6 +75,10 @@
     %link{"rel"=>"stylesheet", "type"=>"text/css", "href"=>"/assets/ie8_fixes.css"}
     <!--<![endif]-->
 
-    /= javascript_include_tag "application"
+    / necc. files, let's keep this small
+    = javascript_include_tag "//code.jquery.com/jquery-2.2.0.min.js"
+
+    / todo, make a subset of application for lightweight players
+    = javascript_include_tag "application"
 
     = yield
