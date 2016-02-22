@@ -112,8 +112,7 @@ function initMap() {
                   '<div class="content_right">' +
 
                     '<div class="info_block">' +
-                      'some info<br>' +
-                      'dunno anymore' +
+                      spot.info_block +
                     '</div>'+
 
                     '<div class="actions">' +
