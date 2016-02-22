@@ -13,11 +13,12 @@
 = javascript_include_tag "nabu_themes/geo/geo"
 = stylesheet_link_tag "nabu_themes/geo/geo", media: "all", "data-turbolinks-track" => true, "async" => true
 
-/ add close button
-%div#close_button.btn.btn-default x
 
 / le video overlay, initially we hide this
 %div#video_player
+  / add close button
+  %div#close_button.btn.btn-default x
+
   = render :partial => "shared/player/video", locals: { height: '100%' }
 
 / le map (and as you notice, the only actual html here)

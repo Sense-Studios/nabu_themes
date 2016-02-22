@@ -23,7 +23,7 @@
     - if @program
 
       :javascript
-        var program_id = "#{@program.id}";
+        var program_id = undefined //"#{@program.id}";
         var show_site = true
         if ( window.location.hash != "" ) {
           program_id = window.location.hash.substring(1, 100)

@@ -1,6 +1,9 @@
 
 // ########################## MARDUQ HELPER FUNCTIONS ##########################
+
+// default
 var video_target = '#video_player'
+
 var closeVideoWindow = function () {
   $('#modal_iframe').attr('src', '' );
   $('#modal_iframe').hide()
@@ -24,6 +27,33 @@ var loadAndPlayOtherVideo = function( _id, _time ) {
   if (  _time == undefined) _time = 0
   hadInpoint = false;
   startProgram( _id, _time )
+}
+
+var goFullscreen = function( _element ) {
+
+  if ( _element == undefined ) _element = "video_player"
+
+  // fullscreen api --> note the order of these!
+  var fullScreenElement = document.getElementById( _element );
+  if ( fullScreenElement.requestFullscreen ) fullScreenElement.requestFullscreen();
+  if ( fullScreenElement.mozRequestFullScreen ) fullScreenElement.mozRequestFullScreen();
+  if ( fullScreenElement.webkitRequestFullScreen && agent.label == "CHROME" ) {
+    fullScreenElement.webkitRequestFullScreen( Element.ALLOW_KEYBOARD_INPUT );
+  } else if ( fullScreenElement.webkitRequestFullScreen ) {
+    fullScreenElement.webkitRequestFullScreen();
+  }
+  if ( fullScreenElement.msRequestFullscreen ) fullScreenElement.msRequestFullscreen();
+
+}
+
+var exitFullScreen = function() {
+  // fullscreen api --> note the order of these!
+  if ( document.exitFullscreen ) document.exitFullscreen();
+  if ( document.cancelFullScreen ) document.cancelFullScreen();
+  if ( document.mozCancelFullScreen ) document.mozCancelFullScreen();
+  if ( document.webkitCancelFullScreen ) document.webkitCancelFullScreen();
+  if ( document.msCancelFullScreen ) document.msCancelFullScreen();         // this doesnt work
+  if ( document.msExitFullscreen ) document.msExitFullscreen();
 }
 
 var startProgram = function( _id, _time ) {
@@ -51,9 +81,12 @@ var startProgram = function( _id, _time ) {
 // ########################## ALL THE MAP FUNCTIONS ############################
 var map
 var active_spots = []
+var first_marker
+
 function initMap() {
   // Specify features and elements to define styles.
-  window.styleArray = [{"elementType":"all","featureType":"road","stylers":[{"lightness":"-39"},{"gamma":"1.63"},{"visibility":"simplified"},{"saturation":"-32"}]},{"elementType":"all","featureType":"road.highway","stylers":[{"saturation":"-1"}]},{"elementType":"geometry.fill","featureType":"road.highway","stylers":[{"color":"#e07f77"},{"saturation":"0"},{"lightness":"0"}]},{"elementType":"labels.text","featureType":"road.highway","stylers":[{"color":"#ffffff"},{"weight":"10"}]}]
+  window.styleArray = [{"elementType":"all","featureType":"road","stylers":[{ visibility: "off" },{"lightness":"-39"},{"gamma":"1.63"},{"visibility":"simplified"},{"saturation":"-32"}]},{"elementType":"all","featureType":"road.highway","stylers":[{"saturation":"-1"}]},{"elementType":"geometry.fill","featureType":"road.highway","stylers":[{"color":"#e07f77"},{"saturation":"0"},{"lightness":"0"}]},{"elementType":"labels.text","featureType":"road.highway","stylers":[{"color":"#ffffff"},{"weight":"10"}]}, {featureType: "poi",elementType: "labels",stylers: [{ visibility: "off" }] }]
+  //{featureType: "poi", stylers: [{ visibility: "off" }]}
 
   // map center coordinates
   var turnhoutsebaan = new google.maps.LatLng(51.2151361,4.4382217);
@@ -97,10 +130,14 @@ function initMap() {
       content:'<div id="iw-container">' +
                 '<div class="iw-content">' +
 
-                  '<div class="play_trailer">' +
-                    '<span class="glyphicon glyphicon-play"></span>'+
-                    ' Speel trailer '+
-                  '</div>'+
+                  '<div class="button_layer">' +
+                  '</div>' +
+
+                  //'<div class="play_trailer pull-left">' +
+                  //  ' <span class="glyphicon glyphicon-play"></span>'+
+                  //  ' Trailer '+
+                    // spot.info_block
+                  //'</div>'+
 
                   '<div class="main_title">' +
                     spot.title +
@@ -111,13 +148,16 @@ function initMap() {
 
                   '<div class="content_right">' +
 
-                    '<div class="info_block">' +
-                      spot.info_block +
-                    '</div>'+
+                    //'<div class="info_block">' +
+                    //  spot.info_block +
+                    //'</div>'+
 
-                    '<div class="actions">' +
-                      '<button id="full_movie_play" data-program="'+spot.program+'"class="btn btn-default"><span class="glyphicon glyphicon-play"></span></button>'+
-                    '</div>' +
+                    '<button id="full_movie_play" data-program="'+spot.program+'"class="btn btn-lg btn-default pull-left">'+
+                      '<span class="glyphicon glyphicon-fullscreen"></span>'+
+                    '</button>'+
+
+                    //''<span class="glyphicon glyphicon-play"></span></button>'+
+                    //'</div>' +
 
                     spot.body +
 
@@ -132,20 +172,45 @@ function initMap() {
 
     active_spots.push([loc,mark,infowindow])
 
-    google.maps.event.addListener(mark, 'click', function() {
-
+    var closeAllSpots = function() {
       // close the rest
       $.each( active_spots, function(i, value) {
         value[2].close();
       });
+    }
 
-      var i = infowindow.open(map,mark);
-      console.log("i:", i)
-      console.log("ref:", infowindow)
 
+    google.maps.event.addListener( mark, 'click', function() {
+
+      // close the rest
+      closeAllSpots();
+
+      var i = infowindow.open( map, mark );
+      console.log("###########################")
+      console.log("map", map )
+      console.log("mark", mark )
+      console.log("i:", i )
+      console.log("ref:", infowindow )
+      console.log("stl:", $('.gm-style-iw').length )
+
+    });
+
+    //google.maps.event.addListener(map, 'click', function() {
+    //    if ( $('.gm-style-iw').hasClass('gva_style') ) {
+    //      $('.gm-style-iw').removeClass('gva_style')
+    //    }
+
+        // aaaaand... close
+    //    infowindow.close();
+    //});
+
+    google.maps.event.addListener( infowindow, 'domready', function() {
+
+      console.log(" ################### DOMREADY ", infowindow )
+      //$('.gm-style-iw').hasClass("gva_style")
       $('.gm-style-iw').each( function( i, value ) {
-        console.log(i,$(this))
-        console.log($(this).find('iframe').length)
+        console.log(">>>", i,$(this))
+        console.log(">>>", $(this).find('iframe').length)
         if ($(this).find('iframe').length > 0) {
           $(this).addClass('gva_style')
         }else{
@@ -159,8 +224,10 @@ function initMap() {
       $('.gm-style-iw').unbind('click')
       $('.gm-style-iw').click( function() {
         startProgram( $(this).find('#full_movie_play').data('program') )
+        goFullscreen('video_player')
         $('#video_player').fadeIn()
         $('#close_button').fadeIn("slow")
+        closeAllSpots()
       })
 
       $('#close_button').unbind('click')
@@ -168,19 +235,9 @@ function initMap() {
         $('#video_player').fadeOut()
         $('#close_button').fadeOut("slow")
         closeVideoWindow()
+        exitFullScreen()
       })
-    });
 
-    //google.maps.event.addListener(map, 'click', function() {
-    //    if ( $('.gm-style-iw').hasClass('gva_style') ) {
-    //      $('.gm-style-iw').removeClass('gva_style')
-    //    }
-
-        // aaaaand... close
-    //    infowindow.close();
-    //});
-
-    google.maps.event.addListener(infowindow, 'domready', function() {
 
       if ( !$('.gm-style-iw').hasClass("gva_style") ) return
 
@@ -205,8 +262,16 @@ function initMap() {
       iwCloseBtn.mouseout(function(){
         $(this).css({opacity: '1'});
       });
-    });
-  })
+    }); // end dom ready
+
+    if ( spot.active ) {
+      first_marker = mark
+    }
+
+  }); // end for each
+
+  // needs for eafch, adn active
+  google.maps.event.trigger( first_marker, 'click');
 
 
   // ###### restrict boundries ##############################################
