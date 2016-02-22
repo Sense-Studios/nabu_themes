@@ -28,7 +28,10 @@ module NabuThemes
         @program = MarduqResource::Program.find( params[:id] ) # any id
       end
 
-      @programs = MarduqResource::Program.where( "client_id" => User.find( @theme.owner ).client_id )
+      owner = User.find( @theme.owner )
+      @programs = MarduqResource::Program.where( "client_id" => owner.client_id )
+      @kalturaPartnerId = owner.kaltura_partner_id
+      @kalturaUiConfigId = owner.kaltura_uiconfig_id
       @filtered_programs = @programs.map do |program|
         md = program.meta.moviedescription
         { id: program.id, title: program.title, tags: program.tags, created_at: program.created_at, meta: { moviedescription: { duration_in_ms: md.try(:duration_in_ms), thumbnail: md.try(:thumbnail) } } }
