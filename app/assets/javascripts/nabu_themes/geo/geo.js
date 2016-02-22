@@ -32,7 +32,7 @@ var startProgram = function( _id, _time ) {
   getProgram( _id, function( p ) {
 
     $('#modal_iframe').show()
-    $('.clipcard-container').hide()
+    //$('.clipcard-container').hide()
 
     // make sure to set program
     program = p
@@ -50,6 +50,7 @@ var startProgram = function( _id, _time ) {
 
 // ########################## ALL THE MAP FUNCTIONS ############################
 var map
+var active_spots = []
 function initMap() {
   // Specify features and elements to define styles.
   window.styleArray = [{"elementType":"all","featureType":"road","stylers":[{"lightness":"-39"},{"gamma":"1.63"},{"visibility":"simplified"},{"saturation":"-32"}]},{"elementType":"all","featureType":"road.highway","stylers":[{"saturation":"-1"}]},{"elementType":"geometry.fill","featureType":"road.highway","stylers":[{"color":"#e07f77"},{"saturation":"0"},{"lightness":"0"}]},{"elementType":"labels.text","featureType":"road.highway","stylers":[{"color":"#ffffff"},{"weight":"10"}]}]
@@ -79,7 +80,6 @@ function initMap() {
   // #### fill spots with ######################################################
 
   var spots = window.channelsettings
-  var active_spots = []
 
   spots.forEach(function(spot) {
 
@@ -134,6 +134,12 @@ function initMap() {
     active_spots.push([loc,mark,infowindow])
 
     google.maps.event.addListener(mark, 'click', function() {
+
+      // close the rest
+      $.each( active_spots, function(i, value) {
+        value[2].close();
+      });
+
       var i = infowindow.open(map,mark);
       console.log("i:", i)
       console.log("ref:", infowindow)
@@ -150,18 +156,34 @@ function initMap() {
 
       //$('.content_left').click(function(){alert("doh")})
 
-      $('#full_movie_play').click( function() {
-        startProgram( $(this).data('program') )
+      //$('#full_movie_play').click( function() {
+      $('.gm-style-iw').unbind('click')
+      $('.gm-style-iw').click( function() {
+        startProgram( $(this).find('#full_movie_play').data('program') )
         $('#video_player').fadeIn()
+        $('#close_button').fadeIn("slow")
+      })
+
+      $('#close_button').unbind('click')
+      $('#close_button').click( function() {
+        $('#video_player').fadeOut()
+        $('#close_button').fadeOut("slow")
+        closeVideoWindow()
       })
     });
 
-    google.maps.event.addListener(map, 'click', function() {
-        //$('.gm-style-iw').removeClass('gva_style')
-        infowindow.close();
-    });
+    //google.maps.event.addListener(map, 'click', function() {
+    //    if ( $('.gm-style-iw').hasClass('gva_style') ) {
+    //      $('.gm-style-iw').removeClass('gva_style')
+    //    }
+
+        // aaaaand... close
+    //    infowindow.close();
+    //});
 
     google.maps.event.addListener(infowindow, 'domready', function() {
+
+      if ( !$('.gm-style-iw').hasClass("gva_style") ) return
 
       // Reference to the DIV that wraps the bottom of infowindow
       var iwOuter = $('.gva_style'); //$('.gm-style-iw');
@@ -176,6 +198,7 @@ function initMap() {
 
       var iwCloseBtn = iwOuter.next();
       iwCloseBtn.css({opacity: '1', right: '38px', top: '3px', width: '15px', height: '15px', border: '1px solid #DA291C', 'border-radius': '13px', 'box-shadow': '0 0 5px #DA291C'});
+
       iwCloseBtn.click(function(){
         $('.gm-style-iw').removeClass('gva_style')
       });

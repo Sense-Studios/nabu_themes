@@ -19,6 +19,9 @@
   left: 10px;
   bottom: 24px
 }*/
+html {
+  overflow-y: hidden;
+}
 
 #video_player {
   position: absolute;
@@ -32,7 +35,8 @@
 }
 
 #video_frame {
-  top: calc( 50% - 240px );
+  top: 0 !important;
+  height: 100% !important;
 }
 
 /* my own styling for the map, not sure if that is canvas or not */
@@ -41,6 +45,16 @@
   width: 100%;
   top: 0;
   left: 0;
+}
+
+#close_button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 10000;
+  display: none;
+  background-color: whitesmoke;
+  color: #da291c;
 }
 
 /* styling for the actual map */
