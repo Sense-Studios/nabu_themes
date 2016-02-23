@@ -57,7 +57,7 @@ var exitFullScreen = function() {
 }
 
 var startProgram = function( _id, _time ) {
-
+  program_id = _id
   if ( _time == undefined ) _time = 0
   getProgram( _id, function( p ) {
 
@@ -270,10 +270,6 @@ function initMap() {
 
   }); // end for each
 
-  // needs for eafch, adn active
-  google.maps.event.trigger( first_marker, 'click');
-
-
   // ###### restrict boundries ##############################################
 
   // Listen for the dragend event
@@ -300,4 +296,14 @@ function initMap() {
   });
 
   // end ######
+
+  // Button Handler for the first click
+  $('#close_button').click( function() {
+    google.maps.event.trigger( first_marker, 'click');
+    $('#video_player').fadeOut()
+    $('#close_button').fadeOut("slow")
+    closeVideoWindow()
+    exitFullScreen()
+  })
+
 }

@@ -4,7 +4,7 @@ module NabuThemes
   class ThemesController < ApplicationController
     before_action :set_theme, only: [:show, :edit, :update, :destroy]
     before_filter :authenticate_user!, except: [:render_theme]
-    # after_action :allow_iframe, only: [:render_theme, :show]
+    after_action :allow_iframe, only: [:render_theme, :show]
     layout "layouts/admin"
 
     # check and find a slug, then find the themeuser and fill # the theme
@@ -208,5 +208,8 @@ module NabuThemes
         params.require(:theme).permit(:title, :description, :about, :contact, :slug, :owner, :home_program, :theme, :menu, :logo, :main_color, :support_color, :background_color, :settings )
       end
 
+      def allow_iframe
+        response.headers.except! 'X-Frame-Options'
+      end
   end
 end
