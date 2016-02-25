@@ -97,7 +97,7 @@ function initMap() {
     scrollwheel: false,
 
     disableDefaultUI: true,
-    zoomContol: true,
+    zoomControl: true,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
 
     // Apply the map style array to the map.
