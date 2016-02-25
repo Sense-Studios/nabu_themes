@@ -97,11 +97,12 @@ function initMap() {
     scrollwheel: false,
 
     disableDefaultUI: true,
+    zoomContol: true,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
 
     // Apply the map style array to the map.
     styles: window.styleArray,
-    zoom: 17
+    zoom: 15
   });
 
   var strictBounds = new google.maps.LatLngBounds(

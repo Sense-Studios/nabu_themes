@@ -52,7 +52,7 @@ html {
   right: 10px;
   top: 10px;
   z-index: 10000;
-  /*display: none;*/
+  display: none;
   background-color: whitesmoke;
   color: #da291c;
 }
