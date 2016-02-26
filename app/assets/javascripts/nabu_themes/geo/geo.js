@@ -9,7 +9,7 @@ var closeVideoWindow = function () {
   $('#modal_iframe').attr('src', '' );
   $('#modal_iframe').hide()
 
-  $(video_target).fadeOut()
+  $('#video_player').fadeOut()
   $('#close_button').fadeOut("slow")
 
   target = "#video_frame"
@@ -69,6 +69,7 @@ var startProgram = function( _id, _time ) {
   getProgram( _id, function( p ) {
 
     $('#modal_iframe').show()
+    $('#video_player').fadeIn()
     $('#map_full_screen_button').hide()
 
     // make sure to set program
