@@ -324,15 +324,14 @@ function initMap() {
       exitFullScreen();
       setTimeout(function() {
         map.setZoom( 15 );
-        map.panTo( turnhoutsebaan );
-      }, 200 );
+        map.setCenter( turnhoutsebaan );
+      }, 600 );
     }else{
       goFullscreen();
-
       setTimeout(function() {
         map.setZoom( 16 );
-        map.panTo( turnhoutsebaan );
-      }, 200 );
+        map.setCenter( turnhoutsebaan );
+      }, 600 );
     }
   })
 
