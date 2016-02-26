@@ -5,9 +5,12 @@
 var video_target = '#video_player'
 
 var closeVideoWindow = function () {
+  console.log("close window called")
   $('#modal_iframe').attr('src', '' );
   $('#modal_iframe').hide()
-  $('.clipcard-container').show()
+
+  $(video_target).fadeOut()
+  $('#close_button').fadeOut("slow")
 
   target = "#video_frame"
   if ( pop !== null && pop !== undefined ) {
@@ -21,6 +24,11 @@ var closeVideoWindow = function () {
     try { pop.destroy(); } catch(e) {} // IE8 fix
     pop = null // failsafe
   }
+
+  $('#map_full_screen_button').show()
+  try {
+    google.maps.event.trigger( last_clicked_marqer, 'click');
+  }catch(err){}
 }
 
 var loadAndPlayOtherVideo = function( _id, _time ) {
@@ -32,7 +40,6 @@ var loadAndPlayOtherVideo = function( _id, _time ) {
 var goFullscreen = function( _element ) {
 
   if ( _element == undefined ) _element = "video_player"
-
   // fullscreen api --> note the order of these!
   var fullScreenElement = document.getElementById( _element );
   if ( fullScreenElement.requestFullscreen ) fullScreenElement.requestFullscreen();
@@ -43,7 +50,6 @@ var goFullscreen = function( _element ) {
     fullScreenElement.webkitRequestFullScreen();
   }
   if ( fullScreenElement.msRequestFullscreen ) fullScreenElement.msRequestFullscreen();
-
 }
 
 var exitFullScreen = function() {
@@ -57,12 +63,13 @@ var exitFullScreen = function() {
 }
 
 var startProgram = function( _id, _time ) {
+
   program_id = _id
   if ( _time == undefined ) _time = 0
   getProgram( _id, function( p ) {
 
     $('#modal_iframe').show()
-    //$('.clipcard-container').hide()
+    $('#map_full_screen_button').hide()
 
     // make sure to set program
     program = p
@@ -82,6 +89,7 @@ var startProgram = function( _id, _time ) {
 var map
 var active_spots = []
 var first_marker
+var last_clicked_marqer
 
 function initMap() {
   // Specify features and elements to define styles.
@@ -184,15 +192,16 @@ function initMap() {
     google.maps.event.addListener( mark, 'click', function() {
 
       // close the rest
-      closeAllSpots();
-
+      closeAllSpots()
       var i = infowindow.open( map, mark );
-      console.log("###########################")
-      console.log("map", map )
-      console.log("mark", mark )
-      console.log("i:", i )
-      console.log("ref:", infowindow )
-      console.log("stl:", $('.gm-style-iw').length )
+      last_clicked_marqer = mark
+
+      //console.log("###########################")
+      //console.log("map", map )
+      //console.log("mark", mark )
+      //console.log("i:", i )
+      //console.log("ref:", infowindow )
+      //console.log("stl:", $('.gm-style-iw').length )
 
     });
 
@@ -226,17 +235,17 @@ function initMap() {
       $('.gm-style-iw').click( function() {
         startProgram( $(this).find('#full_movie_play').data('program') )
         goFullscreen('video_player')
-        $('#video_player').fadeIn()
+        $('er').fadeIn()
         $('#close_button').fadeIn("slow")
         closeAllSpots()
       })
 
       $('#close_button').unbind('click')
       $('#close_button').click( function() {
-        $('#video_player').fadeOut()
-        $('#close_button').fadeOut("slow")
+        //$('#video_player').fadeOut()
+        //$('#close_button').fadeOut("slow")
         closeVideoWindow()
-        exitFullScreen()
+        //exitFullScreen()
       })
 
 
@@ -301,10 +310,19 @@ function initMap() {
   // Button Handler for the first click
   $('#close_button').click( function() {
     google.maps.event.trigger( first_marker, 'click');
-    $('#video_player').fadeOut()
-    $('#close_button').fadeOut("slow")
+    //$('#video_player').fadeOut()
+    //$('#close_button').fadeOut("slow")
     closeVideoWindow()
     exitFullScreen()
   })
 
+  $('#map_full_screen_button').click( function() {
+    if( window.innerHeight == screen.height) {
+      exitFullScreen()
+    }else{
+      goFullscreen()
+    }
+  })
+
+  $('#map_full_screen_button').hide()
 }
