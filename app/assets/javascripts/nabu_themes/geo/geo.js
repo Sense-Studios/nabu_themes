@@ -1,5 +1,7 @@
 
 // ########################## MARDUQ HELPER FUNCTIONS ##########################
+// map center coordinates
+var turnhoutsebaan
 
 // default
 var video_target = '#video_player'
@@ -40,6 +42,7 @@ var loadAndPlayOtherVideo = function( _id, _time ) {
 var goFullscreen = function( _element ) {
 
   if ( _element == undefined ) _element = "video_player"
+
   // fullscreen api --> note the order of these!
   var fullScreenElement = document.getElementById( _element );
   if ( fullScreenElement.requestFullscreen ) fullScreenElement.requestFullscreen();
@@ -96,9 +99,7 @@ function initMap() {
   // Specify features and elements to define styles.
   window.styleArray = [{"elementType":"all","featureType":"road","stylers":[{ visibility: "off" },{"lightness":"-39"},{"gamma":"1.63"},{"visibility":"simplified"},{"saturation":"-32"}]},{"elementType":"all","featureType":"road.highway","stylers":[{"saturation":"-1"}]},{"elementType":"geometry.fill","featureType":"road.highway","stylers":[{"color":"#e07f77"},{"saturation":"0"},{"lightness":"0"}]},{"elementType":"labels.text","featureType":"road.highway","stylers":[{"color":"#ffffff"},{"weight":"10"}]}, {featureType: "poi",elementType: "labels",stylers: [{ visibility: "off" }] }]
   //{featureType: "poi", stylers: [{ visibility: "off" }]}
-
-  // map center coordinates
-  var turnhoutsebaan = new google.maps.LatLng(51.2151361,4.4382217);
+  turnhoutsebaan = new google.maps.LatLng(51.2151361,4.4382217);
 
   // Create a map object and specify the DOM element for display.
   map = new google.maps.Map(document.getElementById('map'), {
@@ -318,12 +319,22 @@ function initMap() {
   })
 
   $('#map_full_screen_button').click( function() {
-    if( window.innerHeight == screen.height) {
-      exitFullScreen()
+    console.log( window.innerHeight == screen.height )
+    if( window.innerHeight == screen.height ) {
+      exitFullScreen();
+      setTimeout(function() {
+        map.setZoom( 15 );
+        map.panTo( turnhoutsebaan );
+      }, 200 );
     }else{
-      goFullscreen()
+      goFullscreen();
+
+      setTimeout(function() {
+        map.setZoom( 16 );
+        map.panTo( turnhoutsebaan );
+      }, 200 );
     }
   })
 
-  $('#map_full_screen_button').hide()
+  $('#map_full_screen_button').hide();
 }
