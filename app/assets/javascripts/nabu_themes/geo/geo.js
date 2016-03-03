@@ -107,6 +107,7 @@ var video_is_playing = true // note that we start wit a playing video
 var c = 0;
 
 var other_unseen_spot = function() {
+  var c = 0;
   if ( unseen_spots.length > 0 ) {
     return unseen_spots[ Math.floor((Math.random() * unseen_spots.length)) ][1]
   }else{
@@ -232,6 +233,7 @@ function initMap() {
       closeAllSpots()
       var i = infowindow.open( map, mark );
       last_clicked_marqer = mark
+      video_is_playing = false;
     });
 
     google.maps.event.addListener( infowindow, 'domready', function() {
@@ -284,6 +286,7 @@ function initMap() {
 
       iwCloseBtn.mouseout(function(){
         $(this).css({opacity: '1'});
+        video_is_playing = true // we pretent that video is playing, because we don't want infowindows popping up
       });
     }); // end dom ready
 
