@@ -28,9 +28,13 @@ var closeVideoWindow = function () {
   }
 
   $('#map_full_screen_button').show()
+  video_is_playing = false
   try {
-    google.maps.event.trigger( last_clicked_marqer, 'click');
-  }catch(err){}
+    //google.maps.event.trigger( last_clicked_marqer, 'click');
+    google.maps.event.trigger( other_unseen_spot(), 'click');
+  }catch(err){
+    console.log("##### ERRRORRRRORRR ", err )
+  }
 }
 
 var loadAndPlayOtherVideo = function( _id, _time ) {
@@ -75,6 +79,8 @@ var startProgram = function( _id, _time ) {
     $('#video_player').fadeIn()
     $('#map_full_screen_button').hide()
 
+    video_is_playing = true
+
     // make sure to set program
     program = p
     program.meta.player_options.autoplay = "true";      // try and autoplay
@@ -92,8 +98,23 @@ var startProgram = function( _id, _time ) {
 // ########################## ALL THE MAP FUNCTIONS ############################
 var map
 var active_spots = []
+var unseen_spots = []
 var first_marker
 var last_clicked_marqer
+var other_unseen_spot
+var current_marker = -1
+var video_is_playing = true // note that we start wit a playing video
+var c = 0;
+
+var other_unseen_spot = function() {
+  if ( unseen_spots.length > 0 ) {
+    return unseen_spots[ Math.floor((Math.random() * unseen_spots.length)) ][1]
+  }else{
+    // if no unseen spots are left
+    return active_spots[ Math.floor((Math.random() * active_spots.length)) ][1] // random
+    // return active_spots[current_marker][1]                                      // last
+  }
+}
 
 function initMap() {
   // Specify features and elements to define styles.
@@ -182,6 +203,7 @@ function initMap() {
     });
 
     active_spots.push([loc,mark,infowindow])
+    unseen_spots.push([loc,mark,infowindow])
 
     var closeAllSpots = function() {
       // close the rest
@@ -190,39 +212,31 @@ function initMap() {
       });
     }
 
+    var remove_from_available = function( _infowindow ) {
+      // remove
+      var kill = -1
+      $.each( unseen_spots, function(i, value) {
+        console.log( "test", i, value[2], _infowindow )
+        if ( value[2] == _infowindow ) {
+          kill = i
+        }
+      })
+      if ( kill != -1 ) {
+        console.log("has kill remove", kill)
+        unseen_spots.splice(kill, 1)
+      }
+    }
 
     google.maps.event.addListener( mark, 'click', function() {
-
       // close the rest
       closeAllSpots()
       var i = infowindow.open( map, mark );
       last_clicked_marqer = mark
-
-      //console.log("###########################")
-      //console.log("map", map )
-      //console.log("mark", mark )
-      //console.log("i:", i )
-      //console.log("ref:", infowindow )
-      //console.log("stl:", $('.gm-style-iw').length )
-
     });
-
-    //google.maps.event.addListener(map, 'click', function() {
-    //    if ( $('.gm-style-iw').hasClass('gva_style') ) {
-    //      $('.gm-style-iw').removeClass('gva_style')
-    //    }
-
-        // aaaaand... close
-    //    infowindow.close();
-    //});
 
     google.maps.event.addListener( infowindow, 'domready', function() {
 
-      console.log(" ################### DOMREADY ", infowindow )
-      //$('.gm-style-iw').hasClass("gva_style")
       $('.gm-style-iw').each( function( i, value ) {
-        console.log(">>>", i,$(this))
-        console.log(">>>", $(this).find('iframe').length)
         if ($(this).find('iframe').length > 0) {
           $(this).addClass('gva_style')
         }else{
@@ -230,16 +244,13 @@ function initMap() {
         }
       });
 
-      //$('.content_left').click(function(){alert("doh")})
-
-      //$('#full_movie_play').click( function() {
       $('.gm-style-iw').unbind('click')
       $('.gm-style-iw').click( function() {
         startProgram( $(this).find('#full_movie_play').data('program') )
         goFullscreen('video_player')
-        $('er').fadeIn()
         $('#close_button').fadeIn("slow")
         closeAllSpots()
+        remove_from_available( infowindow )
       })
 
       $('#close_button').unbind('click')
@@ -276,11 +287,25 @@ function initMap() {
       });
     }); // end dom ready
 
-    if ( spot.active ) {
-      first_marker = mark
-    }
-
+    // sets the first spot
+    //if ( spot.active ) {
+    //  first_marker = mark
+    //}
   }); // end for each
+
+
+  // #### Do some infowindow hocus pocus
+  current_marker = active_spots.length - 1
+  first_marker = active_spots[current_marker]
+
+  setInterval( function() {
+    if ( !video_is_playing ) c++;
+    if ( c%20 == 0 ) {
+      current_marker -= 1
+      if (current_marker < 0) current_marker = active_spots.length - 1
+      google.maps.event.trigger( active_spots[current_marker][1], 'click');
+    }
+  }, 1000 );
 
   // ###### restrict boundries ##############################################
 
@@ -290,7 +315,6 @@ function initMap() {
     if (strictBounds.contains(map.getCenter())) return;
 
     // We're out of bounds - Move the map back within the bounds
-
     var c = map.getCenter(),
       x = c.lng(),
       y = c.lat(),
