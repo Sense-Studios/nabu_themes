@@ -32,8 +32,8 @@ var closeVideoWindow = function () {
   try {
     // google.maps.event.trigger( last_clicked_marqer, 'click');
     // google.maps.event.trigger( other_unseen_spot(), 'click');
-    google.maps.event.trigger( active_spots[current_marker][1], 'click');
-    c = 5
+    c = 0
+    do_next_marker()
   }catch(err){
     console.log("##### ERRRORRRRORRR ", err )
   }
@@ -117,6 +117,12 @@ var other_unseen_spot = function() {
     return active_spots[ Math.floor((Math.random() * active_spots.length)) ][1] // random
     // return active_spots[current_marker][1]                                      // last
   }
+}
+
+var do_next_marker = function() {
+  current_marker -= 1
+  if (current_marker < 0) current_marker = active_spots.length - 1
+  google.maps.event.trigger( active_spots[current_marker][1], 'click');
 }
 
 function initMap() {
@@ -300,8 +306,7 @@ function initMap() {
 
 
   // #### Do some infowindow hocus pocus
-  current_marker = active_spots.length - 1
-  first_marker = active_spots[current_marker]
+  current_marker = active_spots.length
 
   setInterval( function() {
     if ( !video_is_playing ) {
@@ -310,9 +315,7 @@ function initMap() {
       return;
     }
     if ( c%20 == 0 ) {
-      google.maps.event.trigger( active_spots[current_marker][1], 'click');
-      current_marker -= 1
-      if (current_marker < 0) current_marker = active_spots.length - 1
+      do_next_marker()
     }
   }, 1000 );
 
@@ -344,7 +347,7 @@ function initMap() {
 
   // Button Handler for the first click
   $('#close_button').click( function() {
-    google.maps.event.trigger( first_marker, 'click');
+    do_next_marker()
     //$('#video_player').fadeOut()
     //$('#close_button').fadeOut("slow")
     closeVideoWindow()
