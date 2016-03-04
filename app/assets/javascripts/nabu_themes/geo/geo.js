@@ -134,7 +134,7 @@ function initMap() {
 
     // Apply the map style array to the map.
     styles: window.styleArray,
-    zoom: 15
+    zoom: 16
   });
 
   var strictBounds = new google.maps.LatLngBounds(
@@ -302,11 +302,15 @@ function initMap() {
   first_marker = active_spots[current_marker]
 
   setInterval( function() {
-    if ( !video_is_playing ) c++;
+    if ( !video_is_playing ) {
+      c++;
+    }else{
+      return;
+    }
     if ( c%20 == 0 ) {
-      current_marker -= 1
       if (current_marker < 0) current_marker = active_spots.length - 1
       google.maps.event.trigger( active_spots[current_marker][1], 'click');
+      current_marker -= 1
     }
   }, 1000 );
 
@@ -350,13 +354,13 @@ function initMap() {
     if( window.innerHeight == screen.height ) {
       exitFullScreen();
       setTimeout(function() {
-        map.setZoom( 15 );
+        map.setZoom( 16 );
         map.setCenter( turnhoutsebaan );
       }, 600 );
     }else{
       goFullscreen();
       setTimeout(function() {
-        map.setZoom( 16 );
+        map.setZoom( 17 );
         map.setCenter( turnhoutsebaan );
       }, 600 );
     }
