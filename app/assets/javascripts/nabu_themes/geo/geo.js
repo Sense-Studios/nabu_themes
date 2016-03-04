@@ -30,8 +30,10 @@ var closeVideoWindow = function () {
   $('#map_full_screen_button').show()
   video_is_playing = false
   try {
-    //google.maps.event.trigger( last_clicked_marqer, 'click');
-    google.maps.event.trigger( other_unseen_spot(), 'click');
+    // google.maps.event.trigger( last_clicked_marqer, 'click');
+    // google.maps.event.trigger( other_unseen_spot(), 'click');
+    google.maps.event.trigger( active_spots[current_marker][1], 'click');
+    c = 5
   }catch(err){
     console.log("##### ERRRORRRRORRR ", err )
   }
@@ -308,9 +310,9 @@ function initMap() {
       return;
     }
     if ( c%20 == 0 ) {
-      if (current_marker < 0) current_marker = active_spots.length - 1
       google.maps.event.trigger( active_spots[current_marker][1], 'click');
       current_marker -= 1
+      if (current_marker < 0) current_marker = active_spots.length - 1
     }
   }, 1000 );
 
