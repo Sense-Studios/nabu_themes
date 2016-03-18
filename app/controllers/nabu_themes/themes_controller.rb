@@ -36,10 +36,12 @@ module NabuThemes
         md = program.meta.moviedescription
         { id: program.id, title: program.title, tags: program.tags, created_at: program.created_at, meta: { moviedescription: { duration_in_ms: md.try(:duration_in_ms), thumbnail: md.try(:thumbnail) } } }
       end
+
       #.pluck( title, meta.to_json().moviedescription.duration_in_ms, created_at, meta.moviedescription.thumbnail)
       @page = 'nabu_themes/' + @theme.theme + '/index'
       @related_programs = @programs.select { |p| p.tags.any? { |t| @program.tags.include? t } }
       @related_programs = @programs if @related_programs.blank?
+
       # get a page if supplied
       if !params[:page].blank?
         @page = 'nabu_themes/' + @theme.theme + '/' + params[:page].to_s
