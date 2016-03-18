@@ -2,4 +2,4 @@
 # make sure these all start with 'SENSE', to not conflict with
 # other themes
 
-MIXER = 1
+MIXER_SETTINGS = "{}"
