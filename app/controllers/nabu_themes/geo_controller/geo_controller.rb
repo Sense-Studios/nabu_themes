@@ -1,7 +1,8 @@
 require_dependency "nabu_themes/application_controller"
 
 module NabuThemes
-  class Geo::GeoController < ApplicationController
+  #class Geo::GeoController < ApplicationController
+  class Gazetvanantwerpen::GazetvanantwerpenController < ApplicationController
 
     # set to application or remove to let it use its own layout in layout/geo
     layout 'nabu_themes/application'
