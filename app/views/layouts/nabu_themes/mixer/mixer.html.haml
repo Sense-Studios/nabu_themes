@@ -1,3 +1,23 @@
-%h1 mixer layout
+!!!
+%head
+  - if @program
+    %title= @program.title
 
-= yield
+  :javascript
+    // these need to be set in a rb parsed file
+    window.main_color = '#{@theme.main_color}';
+    window.support_color = '#{@theme.support_color}';
+    window.background_color = '#{@theme.background_color}';
+    window.menudata = #{@menudata};
+    window.menuconfig = #{@menuconfig};
+    window.channelsettings = #{@channelsettings};
+    window.programs = #{@filtered_programs.to_json};
+
+    window.kalturaPartnerId = #{@kalturaPartnerId};
+    window.kalturaUiConfigId = #{@kalturaUiConfigId};
+
+  = javascript_include_tag "nabu_themes/mixer/mixer"
+  = stylesheet_link_tag "nabu_themes/mixer/mixer", media: "all", "data-turbolinks-track" => true, "async" => true
+
+%body
+  = yield

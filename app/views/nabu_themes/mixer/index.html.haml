@@ -1,24 +1,14 @@
+%video#video1{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
+%video#video2{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
+%canvas#canvas
+
 :javascript
-  // these need to be set in a rb parsed file
-  window.main_color = '#{@theme.main_color}';
-  window.support_color = '#{@theme.support_color}';
-  window.background_color = '#{@theme.background_color}';
-  window.menudata = #{@menudata};
-  window.menuconfig = #{@menuconfig};
-  window.channelsettings = #{@channelsettings};
-
-  window.kalturaPartnerId = #{@kalturaPartnerId};
-  window.kalturaUiConfigId = #{@kalturaUiConfigId};
-
-= javascript_include_tag "nabu_themes/geo/geo"
-= stylesheet_link_tag "nabu_themes/geo/geo", media: "all", "data-turbolinks-track" => true, "async" => true
-
-
-/ le video overlay
-%div#video_player
-  / add close button
-  %div#close_button.btn.btn-default x
-
-  = render :partial => "shared/player/video", locals: { height: '100%' }
-
-  You are in the mixer now
+  var options = {}
+  var r = new Renderer(options)
+  var b = new BPM()
+  var c = new Control()
+  var f = new Filemanager()
+  r.addModule(b)
+  r.addModule(c)
+  r.addModule(f)
+  r.init()

@@ -1,4 +1,2 @@
-// new file
-var init = function() {
-  // code here
-}
+//= require jquery
+//= require_tree .

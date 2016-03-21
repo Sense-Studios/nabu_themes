@@ -13,6 +13,10 @@ module NabuThemes
 
       @slug = params[:slug]
       @theme = Theme.where( { "slug"=>params[:slug] } ).first()
+      if @theme.settings.blank?
+        @theme.settings = "{'warning':'no_settings'}"
+      end
+
       @channelsettings = @theme.settings
       @menuconfig = NabuThemes::Menu.find( @theme.menu ).config
       @menudata = NabuThemes::Menu.find( @theme.menu ).items
@@ -29,12 +33,25 @@ module NabuThemes
       end
 
       owner = User.find( @theme.owner )
-      @programs = MarduqResource::Program.where( "client_id" => owner.client_id )
       @kalturaPartnerId = owner.kaltura_partner_id
       @kalturaUiConfigId = owner.kaltura_uiconfig_id
+      @programs = MarduqResource::Program.where( "client_id" => owner.client_id )
+
       @filtered_programs = @programs.map do |program|
         md = program.meta.moviedescription
-        { id: program.id, title: program.title, tags: program.tags, created_at: program.created_at, meta: { moviedescription: { duration_in_ms: md.try(:duration_in_ms), thumbnail: md.try(:thumbnail) } } }
+        {
+          id: program.id,
+          title: program.title,
+          tags: program.tags,
+          created_at: program.created_at,
+          assets: program.program_items[0].asset,
+          meta: {
+            moviedescription: {
+              duration_in_ms: md.try(:duration_in_ms),
+              thumbnail: md.try(:thumbnail)
+            }
+          }
+        }
       end
 
       #.pluck( title, meta.to_json().moviedescription.duration_in_ms, created_at, meta.moviedescription.thumbnail)
