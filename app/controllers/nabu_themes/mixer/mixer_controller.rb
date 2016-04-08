@@ -5,7 +5,7 @@ module NabuThemes
     layout 'nabu_themes/sense/sense'
 
     def index
-      @channelsettings "{'foo':'bar'}"
+      @channelsettings = "{'foo':'bar'}"
     end
 
     def test
