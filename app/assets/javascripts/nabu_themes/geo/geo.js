@@ -368,13 +368,13 @@ function initMap() {
     if( window.innerHeight == screen.height ) {
       exitFullScreen();
       setTimeout(function() {
-        map.setZoom( 17 );
+        map.setZoom( 16 );
         map.setCenter( turnhoutsebaan );
       }, 600 );
     }else{
       goFullscreen();
       setTimeout(function() {
-        map.setZoom( 18 );
+        map.setZoom( 17 );
         map.setCenter( turnhoutsebaan );
       }, 600 );
     }
