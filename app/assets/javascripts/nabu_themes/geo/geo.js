@@ -29,6 +29,7 @@ var closeVideoWindow = function () {
 
   $('#map_full_screen_button').show()
   video_is_playing = false
+
   try {
     // google.maps.event.trigger( last_clicked_marqer, 'click');
     // google.maps.event.trigger( other_unseen_spot(), 'click');
@@ -88,6 +89,7 @@ var startProgram = function( _id, _time ) {
     program.meta.player_options.autoplay = "true";      // try and autoplay
     program.meta.moviedescription["in-point"] = _time   // try and go to time
     getPlayer( p, "#video_frame", agent.technology, agent.videotype);
+
     // initControls(); // not needed
     // setSocial(); // not needed
     initMarqers( program.marqers ) // very much needed
@@ -129,7 +131,11 @@ function initMap() {
   // Specify features and elements to define styles.
   window.styleArray = [{"elementType":"all","featureType":"road","stylers":[{ visibility: "off" },{"lightness":"-39"},{"gamma":"1.63"},{"visibility":"simplified"},{"saturation":"-32"}]},{"elementType":"all","featureType":"road.highway","stylers":[{"saturation":"-1"}]},{"elementType":"geometry.fill","featureType":"road.highway","stylers":[{"color":"#e07f77"},{"saturation":"0"},{"lightness":"0"}]},{"elementType":"labels.text","featureType":"road.highway","stylers":[{"color":"#ffffff"},{"weight":"10"}]}, {featureType: "poi",elementType: "labels",stylers: [{ visibility: "off" }] }]
   //{featureType: "poi", stylers: [{ visibility: "off" }]}
-  turnhoutsebaan = new google.maps.LatLng(51.2151361,4.4382217);
+
+
+  // starting place
+  // turnhoutsebaan = new google.maps.LatLng(51.2151361,4.4382217);
+  turnhoutsebaan = new google.maps.LatLng(51.21570734070004, 4.430990464495825)
 
   // Create a map object and specify the DOM element for display.
   map = new google.maps.Map(document.getElementById('map'), {
@@ -308,6 +314,8 @@ function initMap() {
   // #### Do some infowindow hocus pocus
   current_marker = active_spots.length
 
+  // #### Autochoose video
+  /*
   setInterval( function() {
     if ( !video_is_playing ) {
       c++;
@@ -318,6 +326,7 @@ function initMap() {
       do_next_marker()
     }
   }, 1000 );
+  */
 
   // ###### restrict boundries ##############################################
 
@@ -359,17 +368,18 @@ function initMap() {
     if( window.innerHeight == screen.height ) {
       exitFullScreen();
       setTimeout(function() {
-        map.setZoom( 16 );
+        map.setZoom( 17 );
         map.setCenter( turnhoutsebaan );
       }, 600 );
     }else{
       goFullscreen();
       setTimeout(function() {
-        map.setZoom( 17 );
+        map.setZoom( 18 );
         map.setCenter( turnhoutsebaan );
       }, 600 );
     }
   })
 
   $('#map_full_screen_button').hide();
+  closeVideoWindow();
 }

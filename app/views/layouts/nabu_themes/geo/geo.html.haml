@@ -23,15 +23,18 @@
     - if @program
 
       :javascript
-        var program_id = "#{@program.id}";
+        // kill the program
+        var program_id = null // "#{@program.id}"; //-- kill the initial program
+
         var show_site = true
         if ( window.location.hash != "" ) {
           program_id = window.location.hash.substring(1, 100)
           var show_site = false // toggles the site
         }
         var clipcard_id = "#{@clipcard.id unless @clipcard.nil?}";
-        var client_id = "#{@program.client_id}" ;
-        var account_id = "#{@account_id}" ;
+        var client_id = "#{@program.client_id}";
+        var account_id = "#{@account_id}";
+
 
       %title
         = @program.title
@@ -69,7 +72,7 @@
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true, "async" => true
 
     :css
-      = @custom_style
+      = #{@custom_style}
 
     <!--[if gt IE 9]><!-->
     %link{"rel"=>"stylesheet", "type"=>"text/css", "href"=>"/assets/ie8_fixes.css"}
