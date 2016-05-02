@@ -42,6 +42,7 @@ module NabuThemes
         {
           id: program.id,
           title: program.title,
+          description: program.description,
           tags: program.tags,
           created_at: program.created_at,
           assets: program.program_items[0].asset,

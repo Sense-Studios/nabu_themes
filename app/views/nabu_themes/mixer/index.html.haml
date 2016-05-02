@@ -1,8 +1,88 @@
-%video#video1{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
-%video#video2{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
+#sidebar
+  #button-play.btn.btn-material-sense-yellow
+    .glyphicon.glyphicon-play
+  #button-user.btn.btn-material-sense-yellow
+    .glyphicon.glyphicon-user
+  .background
+
+#content
+  .row_m
+    .col_m
+      %h4 Starting in 2003
+      %p
+        Sense started out as
+        %em visual jockeys
+        in the Amsterdam Dance Scene of early 2000.
+
+      %p
+        Back then veejaying was still mostly done using
+        %strong DVDs and even VHS tapes.
+        We didn’t even want to touch that, and came out with desktop computers,
+        a mountain of sample footage and early mix programs like
+        %em Resolume
+        and
+        %em Visual Jockey.
+      %p
+        Sense stood out with a
+        %strong highly adaptive
+        visual set that would later be characterized as
+        %em Nu-veejaying.
+
+    .col_m
+      %h4 Dune
+      %p
+        A beginning is a very delivate time,
+      %p
+        know then that it is the year ten thousand one-nineteen-one.
+        the know universe is ruled by the Padishah emperor Shaddam IV.
+      %p
+        my father
+      %p
+        In this time, the most precious substance in the entire universe
+        is the Spice-melange. The spice.
+
+    .header_m
+      %span.light
+        %em Once,
+        we were
+      %br
+      %heavy
+        %em Veejays
+
+#footer
+  %h1.title
+    %span.small Now playing:
+    %span#program_title collection of videos from the account
+  %h2.subtitle#program_description
+    Actually Some have their crosses and their golden gates.
+    %br
+    Well she is the grace I wear when I lose my faith
+  #logo_smaller
+    = image_tag 'nabu_themes/sense/sense_logo_smaller.png'
+  .background
+
+#vignet
+
+%video#video1.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
+%video#video2.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
 %canvas#canvas
 
+:css
+  .grey_back {
+    background-color: #a5a5a5;
+    color: #333333;
+    font-weight: 600;
+
+  }
+
+  .white_back {
+    background-color: #f5f5f5;
+    color: #666666;
+    font-weight: 100;
+  }
+
 :javascript
+  // set up renderer
   var options = {}
   var r = new Renderer(options)
   var b = new BPM()
@@ -12,3 +92,69 @@
   r.addModule(c)
   r.addModule(f)
   r.init()
+
+  // some more settings
+  r.blendingMode = blendingModes.hardLight
+
+:javascript
+  // hook up videos
+  $('#button-user').click( function() {
+    if (document.getElementById('video1').paused) {
+      document.getElementById('video1').play();
+      document.getElementById('video2').play();
+    }else{
+      document.getElementById('video1').pause();
+      document.getElementById('video2').pause();
+    }
+  });
+
+  $('#button-play').click( function() {
+    if ( $(".col_m:eq(0)").css("opacity") == 0 ) {
+      $(".header_m:eq(0)").css("opacity", 0).animate({"opacity":1}, 700);
+      setTimeout( function() { doTypeOn(".col_m:eq(0)") }, 400 );
+      setTimeout( function() { doTypeOn(".col_m:eq(1)") }, 900 );
+    } else {
+      $(".header_m:eq(0)").css("opacity", 0)
+      $(".col_m:eq(0)").css("opacity", 0);
+      $(".col_m:eq(1)").css("opacity", 0);
+    }
+  });
+
+:javascript
+  // type on
+  function doTypeOn( elm ) {
+    var str = $(elm).html(),
+        i = 0,
+        isTag,
+        text;
+
+    (function type() {
+        rnd = Math.round( Math.random() * 120 ) + 24
+        rc = (0|Math.random()*9e6).toString(36)
+        text = str.slice(0, i);
+        newt = str.slice(i-rnd, i);
+        //console.log(i-r, i)
+        text = text + "<span class='white_back'>" + newt + "</span> <span class='grey_back'>" + rc + "</span>";
+        i += rnd;
+
+        if (text === str) return;
+        $(elm).html( text );
+        $(elm).find('.white_back').fadeOut(60)
+        $(elm).find('.grey_back').hide().fadeIn(80)
+        $(elm).css('opacity', 1)
+
+        var char = text.slice(-1);
+        if( char === '<' ) isTag = true;
+        if( char === '>' ) isTag = false;
+        if (isTag) return type();
+
+        if ( i < str.length ) {
+          setTimeout( type, Math.round( Math.random() * 180 ) );
+        }else{
+          $(elm).html( str )
+        }
+    }());
+  }
+
+  setTimeout( function() { doTypeOn(".col_m:eq(0)") }, 1600 )
+  setTimeout( function() { doTypeOn(".col_m:eq(1)") }, 2250 )

@@ -9,7 +9,7 @@ var Renderer = function( _settings ) {
   _self.src2 = "http://nabu-dev.s3.amazonaws.com/uploads/video/558b39266465760a3700001b/480p_h264.mp4?r=101294694802"
   _self.width = 640
   _self.height = 380
-  _self.optimize = false
+  _self.optimize = true // force 30fps
   _self.alpha = 1
   _self.alpha2 = 1
 
@@ -34,7 +34,8 @@ var Renderer = function( _settings ) {
   // reset with _self.c_a = Math.PI * 1.5; _self.bpm = 0
 
   // find me in js/blendmodes
-  _self.blendingMode = blendingModes.add;
+  //_self.blendingMode = blendingModes.add;
+  //_self.blendingMode = blendingModes.linearBurn;
 
   _self.addModule = function(  _module ) {
     console.log( "adding",  _module )

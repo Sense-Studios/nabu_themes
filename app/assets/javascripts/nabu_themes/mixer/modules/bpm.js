@@ -42,7 +42,7 @@ var BPM = function() {
   }
 
   // reset to a certain value
-  // note this will not bypass c_a  
+  // note this will not bypass c_a
   // set num to -0.5PI and 0.5PI
   _self.reset = function( num ) {
     // reset

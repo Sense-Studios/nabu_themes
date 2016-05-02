@@ -16,6 +16,7 @@
     window.kalturaPartnerId = #{@kalturaPartnerId};
     window.kalturaUiConfigId = #{@kalturaUiConfigId};
 
+  = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true, "async" => true
   = javascript_include_tag "nabu_themes/mixer/mixer"
   = stylesheet_link_tag "nabu_themes/mixer/mixer", media: "all", "data-turbolinks-track" => true, "async" => true
 
