@@ -39,13 +39,15 @@ module NabuThemes
 
       @filtered_programs = @programs.map do |program|
         md = program.meta.moviedescription
+        ass = "no assets found"
+        ass = program.program_items[0].asset unless program.program_items[0].nil?
         {
           id: program.id,
           title: program.title,
           description: program.description,
           tags: program.tags,
           created_at: program.created_at,
-          assets: program.program_items[0].asset,
+          assets: ass,
           meta: {
             moviedescription: {
               duration_in_ms: md.try(:duration_in_ms),
