@@ -13,6 +13,19 @@ var Renderer = function( _settings ) {
   _self.alpha = 1
   _self.alpha2 = 1
 
+  /*
+  $('body').append("<div class='render_info'> info </div>")
+  $('.render_info').css({
+    'position': 'absolute',
+    'right': '0px',
+    'top': '0px',
+    'height': '80px',
+    'width': '320px',
+    'z-index': '1000000000','right': '0',
+    'background-color': 'white'
+  });
+  */
+
   // overrides
   if (_settings != undefined) {
     $.each( _settings, function(k, v) {
@@ -99,6 +112,7 @@ var Renderer = function( _settings ) {
 
   var pixels1, pixels2, image1, image2, imageData1, imageData2
   var r, g, b, oR, oG, oB, alpha1 = 1 - _self.alpha;
+  var bar = "####################"
 
   _self.update = function() {
       c++;
@@ -128,24 +142,36 @@ var Renderer = function( _settings ) {
       pixels2 = image2.data; // @type Array
 
       //if (c%60==0) console.log("---", _self.alpha, alpha1)
+      alpha1 = 1 - _self.alpha
+
+      window.a1_mod = ((_self.alpha * 2))
+      if (a1_mod > 1) a1_mod = 1
+      window.a2_mod = ((alpha1 * 2))
+      if (a2_mod > 1) a2_mod = 1
+      //console.log( a1_mod, a2_mod )
+
+
+      //$('.render_info').html()
+      $('.render_info').html( bar.substr(0, Math.round(a1_mod * 20)) + "<br> " + bar.substr(0, Math.round(a2_mod * 20)) )
+
 
       // blend images
       for (var i = 0, il = pixels1.length; i < il; i += 4) {
-        oR = pixels1[i] * _self.alpha2;
-        oG = pixels1[i + 1] * _self.alpha2;
-        oB = pixels1[i + 2] * _self.alpha2;
+        oR = pixels1[i]     //* _self.alpha2;
+        oG = pixels1[i + 1] //* _self.alpha2;
+        oB = pixels1[i + 2] //* _self.alpha2;
 
         // calculate blended color
-        r = _self.blendingMode(pixels2[i], oR);
-        g = _self.blendingMode(pixels2[i + 1], oG);
-        b = _self.blendingMode(pixels2[i + 2], oB);
+        r = _self.blendingMode( pixels2[i]     * a1_mod, oR * a2_mod );
+        g = _self.blendingMode( pixels2[i + 1] * a1_mod, oG * a2_mod );
+        b = _self.blendingMode( pixels2[i + 2] * a1_mod, oB * a2_mod );
 
         // _self.alpha compositing
 
         // _/ \)
-        pixels1[i] =     r  * _self.alpha + oR * alpha1;
-        pixels1[i + 1] = g  * _self.alpha + oG * alpha1;
-        pixels1[i + 2] = b  * _self.alpha + oB * alpha1;
+        pixels1[i] =     r  //* a1_mod + oR * a2_mod;
+        pixels1[i + 1] = g  //* a1_mod + oG * a2_mod;
+        pixels1[i + 2] = b  //* a1_mod + oB * a2_mod;
       }
 
       image1.data = imageData1;

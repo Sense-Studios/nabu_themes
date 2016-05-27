@@ -1,5 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Playfair+Display:400,400italic,700italic,700,900,900italic);
 
+body, html {
+
+}
+
 #video1 {
   width: 320px;
   height: 200px;
@@ -29,9 +33,9 @@
   width: 100%;
   position: absolute;
   bottom: 0;
-  text-align: right;
+  text-align: left;
   color: white;
-  padding-right: 178px;
+  padding-left: 204px;
   height: 100px;
 
   h1.title {
@@ -58,7 +62,7 @@
     margin: 0;
     padding: 0;
     max-width: 80%;
-    float: right;
+    /*float: right;*/
     font-size: 18px;
     line-height: 23px;
     margin-top: 4px;
@@ -86,7 +90,7 @@
 #logo_smaller {
   position: fixed;
   bottom: 18px;
-  right: 13px;
+  left: 50px;
 }
 
 #sidebar {
@@ -95,12 +99,26 @@
   text-align: center;
   padding-top: 6%;
 
+  /*
   .btn{
     padding: 8px 10px 7px 10px;
     border: 1px solid rgba(20, 20, 20, 0.3);
     margin: 14px 0px 0px 0px;
     box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.4);
     font-size: 10px;
+  }
+  */
+
+  .btn{
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    border: 1px solid rgba(20, 20, 20, 0.3);
+    margin: 14px 0px 0px 0px;
+    box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.4);
+    font-size: 10px;
+    z-index: 1;
   }
 
   .background {
@@ -138,7 +156,7 @@
     .col_m {
       background-color: rgba(0, 0, 0, 0.24);
       padding: 7% 1.3% 11% 3%;
-      text-align: justify;
+      /*text-align: justify;*/
       min-width: 294px;
       /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.72+0,0.3+65,0.15+83,0+100 */
       background: -moz-linear-gradient(top,  rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.3) 65%, rgba(0,0,0,0.15) 83%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
@@ -185,19 +203,27 @@
       display: inline;
 
       .light {
+        display: inline;
         font-weight: 100;
       }
+
+      .em {} // TODO
+
       .strong {
+        display: inline;
         font-weight: 600;
         font-size: 68;
       }
       .heavy {
+        display: inline;
         font-weight: 800;
         font-size: 72;
       }
-      .caps {
-        font-variant: small-caps;
-      }
+    }
+
+    .caps {
+      display: inline;
+      font-variant: small-caps;
     }
   }
 

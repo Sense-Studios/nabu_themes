@@ -61,7 +61,7 @@ var BPM = function() {
 
   _self.center = function() {
     _self.bpm = 0
-    _self.c_a = Math.PI * 1 //center 0.5 0.5
+    _self.c_a = 0 //Math.PI * 1 //center 0.5 0.5
   }
 
   _self.right = function() {

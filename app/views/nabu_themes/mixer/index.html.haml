@@ -1,12 +1,63 @@
 #sidebar
-  #button-play.btn.btn-material-sense-yellow
+  #button-play.btn.btn-material-grey-500
     .glyphicon.glyphicon-play
-  #button-user.btn.btn-material-sense-yellow
+  #button-user.btn.btn-material-grey-500
     .glyphicon.glyphicon-user
+  #button-beat.btn.btn-material-sense-yellow
+    BEAT
+  #button-cat.btn.btn-material-sense-yellow
+    CAT.
+  #button-menu.btn.btn-material-sense-yellow
+    MENU
+  #button-cont.btn.btn-material-red-500
+    CONT.
+
   .background
+
 
 #content
   .row_m
+
+    .col_m
+      %h4 Dune
+      %br
+      %br
+      %p
+        A beginning is a very delivate time,
+      %p
+        know then that it is the year
+        .caps ten thousand one-nineteen-one.
+        the know universe is ruled by the
+        %em Padishah
+        emperor
+        %strong Shaddam IV.
+      %p
+        my father
+      %p
+        In this time, the most precious substance in the entire universe
+        is the
+        %strong Spice-melange.
+
+      %ol
+        %em The spice
+        %li extends life
+        %li expands conscousness
+        %li
+          is
+          %strong vital
+          for space travel.
+
+      %p
+        The spice can be found on one planet only in the entire universe.
+
+      %p
+        That planet is called
+        %em Arakis
+        also known as
+
+      %p
+        %strong Dune
+
     .col_m
       %h4 Starting in 2003
       %p
@@ -29,25 +80,53 @@
         %em Nu-veejaying.
 
     .col_m
-      %h4 Dune
+      .stars.text-center{:width => "100%"}
+        .fa.fa-star
+        .fa.fa-star
+        .fa.fa-star
+      %br
+      %hr
+      %br
+
       %p
-        A beginning is a very delivate time,
+        We've reached a point in our civilization
+        %br
+        where counterculture has mutated into a self-obsessed aesthetic vacuum.
+
       %p
-        know then that it is the year ten thousand one-nineteen-one.
-        the know universe is ruled by the Padishah emperor Shaddam IV.
+        So while hipsterdom is the end product of all prior countercultures,
+        %br
+        it's been stripped of its subversion and originality.
+
       %p
-        my father
-      %p
-        In this time, the most precious substance in the entire universe
-        is the Spice-melange. The spice.
+        And is leaving a generation pointlessly obsessing over fashion,
+        faux individuality, cultural capital and the commodities of style.
+
+
+
+
+
+
+    /
+      .header_m
+        %span.light
+          %em Once,
+          we were
+        %br
+        %heavy
+          %em Veejays
 
     .header_m
       %span.light
-        %em Once,
-        we were
+        %em
+          %small
+            The dead end
+            %br
+            of Western civilization
       %br
       %heavy
-        %em Veejays
+        %em Hipster
+
 
 #footer
   %h1.title
@@ -113,12 +192,22 @@
       $(".header_m:eq(0)").css("opacity", 0).animate({"opacity":1}, 700);
       setTimeout( function() { doTypeOn(".col_m:eq(0)") }, 400 );
       setTimeout( function() { doTypeOn(".col_m:eq(1)") }, 900 );
+      setTimeout( function() { doTypeOn(".col_m:eq(2)") }, 1300 );
     } else {
       $(".header_m:eq(0)").css("opacity", 0)
       $(".col_m:eq(0)").css("opacity", 0);
       $(".col_m:eq(1)").css("opacity", 0);
+      $(".col_m:eq(2)").css("opacity", 0);
     }
   });
+
+  var bpms = [ 0, 2, 4, 8, 16, 24, 32, 42, 64, 72, 90, 100, 120, 128, 160, 200, 240, 400 ]
+  var current_bpm = 0
+  $('#button-beat').click( function() {
+    current_bpm += 1
+    if ( current_bpm > bpms.length ) current_bpm = 0
+    b.bpm = bpms[current_bpm]
+  })
 
 :javascript
   // type on
@@ -158,3 +247,4 @@
 
   setTimeout( function() { doTypeOn(".col_m:eq(0)") }, 1600 )
   setTimeout( function() { doTypeOn(".col_m:eq(1)") }, 2250 )
+  setTimeout( function() { doTypeOn(".col_m:eq(2)") }, 2600 )
