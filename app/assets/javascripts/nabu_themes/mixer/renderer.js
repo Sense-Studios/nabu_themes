@@ -13,7 +13,7 @@ var Renderer = function( _settings ) {
   _self.alpha = 1
   _self.alpha2 = 1
 
-  /*
+
   $('body').append("<div class='render_info'> info </div>")
   $('.render_info').css({
     'position': 'absolute',
@@ -22,9 +22,10 @@ var Renderer = function( _settings ) {
     'height': '80px',
     'width': '320px',
     'z-index': '1000000000','right': '0',
-    'background-color': 'white'
+    'font-size': '8px',
+    'text-align': 'right',
+    'color': 'rgba(250,250,250,0.5)'
   });
-  */
 
   // overrides
   if (_settings != undefined) {
@@ -112,7 +113,7 @@ var Renderer = function( _settings ) {
 
   var pixels1, pixels2, image1, image2, imageData1, imageData2
   var r, g, b, oR, oG, oB, alpha1 = 1 - _self.alpha;
-  var bar = "####################"
+  var bar = "||||||||||||||||||||"
 
   _self.update = function() {
       c++;

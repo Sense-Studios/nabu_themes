@@ -28,23 +28,28 @@ var Filemanager = function() {
   }
 
   _self.change_channels = function( _channel1, _channel2 ) {
-    _self.nextUpdate = Math.round( Math.random() * _self.updateMax );
-    rnd1 = Math.round( Math.random() * eligables.length )
-    rnd2 = Math.round( Math.random() * eligables.length )
+    try {
+      _self.nextUpdate = Math.round( Math.random() * _self.updateMax );
+      rnd1 = Math.round( Math.random() * eligables.length )
+      rnd2 = Math.round( Math.random() * eligables.length )
 
-    var source1 = getUrlByLabel( eligables[ rnd1 ], '480p_h264' )
-    var source2 = getUrlByLabel( eligables[ rnd2 ], '480p_h264' )
+      var source1 = getUrlByLabel( eligables[ rnd1 ], '480p_h264' )
+      var source2 = getUrlByLabel( eligables[ rnd2 ], '480p_h264' )
 
-    console.log(rnd1, source1 )
-    console.log(rnd2, source2 )
-    console.log("next: ", _self.nextUpdate)
+      console.log(rnd1, source1 )
+      console.log(rnd2, source2 )
+      console.log("next: ", _self.nextUpdate)
 
-    // update info
-    $('#program_title').hide().text(eligables[ rnd1 ].title).fadeIn('slow')
-    $('#program_description').hide().text( eligables[ rnd1 ].description ).fadeIn('slow')
+      // update info
+      $('#program_title').hide().text(eligables[ rnd1 ].title).fadeIn('slow')
+      $('#program_description').hide().text( eligables[ rnd1 ].description ).fadeIn('slow')
 
-    _self.renderer.updateSource( 1, source1 )
-    _self.renderer.updateSource( 2, source2 )
+      _self.renderer.updateSource( 1, source1 )
+      _self.renderer.updateSource( 2, source2 )
+    } catch(e) {
+      console.log("caught an error: ", e)
+      _self.change_channels()
+    }
   }
 
   getUrlByLabel = function( program, label ) {

@@ -79,12 +79,10 @@ $(document).ready(function(){
 
   // listen to events...cur
   mc.on("swipeleft", function(ev) {
-
     if ( curr < categories) $('.right_button').trigger('click');
   });
 
   mc.on("swiperight", function(ev) {
-
     if ( curr > 0 ) $('.left_button').trigger('click');
   });
 
@@ -104,12 +102,10 @@ if($(window).width() < 700) {
   $('.custom_navbar_mobile_menu').click(function(){
     if(!sidemenuOpen) {
       $('.cat_group').css({'transform': 'translateX(-260px)','-webkit-transform': 'translateX(-260px)'});
-      // $('.content').css({'transform': 'translateX(-250px)','-webkit-transform': 'translateX(-250px)'});
       sidemenuOpen = true;
     }
     else {
       $('.cat_group').removeAttr('style')
-      // $('.content').css({'transform': 'translateX(0)','-webkit-transform': 'translateX(0)'});
       sidemenuOpen = false;
     }
   });
@@ -163,7 +159,6 @@ function doVideoResize() {
 }
 
 function initResize() {
-  console.log("BABYLON INITRESIZE");
   setSocial();
   if ( program !== undefined && pop !== null ) {
 
@@ -175,20 +170,14 @@ function initResize() {
     lastprogram = program.id;
     pop.on( 'loadstart', function() {
       $('#video_frame').delay(800).fadeIn('slow');
-      //console.log("BABYLON >>> INTERCEPT LOADSTART!")
       $('.control_holder').hide();
       setTimeout( function() { $('.control_holder').hide() }, 500 ) // de fuck?!
     });
 
-    //pop.on( 'canplay', function() {
-      //console.log("BABYLON >>> INTERCEPT CANPLAY!")
-      //$('.control_holder').hide();
-      //setTimeout( function() { $('.control_holder').hide() }, 500 ) // de fuck?!
-    //})
 
     $('#video_frame').delay(800).fadeIn('slow');
     $('.control_holder').hide();
-    setTimeout( function() { $('.control_holder').hide() }, 500 ) // de fuck?!
+    setTimeout( function() { $('.control_holder').hide(); $('.big-play').addClass('hidden') }, 500 ) // de fuck?!
     $('.program_list').shapeshift(ss_options);
     var programHeight = $('.program_list').height();
     programHeight = programHeight + 40;
@@ -223,12 +212,9 @@ function fadeInVideo() {
 
 function loadProgram( p ) {
 
-  console.log("BABYLON LOAD PROGRAM: ")
-
   // RESET stuff
   $('.track_marqer').remove() // is not removed initially, so a failsafe
 
-  console.log("BABYLON RESET ANIMATION: ", p )
   $('.brandbox').fadeOut('slow');
   $('.middle').css('pointer-events','none');
   $('.bottom').removeClass('show_bottom');
@@ -363,14 +349,11 @@ function buildProgram( p ) {
   // hide controls, before play
   pop.on('loadeddata', function() {
     console.log("BABYLON: loaded data ... ")
-    //console.log("GAZETVANANTWERPEN: loaded data ... ")
-    //showControls()
   })
 
   // console.log("GAZETVANANTWERPEN CANPLAY: ", pop, p )
   // failsave
   pop.on('canplay', function() {
-    console.log("BABYLON: canplay ... ")
     showControls()
     $('.sense-layer').fadeIn();
   });
@@ -380,12 +363,11 @@ function buildProgram( p ) {
   pop.on( 'playing', function() { checkPlayButton() } )
   pop.on( 'play', function() { checkPlayButton() } )
   pop.on( 'pause', function() { checkPlayButton() } )
-  //pop.on( 'ended', function() { checkPlayButton() } )
 
   //console.log("GAZETVANANTWERPEN ZUT: ", pop, p )
   pop.on('play', function() {
     //console.log("GAZETVANANTWERPEN: play ... ")
-    $('.control_holder .play-button_scrub-bar .playpausebutton span').addClass('glyphicon-pause');
+    //$('.control_holder .play-button_scrub-bar .playpausebutton span').addClass('glyphicon-pause');
     closeSideMenu();
     showControls()
     pop.mute(false);
@@ -395,14 +377,14 @@ function buildProgram( p ) {
   //console.log("GAZETVANANTWERPEN ZUT: ", pop, p )
   pop.on('pause', function() {
     //console.log("GAZETVANANTWERPEN: pause ... ")
-    $('.control_holder .play-button_scrub-bar .playpausebutton span').removeClass('glyphicon-pause');
+    //$('.control_holder .play-button_scrub-bar .playpausebutton span').removeClass('glyphicon-pause');
     showControls()
   })
 
   //console.log("GAZETVANANTWERPEN MEERZUT: ", pop, p )
   // turn big play button back on (unless yotube ?)
   if ( program.program_items[0].asset._type == "Video" ) {
-    $(".big-play").removeClass('hidden')
+    //$(".big-play").removeClass('hidden')
     $('.control_holder').fadeIn()
   }
 
@@ -438,7 +420,7 @@ function buildProgram( p ) {
 
   setTimeout( function() {
     console.log( isPlaying, program.program_items[0].asset._type )
-    if (!isPlaying && program.program_items[0].asset._type == 'Video') $('.big-play').removeClass('hidden');
+    if (!isPlaying && program.program_items[0].asset._type == 'Video') //$('.big-play').removeClass('hidden');
     sideMenuTop();
   }, 800 )
   setSocial();
@@ -450,24 +432,9 @@ var toggleMuteButton = function() {
   //console.log("GAZETVANANTWERPEN toggleMUTED");
 }
 
-/*
-var checkPlayButton = function() {
-  if ( pop.paused() ) {
-    // set controller o play
-    $(".glyphicon-play").removeClass("display");
-    $(".glyphicon-pause").addClass("display");
-  }else{
-    // set op pause
-    $(".glyphicon-play").addClass("display");
-    $(".glyphicon-pause").removeClass("display");
-    $(".big-play").addClass('hidden')
-  }
-}
-*/
-
 var showControls = function() {
   $('.control_holder').fadeIn();
-  checkPlayButton() ;
+  $('.big-play').removeClass('hidden')
 }
 
 var toggleSite = function() {
@@ -475,8 +442,20 @@ var toggleSite = function() {
     //console.log("GAZETVANANTWERPEN SHOW VIDEO")
 
     // show videos
-    if (!isPlaying && program.program_items[0].asset._type == 'Video') $('.big-play').removeClass('hidden');
+    if (!isPlaying && program.program_items[0].asset._type == 'Video') //$('.big-play').removeClass('hidden');
     $('.control_holder').fadeIn('slow');
+
+    pop.off('pause')
+    pop.on('pause', function() {
+      $('.big-play').show()
+    })
+
+    pop.off('play')
+    pop.on('play', function() {
+      $('.big-play').hide()
+    })
+
+    if ( pop.paused() ) $('.big-play').show()
 
     // why the fuck is this reloading here?
     // chill, its doing nothing when no progam is loading
@@ -489,10 +468,8 @@ var toggleSite = function() {
 
 
   }else{
-    //console.log("GAZETVANANTWERPEN SHOW MENU etc.")
-
     // show menus
-    $('.big-play').addClass('hidden');
+    $('.big-play').hide()
     $('.control_holder').fadeOut('slow');
 
     $('.brandbox').fadeIn('slow');
@@ -504,12 +481,12 @@ var toggleSite = function() {
     $('.video_background_hider').animate({'opacity':1}, 1200 );
     $('.marqer').addClass('hidden');
     $('.moar_button').fadeOut('slow');
-    $('.control_holder .play-button_scrub-bar .playpausebutton span').removeClass('glyphicon-pause');
-
+    //$('.control_holder .play-button_scrub-bar .playpausebutton span').removeClass('glyphicon-pause');
 
     $('.custom_navbar_navbar').fadeIn();
     $('.custom_navbar_menu').fadeOut();
     $('.custom_navbar_mobile_menu').fadeIn();
+
     if(isMobile.any()) $('.navbar-brand').css('margin-left', '10%');
     $('.custom_navbar_brand').removeClass('hidden_navbar_brand');
     $('.custom_navbar_menu').css('background-color','#FFF');
@@ -522,6 +499,7 @@ var toggleSite = function() {
     videoToggle = false;
     window.clearTimeout(mouseTimer);
     pop.volume(0);
+
     //pop.pause();
     pop.playbackRate(0.4);
 
@@ -929,14 +907,9 @@ function createFooter() {
 $('.custom_navbar_menu').click( function() { toggleSite(); videoToggle = false; window.clearTimeout(mouseTimer);});
 $('.tabpanel ul li').click( function() { openSideMenu(); });
 $('.fa-close').click( function() { closeSideMenu(); });
-//$('div:not(.item,.top)').click( function() {
-//  if ( $('.brandbox').is(":visible") ) {
-//    toggleSite(); videoToggle = false; window.clearTimeout(mouseTimer);
-//  }
-//});
 $('.sense-layer').css('display','block');
 $('.sense-layer').click(function() {
-  if(playtoggle == false) {
+  if(pop.paused()) {
     pop.play();
     playtoggle = true;
   } else {
@@ -944,7 +917,6 @@ $('.sense-layer').click(function() {
     playtoggle = false;
   }
 })
-
 
 var openSideMenu = function() {
     $('.side_menu').addClass('open_side_menu');

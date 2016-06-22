@@ -214,8 +214,12 @@ html, body {
 }
 
 .smaller_background {
-  background-color: rgba(255, 255, 255, 0.8);
-  width: 460px;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+39,ffffff+68&1+39,0+68 */
+  background: -moz-linear-gradient(left,  rgba(255,255,255,1) 39%, rgba(255,255,255,0) 68%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 39%,rgba(255,255,255,0) 68%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right,  rgba(255,255,255,1) 39%,rgba(255,255,255,0) 68%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 */
+  width: 80%;
   height: 90px;
 }
 
@@ -1296,7 +1300,7 @@ border: none;
       top: 5px!important;
       left: 5px!important;
       height: 20px!important;
-      width: 55px!important;
+      width: 64px!important;
       span {
         width: 20px!important;
         padding: 3px!important;

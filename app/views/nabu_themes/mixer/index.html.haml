@@ -1,14 +1,14 @@
 #sidebar
-  #button-play.btn.btn-material-grey-500
+  #button-play.btn.btn-material-grey-800
+    .glyphicon.glyphicon-align-justify
+  #button-user.btn.btn-material-grey-800
     .glyphicon.glyphicon-play
-  #button-user.btn.btn-material-grey-500
-    .glyphicon.glyphicon-user
   #button-beat.btn.btn-material-sense-yellow
     BEAT
   #button-cat.btn.btn-material-sense-yellow
     CAT.
-  #button-menu.btn.btn-material-sense-yellow
-    MENU
+  #button-menu.btn.btn-material-blue-600
+    BLND.
   #button-cont.btn.btn-material-red-500
     CONT.
 
@@ -205,8 +205,22 @@
   var current_bpm = 0
   $('#button-beat').click( function() {
     current_bpm += 1
-    if ( current_bpm > bpms.length ) current_bpm = 0
+    if ( current_bpm >= bpms.length ) current_bpm = 0
     b.bpm = bpms[current_bpm]
+    console.log( "bpm set to: ", bpms[current_bpm])
+  })
+
+  var blms = [ blendingModes.add, blendingModes.lighten, blendingModes.hardLight, blendingModes.darken, blendingModes.softLight ]
+  var current_blm = 0
+  $('#button-menu').click( function() {
+    current_blm += 1
+    if ( current_blm >= blms.length ) current_blm = 0
+    r.blendingMode = blms[current_blm]
+    console.log( "blendingMode set to: ", blms[current_blm])
+  })
+
+  $('#button-cont').click( function() {
+    f.change_channels()
   })
 
 :javascript
