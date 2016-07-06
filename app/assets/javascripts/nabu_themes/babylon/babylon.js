@@ -11,7 +11,7 @@ setMarqers
 resetMarqers
 */
 
-var analytics_urchin = null;
+/*var analytics_urchin = null;*/
 var pop_under_set = false;
 var menu_toggle = 0;
 var side_menu = 0;
@@ -281,6 +281,7 @@ function buildProgram( p ) {
 
     // set meta
     $('title').text( p.title )
+    log("channe_load_video", channel + ": " + p.title + " (" + p.id + ")")
 
     // Set Info
     var time = p.created_at;
