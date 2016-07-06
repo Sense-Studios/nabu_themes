@@ -447,7 +447,7 @@ var toggleSite = function() {
 
     pop.off('pause')
     pop.on('pause', function() {
-      $('.big-play').show()
+      //$('.big-play').show()
     })
 
     pop.off('play')
@@ -455,7 +455,11 @@ var toggleSite = function() {
       $('.big-play').hide()
     })
 
-    if ( pop.paused() ) $('.big-play').show()
+    //if ( pop.paused() ) $('.big-play').show()
+    if ( pop.currentTime() == 0 && pop.paused() ) {
+      $('.big-play').show()
+      $('.big-play').removeClass('hidden')
+    }
 
     // why the fuck is this reloading here?
     // chill, its doing nothing when no progam is loading

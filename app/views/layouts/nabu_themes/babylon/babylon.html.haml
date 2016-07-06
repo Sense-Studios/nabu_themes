@@ -61,10 +61,10 @@
 
   %body
 
-
     :javascript
-      var analytics_urchin = null
-      var analytics_woopra_id = null
+      var analytics_owner = "#{@owner.id}"
+      var analytics_urchin = "#{@owner.urchin}"
+      var analytics_woopra_id = "#{@owner.woopra_id}"
 
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true, "async" => true
 
@@ -74,6 +74,7 @@
     <!--[if gt IE 9]><!-->
     %link{"rel"=>"stylesheet", "type"=>"text/css", "href"=>"/assets/ie8_fixes.css"}
       <!--<![endif]-->
+
 
     = javascript_include_tag "application"
 
