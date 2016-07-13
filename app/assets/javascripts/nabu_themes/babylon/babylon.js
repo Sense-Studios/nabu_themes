@@ -281,7 +281,6 @@ function buildProgram( p ) {
 
     // set meta
     $('title').text( p.title )
-    log("channe_load_video", channel + ": " + p.title + " (" + p.id + ")")
 
     // Set Info
     var time = p.created_at;
@@ -330,6 +329,10 @@ function buildProgram( p ) {
 
     // if we got none
     if ( related_programs.length == 0 ) $('.video_list').append('<h3>Geen gerelateerde videos</h3>')
+
+    // notify google
+    log("channe_load_video", channel + ": " + p.title + " (" + p.id + ")" )
+    ga('send', 'pageview');
   }
 
   clearInterval( marqercheckup );

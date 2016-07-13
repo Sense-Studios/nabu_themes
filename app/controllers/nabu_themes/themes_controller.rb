@@ -11,6 +11,12 @@ module NabuThemes
     # note that slug checking is done in the routes
     def render_theme
 
+      # ensure backward compatibility
+      if params[:page] == "p2v"
+        params[:id] = nil
+        params[:page] = nil
+      end
+
       @slug = params[:slug]
       @theme = Theme.where( { "slug"=>params[:slug] } ).first()
       if @theme.settings.blank?
