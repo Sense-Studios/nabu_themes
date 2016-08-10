@@ -5,8 +5,8 @@ var Renderer = function( _settings ) {
 
   // public
   _self.blendingMode = blendingModes.normal
-  _self.src1 = "http://nabu-dev.s3.amazonaws.com/uploads/video/567498216465766873000000/480p_h264.mp4?r=840953931550"
-  _self.src2 = "http://nabu-dev.s3.amazonaws.com/uploads/video/558b39266465760a3700001b/480p_h264.mp4?r=101294694802"
+  _self.src1 = "//nabu-dev.s3.amazonaws.com/uploads/video/567498216465766873000000/480p_h264.mp4?r=840953931550"
+  _self.src2 = "//nabu-dev.s3.amazonaws.com/uploads/video/558b39266465760a3700001b/480p_h264.mp4?r=101294694802"
   _self.width = 640
   _self.height = 380
   _self.optimize = true // force 30fps
@@ -100,6 +100,8 @@ var Renderer = function( _settings ) {
   }
 
   _self.updateSource = function( num, url ) {
+    // think of the num as resolume layers or a channels
+    console.log(">>> Set Source", num, url)
     if ( num == 1 ) {
       img1.src = url;
       _self.src1 = url

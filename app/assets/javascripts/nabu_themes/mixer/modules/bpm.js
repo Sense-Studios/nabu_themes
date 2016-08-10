@@ -55,17 +55,20 @@ var BPM = function() {
 
   // pretty useless and confusing helpers
   _self.left = function() {
-    _self.bpm = 0
+    _self.bpm = 1
     _self.c_a = Math.PI * 0.5 //left 1 0
+    setTimeout(function(){_self.bpm = 0}, 200 )
   }
 
   _self.center = function() {
-    _self.bpm = 0
-    _self.c_a = 0 //Math.PI * 1 //center 0.5 0.5
+    _self.bpm = 1
+    _self.c_a = 3.14 //Math.PI * 1 //center 0.5 0.5
+    setTimeout(function(){_self.bpm = 0}, 200 )
   }
 
   _self.right = function() {
-    _self.bpm = 0
+    _self.bpm = 1
     _self.c_a = Math.PI * 1.5 //right 0 1
+    setTimeout(function(){_self.bpm = 0}, 200 )
   }
 }

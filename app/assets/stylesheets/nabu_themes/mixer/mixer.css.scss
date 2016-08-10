@@ -1,17 +1,34 @@
 @import url(https://fonts.googleapis.com/css?family=Playfair+Display:400,400italic,700italic,700,900,900italic);
 
 body, html {
+  overflow: hidden;
+}
 
+a {
+  text-decoration: underline;
+  color: #e0b52b;
+  &:hover {
+    color: #e0b52b;
+  }
+  &:visited {
+    color: #e0b52b;
+  }
 }
 
 #video1 {
   width: 320px;
   height: 200px;
+  position: absolute;
+  right: 360px;
+  bottom: 20px;
 }
 
 #video2 {
   width: 320px;
   height: 200px;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
 }
 
 #vignet {

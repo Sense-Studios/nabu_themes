@@ -16,116 +16,8 @@
 
 
 #content
-  .row_m
-
-    .col_m
-      %h4 Dune
-      %br
-      %br
-      %p
-        A beginning is a very delivate time,
-      %p
-        know then that it is the year
-        .caps ten thousand one-nineteen-one.
-        the know universe is ruled by the
-        %em Padishah
-        emperor
-        %strong Shaddam IV.
-      %p
-        my father
-      %p
-        In this time, the most precious substance in the entire universe
-        is the
-        %strong Spice-melange.
-
-      %ol
-        %em The spice
-        %li extends life
-        %li expands conscousness
-        %li
-          is
-          %strong vital
-          for space travel.
-
-      %p
-        The spice can be found on one planet only in the entire universe.
-
-      %p
-        That planet is called
-        %em Arakis
-        also known as
-
-      %p
-        %strong Dune
-
-    .col_m
-      %h4 Starting in 2003
-      %p
-        Sense started out as
-        %em visual jockeys
-        in the Amsterdam Dance Scene of early 2000.
-
-      %p
-        Back then veejaying was still mostly done using
-        %strong DVDs and even VHS tapes.
-        We didn’t even want to touch that, and came out with desktop computers,
-        a mountain of sample footage and early mix programs like
-        %em Resolume
-        and
-        %em Visual Jockey.
-      %p
-        Sense stood out with a
-        %strong highly adaptive
-        visual set that would later be characterized as
-        %em Nu-veejaying.
-
-    .col_m
-      .stars.text-center{:width => "100%"}
-        .fa.fa-star
-        .fa.fa-star
-        .fa.fa-star
-      %br
-      %hr
-      %br
-
-      %p
-        We've reached a point in our civilization
-        %br
-        where counterculture has mutated into a self-obsessed aesthetic vacuum.
-
-      %p
-        So while hipsterdom is the end product of all prior countercultures,
-        %br
-        it's been stripped of its subversion and originality.
-
-      %p
-        And is leaving a generation pointlessly obsessing over fashion,
-        faux individuality, cultural capital and the commodities of style.
-
-
-
-
-
-
-    /
-      .header_m
-        %span.light
-          %em Once,
-          we were
-        %br
-        %heavy
-          %em Veejays
-
-    .header_m
-      %span.light
-        %em
-          %small
-            The dead end
-            %br
-            of Western civilization
-      %br
-      %heavy
-        %em Hipster
+  // content goes here
+  =# render :partial => "nabu_themes/mixer/example_views"
 
 
 #footer
@@ -175,6 +67,7 @@
   // some more settings
   r.blendingMode = blendingModes.hardLight
 
+// SET UP BUTTONS
 :javascript
   // hook up videos
   $('#button-user').click( function() {
@@ -201,28 +94,42 @@
     }
   });
 
-  var bpms = [ 0, 2, 4, 8, 16, 24, 32, 42, 64, 72, 90, 100, 120, 128, 160, 200, 240, 400 ]
-  var current_bpm = 0
+  //var bpms = [ 0, 2, 4, 8, 16, 24, 32, 42, 64, 72, 90, 100, 120, 128, 160, 200, 240, 400 ]
+  var bpms = [ 64, 128, 256, 128, 64, 28, 0 ]
+  //var cols = [  ]
+  var current_bpm = 6
+  b.bpm = 28;
   $('#button-beat').click( function() {
     current_bpm += 1
     if ( current_bpm >= bpms.length ) current_bpm = 0
     b.bpm = bpms[current_bpm]
     console.log( "bpm set to: ", bpms[current_bpm])
+    $('#button-beat').text( bpms[current_bpm] )
   })
 
-  var blms = [ blendingModes.add, blendingModes.lighten, blendingModes.hardLight, blendingModes.darken, blendingModes.softLight ]
+  $('#button-cat').click( function() {
+    v1 = document.getElementById('video1')
+    v2 = document.getElementById('video2')
+    v1.currentTime = Math.random() * v1.duration
+    v2.currentTime = Math.random() * v2.duration
+  })
+
+  var blms = [ blendingModes.add, blendingModes.lighten, blendingModes.hardLight, blendingModes.darken, blendingModes.softLight, blendingModes.normal ]
+  var blend_names = ["add", "light", "hard", "dark", "soft", "norm"]
   var current_blm = 0
   $('#button-menu').click( function() {
     current_blm += 1
     if ( current_blm >= blms.length ) current_blm = 0
     r.blendingMode = blms[current_blm]
     console.log( "blendingMode set to: ", blms[current_blm])
+    $('#button-menu').text(blend_names[current_blm])
   })
 
   $('#button-cont').click( function() {
     f.change_channels()
   })
 
+// SET UP CONTENT (HELPER)
 :javascript
   // type on
   function doTypeOn( elm ) {
@@ -259,6 +166,10 @@
     }());
   }
 
+  // add more for more colums
   setTimeout( function() { doTypeOn(".col_m:eq(0)") }, 1600 )
   setTimeout( function() { doTypeOn(".col_m:eq(1)") }, 2250 )
   setTimeout( function() { doTypeOn(".col_m:eq(2)") }, 2600 )
+
+  // RENDER CONTENT
+  $('#content').html(channelsettings.home)

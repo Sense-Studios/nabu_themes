@@ -20,49 +20,60 @@ var Filemanager = function() {
 
   _self.update = function() {
     c++;
-    if ( c%100 == 0 ) console.log(" ##### ", c, _self.nextUpdate )
+    if ( c%100 == 0 ) console.log(" ##### ", c, _self.nextUpdate );
     if ( c >= _self.nextUpdate ) {
-      c = 0
-      _self.change_channels()
+      c = 0;
+      _self.change_channels();
     }
   }
+
+  //_self.set_Channel = function( tag? name? id? ) {
+
+  //}
 
   _self.change_channels = function( _channel1, _channel2 ) {
     try {
       _self.nextUpdate = Math.round( Math.random() * _self.updateMax );
-      rnd1 = Math.round( Math.random() * eligables.length )
-      rnd2 = Math.round( Math.random() * eligables.length )
+      rnd1 = Math.round( Math.random() * eligables.length );
+      rnd2 = Math.round( Math.random() * eligables.length );
 
-      var source1 = getUrlByLabel( eligables[ rnd1 ], '480p_h264' )
-      var source2 = getUrlByLabel( eligables[ rnd2 ], '480p_h264' )
+      var source1 = getUrlByQuality( eligables[ rnd1 ], '480p_h264' );
+      var source2 = getUrlByQuality( eligables[ rnd2 ], '480p_h264' );
 
-      console.log(rnd1, source1 )
-      console.log(rnd2, source2 )
-      console.log("next: ", _self.nextUpdate)
+      console.log( eligables[ rnd1 ].assets.versions[2].url )
+      console.log(rnd1, source1 );
+      console.log(rnd2, source2 );
+      console.log("next: ", _self.nextUpdate);
 
       // update info
-      $('#program_title').hide().text(eligables[ rnd1 ].title).fadeIn('slow')
-      $('#program_description').hide().text( eligables[ rnd1 ].description ).fadeIn('slow')
+      $('#program_title').hide().text(eligables[ rnd1 ].title).fadeIn('slow');
+      $('#program_description').hide().text( eligables[ rnd1 ].description ).fadeIn('slow');
 
-      _self.renderer.updateSource( 1, source1 )
-      _self.renderer.updateSource( 2, source2 )
+      console.log("source 1:", source1)
+      console.log("source 2:", source2)
+
+      _self.renderer.updateSource( 1, source1 );
+      _self.renderer.updateSource( 2, source2 );
     } catch(e) {
-      console.log("caught an error: ", e)
-      _self.change_channels()
+      console.log("caught an error: ", e);
+      _self.change_channels();
     }
   }
 
-  getUrlByLabel = function( program, label ) {
-    var url = ""
-    console.log(program)
-    if (program == undefined) return // failsafe
+  getUrlByQuality = function( program, quality ) {
+    var url = "";
+    console.log(program);
+    if (program == undefined) return; // failsafe
 
-    console.log(program.id)
+    console.log(program.id);
     $.each( program.assets.versions, function(i, version ) {
-      if ( version.label == label ) {
-        url = version.url
+      console.log("trr", version.label, quality)
+      if ( version.label == quality ) {
+        url = version.url //.replace("http://", "//");
+        console.log("match:", version.url )
       }
     });
-    return url
+    console.log("return:", url)
+    return url;
   }
 }
