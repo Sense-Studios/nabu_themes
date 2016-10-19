@@ -1,7 +1,7 @@
 
 // ########################## MARDUQ HELPER FUNCTIONS ##########################
 // map center coordinates
-var turnhoutsebaan
+var map_center
 
 // default
 var video_target = '#video_player'
@@ -33,8 +33,8 @@ var closeVideoWindow = function () {
   try {
     // google.maps.event.trigger( last_clicked_marqer, 'click');
     // google.maps.event.trigger( other_unseen_spot(), 'click');
-    c = 0
-    do_next_marker()
+    if ( channelsettings.map_settings.auto_open ) do_next_marker()
+
   }catch(err){
     console.log("##### ERRRORRRRORRR ", err )
   }
@@ -122,6 +122,7 @@ var other_unseen_spot = function() {
 }
 
 var do_next_marker = function() {
+  console.log("do_next_marker")
   current_marker -= 1
   if (current_marker < 0) current_marker = active_spots.length - 1
   google.maps.event.trigger( active_spots[current_marker][1], 'click');
@@ -129,26 +130,42 @@ var do_next_marker = function() {
 
 function initMap() {
   // Specify features and elements to define styles.
-  window.styleArray = [{"elementType":"all","featureType":"road","stylers":[{ visibility: "off" },{"lightness":"-39"},{"gamma":"1.63"},{"visibility":"simplified"},{"saturation":"-32"}]},{"elementType":"all","featureType":"road.highway","stylers":[{"saturation":"-1"}]},{"elementType":"geometry.fill","featureType":"road.highway","stylers":[{"color":"#e07f77"},{"saturation":"0"},{"lightness":"0"}]},{"elementType":"labels.text","featureType":"road.highway","stylers":[{"color":"#ffffff"},{"weight":"10"}]}, {featureType: "poi",elementType: "labels",stylers: [{ visibility: "off" }] }]
+  if (channelsettings.style == undefined) {
+    window.styleArray = [{"elementType":"all","featureType":"road","stylers":[{ "visibility": "off" },{"lightness":"-39"},{"gamma":"1.63"},{"visibility":"simplified"},{"saturation":"-32"}]},{"elementType":"all","featureType":"road.highway","stylers":[{"saturation":"-1"}]},{"elementType":"geometry.fill","featureType":"road.highway","stylers":[{"color":"#e07f77"},{"saturation":"0"},{"lightness":"0"}]},{"elementType":"labels.text","featureType":"road.highway","stylers":[{"color":"#ffffff"},{"weight":"10"}]}, {featureType: "poi",elementType: "labels",stylers: [{ visibility: "off" }] }]
+  } else {
+    window.styleArray = channelsettings.style
+  }
   //{featureType: "poi", stylers: [{ visibility: "off" }]}
 
+  if ( channelsettings.map_settings == undefined ) {
+      channelsettings.map_settings = {
+      "zoom": 16,
+      "center": [ 51.21570734070004, 4.430990464495825 ],
+      "bounds": {
+          "topleft": [ 51.2129728, 4.4277095 ],
+          "bottomright": [ 51.2196805, 4.4738757 ]
+      },
+      "zoomcontrol": true,
+      "scrollwheel": false
+    }
+  }
 
   // starting place
-  // turnhoutsebaan = new google.maps.LatLng(51.2151361,4.4382217);
-  turnhoutsebaan = new google.maps.LatLng(51.21570734070004, 4.430990464495825)
+  // map_center = new google.maps.LatLng(51.2151361,4.4382217);
+  map_center = new google.maps.LatLng( channelsettings.map_settings.center[0], channelsettings.map_settings.center[1] )
 
   // Create a map object and specify the DOM element for display.
   map = new google.maps.Map(document.getElementById('map'), {
-    center: turnhoutsebaan,
-    scrollwheel: false,
+    center: map_center,
+    scrollwheel: channelsettings.map_settings.scrollwheel,
 
     disableDefaultUI: true,
-    zoomControl: true,
+    zoomControl: channelsettings.map_settings.zoomcontrol,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
 
     // Apply the map style array to the map.
     styles: window.styleArray,
-    zoom: 16
+    zoom: channelsettings.map_settings.zoom
   });
 
   var strictBounds = new google.maps.LatLngBounds(
@@ -159,7 +176,7 @@ function initMap() {
 
   // #### fill spots with ######################################################
 
-  var spots = window.channelsettings
+  var spots = window.channelsettings.spots
 
   spots.forEach(function(spot) {
 
@@ -369,13 +386,13 @@ function initMap() {
       exitFullScreen();
       setTimeout(function() {
         map.setZoom( 16 );
-        map.setCenter( turnhoutsebaan );
+        map.setCenter( map_center );
       }, 600 );
     }else{
       goFullscreen();
       setTimeout(function() {
         map.setZoom( 17 );
-        map.setCenter( turnhoutsebaan );
+        map.setCenter( map_center );
       }, 600 );
     }
   })

@@ -138,6 +138,8 @@
         isTag,
         text;
 
+    if (!str) return;
+
     (function type() {
         rnd = Math.round( Math.random() * 120 ) + 24
         rc = (0|Math.random()*9e6).toString(36)
