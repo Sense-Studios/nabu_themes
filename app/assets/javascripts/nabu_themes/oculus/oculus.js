@@ -1,6 +1,6 @@
 //= require jquery
 //= require jquery_ujs
-//= require galleria
+// require galleria
 
 //= require popcorn
 
