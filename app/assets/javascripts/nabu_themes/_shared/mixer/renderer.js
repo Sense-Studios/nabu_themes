@@ -69,6 +69,7 @@ var Renderer = function( _settings ) {
     img2.volume = 0;
     img1.src = video1_src;
     img2.src = video2_src;
+
     //img1.w = img1.video_self.width, img1.video_self.height
     //img2.w = img2.video_self.width, img2.video_self.height
     canvas = document.getElementById("canvas");
@@ -78,7 +79,6 @@ var Renderer = function( _settings ) {
     canvas.height = _self.height;
 
     //$('title').text('IN THE HOUSSSEE')
-
     console.log("got initial w and h", _self.width, _self.height);
 
     // first run

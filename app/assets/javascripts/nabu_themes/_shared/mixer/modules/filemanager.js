@@ -2,29 +2,33 @@ var Filemanager = function() {
   var _self = this;
   _self.renderer;
   _self.bypass = false;
-  _self.defaultQuality = "320p_h264_mobile"
-
+  _self.defaultQuality = "720p_5000kbps_h264" //"320p_h264_mobile"
   var c = 0;
-  _self.nextUpdate = 400
-  _self.updateMax = 1600
-
   var eligables = []
+
   $.each( programs, function( i, p ) {
 
     // add all the code about which movie you want here
-    console.log(p.id)
     if ( p.assets._type == "Video" ) {
       eligables.push(p)
     }
   });
+  console.log("elegible: ", programs.length)
 
   _self.update = function() {
     c++;
-    if ( c%100 == 0 ) console.log(" ##### ", c, _self.nextUpdate );
-    if ( c >= _self.nextUpdate ) {
-      c = 0;
-      _self.change_channels();
-    }
+
+
+    // MOVE TO AUTOPLAY
+    //_self.nextUpdate = 400
+    //_self.updateMax = 1600
+    //if ( c%100 == 0 ) console.log(" ##### ", c, _self.nextUpdate );
+    //if ( c >= _self.nextUpdate ) {
+    //  c = 0;
+    //  _self.change_channels();
+    //}
+
+    // console.log("update file")
   }
 
   // note
@@ -64,9 +68,11 @@ var Filemanager = function() {
     currentvideo.addEventListener('canplay', randomInPoint )
   }
 
+  // TODO CLEAN THE FOLLOWING MESS UP!
+
   // change source, randomly, on both channels
   _self.change_channels = function( _channel1, _channel2 ) {
-    try {
+    //try {
 
       // set time to next update
       // _self.nextUpdate = Math.round( Math.random() * _self.updateMax );
@@ -82,22 +88,38 @@ var Filemanager = function() {
       // console.log(rnd2, source2 );
       // console.log("next: ", _self.nextUpdate);
 
-      // update info
-      $('#program_title').hide().text(eligables[ rnd1 ].title).fadeIn('slow');
-      $('#program_description').hide().text( eligables[ rnd1 ].description ).fadeIn('slow');
-
-      console.log("source 1:", source1)
-      console.log("source 2:", source2)
+      console.log("picked random source 1:", source1)
+      console.log("picked random source 2:", source2)
 
       // pass source on to the renderer
-      _self.renderer.updateSource( 1, source1 );
-      _self.renderer.updateSource( 2, source2 );
+      if (Math.random() > 0.5 ) {
+        _self.renderer.updateSource( 1, source1 );
+        firebase.database().ref('/client_1/video1/').child('url').set( source1 );
+        firebase.database().ref('/client_1/video1/').child('title').set( eligables[ rnd1 ].title );
+        firebase.database().ref('/client_1/video1/').child('id').set( eligables[ rnd1 ].id );
 
-    } catch(e) {
+        // update info
+        $('#program_title').text(eligables[ rnd1 ].title) //.fadeIn('slow');
+        $('#program_description').text( eligables[ rnd1 ].description ) //.fadeIn('slow');
+        setTimeout( function() { doTypeOn("#footer") }, 200 );
 
-      // console.log("caught an error: ", e);
-      _self.change_channels();
-    }
+      }else{
+        _self.renderer.updateSource( 2, source2 );
+        firebase.database().ref('/client_1/video2/').child('url').set( source2 );
+        firebase.database().ref('/client_1/video2/').child('id').set( eligables[ rnd2 ].id );
+        firebase.database().ref('/client_1/video2/').child('title').set( eligables[ rnd2 ].title );
+
+        // update info
+        $('#program_title').text(eligables[ rnd2 ].title) //.fadeIn('slow');
+        $('#program_description').text( eligables[ rnd2 ].description ) //.fadeIn('slow');
+        setTimeout( function() { doTypeOn("#footer") }, 200 );
+      }
+
+    //} catch(e) {
+
+      // console.log(" ### ERROR ### caught an error: ", e);
+      //_self.change_channels();
+    //}
   }
 
   // helper
@@ -108,10 +130,10 @@ var Filemanager = function() {
 
     console.log(program.id);
     $.each( program.assets.versions, function(i, version ) {
-      console.log("trr", version.label, quality)
+      //console.log("trr", version.label, quality)
       if ( version.label == quality ) {
         url = version.url //.replace("http://", "//");
-        console.log("match:", version.url )
+        console.log("match & load:", version.url )
       }
     });
     // console.log("return:", url)

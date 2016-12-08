@@ -1,0 +1,30 @@
+/ move this line to the controller ?
+/ it should be used in any theme/ channel
+- @items = JSON.parse( NabuThemes::Menu.find( @theme.menu ).items )['menu']
+
+#slider
+  %ul
+    - @items.each_with_index do |item, index|
+      - if item['items'].count == 0
+        %li{ 'data-idx' => index, style: "background-image: url('http://i.ytimg.com/vi/8Ny55xLU6l0/maxresdefault.jpg')"}
+      - else
+        - begin
+          - current_program = MarduqResource::Program.find( item['items'][0]['id'] )
+          %li{ 'data-idx' => index, style: "background-image: url( #{ current_program.meta.moviedescription.thumbnail} )"}
+            .player
+              %iframe{ src: "", scrolling: 'no', frameborder: 0, allowfullscreen: false, width: '100%', height: '100%' }
+              / "/embed/#{ current_program.id }"
+              %span{:class=>'glyphicon glyphicon-play item-play'}
+
+            .item
+              -%w{news showcase more}.each do |b|
+                %div{ class: "block #{b}" }
+                  = render partial: 'nabu_themes/sense/item', locals: { current_program: current_program, "#{b}".to_sym => true, items: item['items'], category: item['name'] }
+        - rescue
+          %h1 You broke it
+
+#category
+  %ul
+    - @items.each_with_index do |n, index|
+      %li.skew{ 'data-idx' => index }
+        .unskew= "#{n['name']}".html_safe
