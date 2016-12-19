@@ -79,7 +79,7 @@
     uniform sampler2D baseTexture1;
     uniform sampler2D baseTexture2;
     uniform sampler2D noiseTexture;
-    uniform sampler2D delayed_image;
+    // uniform sampler2D delayed_image;
     uniform float alpha;
     uniform float alpha1;
     uniform float alpha2;
@@ -118,32 +118,35 @@
       //vec4 part1 = ( texture2D( baseTexture1, uvNoiseTimeShift ) * alpha1 ) + vec4( 0, 0, 0.4-vUv.y, 0.5 );
       //vec4 part2 = vec4(0,0,0,0);
 
-      //#ifdef FOO
-      //  part2 = ( texture2D( baseTexture2, uvNoiseTimeShift ) * alpha2 );
-      //#endif
+      // #ifdef FOO
+      //   part2 = ( texture2D( baseTexture2, uvNoiseTimeShift ) * alpha2 );
+      // #endif
 
-      //vec3 test1 = texture2D( baseTexture1, uvNoiseTimeShift ).xyz * alpha1; // + vec3(0.1,0.1,0.1);
-      //vec3 test2 = texture2D( baseTex ture2, vUv ).xyz * alpha2; // + vec3(0.2,0.2,0.1);
+      // vec3 test1 = texture2D( baseTexture1, uvNoiseTimeShift ).xyz * alpha1; // + vec3(0.1,0.1,0.1);
+      // vec3 test2 = texture2D( baseTex ture2, vUv ).xyz * alpha2; // + vec3(0.2,0.2,0.1);
 
       // lets blend
-      //vec4 baseColor = vec4( blend( test1, test2, mode ), 1); // + echo;
+      // vec4 baseColor = vec4( blend( test1, test2, mode ), 1); // + echo;
 
       // FOO
       // vec4 baseColor = part1 + part2;
-      //vec4 result = vec4( texture2D( baseTexture2, vUv).xyz, 1.0);
-      //vec4 startT = texture2D( afterimage, vUv);
-      //result.rgb = mod(result.rgb, 1.0);
+      // vec4 result = vec4( texture2D( baseTexture2, vUv).xyz, 1.0);
+      // vec4 startT = texture2D( afterimage, vUv);
+      // result.rgb = mod(result.rgb, 1.0);
 
-      vec4 video1 = vec4( texture2D( baseTexture1, vUv ).xyz, alpha1 );
-      vec4 video2 = vec4( texture2D( baseTexture2, vUv ).xyz, alpha2 );
-      //vec4 delayed = vec4( texture2D( delayed_image, vUv ).xyz, 1.0 );
+      vec2 uvTimeShift = vUv + vec2( -0.7, 1.5 ) * vec2( sin( time ), cos( time ) ) * baseSpeed;
+      vec4 noiseGeneratorTimeShift = texture2D( noiseTexture, uvTimeShift );
 
-      //vec4 baseColor =
-      //if ( vUv.x > 0.5 ) baseColor = delayed;
-      // + vec4( texture2D( afterimage, vUv ).xyz, 1.0 );
-      // baseColor.a = alpha;
-      gl_FragColor = vec4( blend( video1.rgb, video2.rgb, blendmode ), 1.0 );
-      //afterimage = baseColor.xy;
+      vec3 video1 = ( texture2D( baseTexture1, vUv ).xyz * alpha1 ) + ( vec4( 0.83, 0.50, 0.50, 1.0).rgb * ( noiseGeneratorTimeShift.a * alpha1 ) );  // src
+      vec3 video2 = ( texture2D( baseTexture2, vUv ).xyz * alpha2 ) + ( vec4( 0.54, 0.32, 0.32, 1.0).rgb * ( noiseGeneratorTimeShift.a * alpha2 ) );  // dst
+      // vec4 delayed = vec4( texture2D( delayed_image, vUv ).xyz, 1.0 );
+
+      // vec4 baseColor =
+      // if ( vUv.x > 0.5 ) baseColor = delayed;
+      //  + vec4( texture2D( afterimage, vUv ).xyz, 1.0 );
+      //  baseColor.a = alpha;
+      gl_FragColor = vec4( blend( video1, video2, blendmode ), 1.0 );
+      // afterimage = baseColor.xy;
     }
 
 </script>

@@ -24,6 +24,7 @@
   // test
   var bigOne = document.getElementById('bigOne');
   var dbRef = firebase.database().ref().child('text');
+  var local_client = "player_1"
   dbRef.on('value', snap => bigOne.innerText = snap.val());
 
   // now do this
@@ -77,6 +78,13 @@
 // add the video &c necc. for the mixer
 %video#video1.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
 %video#video2.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
+%video#video3.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
+
+%canvas#buffer1.hidden
+%canvas#buffer2.hidden
+%canvas#buffer3.hidden
+%canvas#buffer4.hidden
+
 %canvas#canvas
 %canvas#glcanvas
 
@@ -150,7 +158,8 @@
   });
 
   //var bpms = [ 0, 2, 4, 8, 16, 24, 32, 42, 64, 72, 90, 100, 120, 128, 160, 200, 240, 400 ]
-  var bpms = [ 64, 128, 256, 128, 64, 28, 0 ]
+  //var bpms = [ 64, 128, 256, 128, 64, 28, 0 ]
+  var bpms = [ 2, 4, 8, 16, 28, 32, 64 ]
   //var cols = [  ]
   var current_bpm = 6
   b.bpm = 28;
@@ -169,13 +178,14 @@
     v2.currentTime = Math.random() * v2.duration
   })
 
-  var blms = [ blendingModes.add, blendingModes.lighten, blendingModes.hardLight, blendingModes.darken, blendingModes.softLight, blendingModes.normal ]
-  var blend_names = ["add", "light", "hard", "dark", "soft", "norm"]
+  var blms = [ 1, 7, 13, 4, 12, 8 ]
+  var blend_names = ["add", "light", "hard", "dark", "soft", "scrn"]
   var current_blm = 0
   $('#button-menu').click( function() {
     current_blm += 1
     if ( current_blm >= blms.length ) current_blm = 0
-    r.blendingMode = blms[current_blm]
+    //r.blendingMode = blms[current_blm]
+    customUniforms.blendmode.value = blms[current_blm]
     console.log( "blendingMode set to: ", blms[current_blm])
     $('#button-menu').text(blend_names[current_blm])
   })

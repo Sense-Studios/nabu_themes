@@ -1,31 +1,72 @@
 client_1: {
+
   video1: {
-    id: '-1',
-    url: '-1',
-    currentTime: '0',
-    speed: '1',
-    alpha: '1',
-    title: '0'
+    id: '',
+    url: '',
+    currentTime: 0,
+    speed: 1.0,
+    alpha: 1.0,
+    title: ''
+    play: 'pause' // play, pause, loop
+    cue: 0
+    cue_A: { in: -1, out: -1 },
+    cue_B: { in: -1, out: -1 },
+    cue_C: { in: -1, out: -1 }
   },
 
   video2: {
-    id: '-1',
-    url: '-1',
-    currentTime: '0',
-    speed: '1',
-    alpha: '1',
-    title: '0'
+    id: '',
+    url: '',
+    currentTime: 0,
+    speed: 1.0,
+    alpha: 1.0,
+    title: ''
+    play: 'pause'
+    cue: 0
+    cue_A: { in: -1, out: -1 },
+    cue_B: { in: -1, out: -1 },
+    cue_C: { in: -1, out: -1 }
   },
 
+  video3: {
+    currentTime: 0,
+    speed: 1.0,
+    play: 'paused',
+    url: '',
+    id: ''
+  },
+
+  mixtype: 'mix',       // nam, fam, (wipe)?
+  bpm: '128',
+  autofade: false,
+  automaton: false,
+  trans: 'trans'        // 'trans', 'black', 'white'
+  trans_left: false,
+  trans_right: false,
+  scratch_left:, false,
+  scratch_right: false,
+  blendmode: 'ADD',     // ADD, DARKEN, LIGHTEN ... set as 1, 2, 3 ...
+
+  effect: {
+    effect: 'water',    // ripple, fire, wave, follow ... set as 1, 2, 3 ...
+    subefect: 'cloud',  // textures, cloud.png, cloud2.png ...
+    eff_x: -1,          // can have states 0, 1, 2, 3, 4
+    eff_y: -1,
+    eff_a: -1,
+    eff_b: -1,
+    eff_slide_1: 0.0,
+    eff_slide_2: 0.0,
+    eff_slide_3: 0.0,
+    eff_slide_4: 0.0,
+  },
+  foo: 'bar',       // to be removed
+
+  // identity information
   id: '',
   name: '',
   site: '',
-  mixtype: 'straight',
-  blendmode: 'add',
-  effect: 'water',
-  foo: 'bar',
-  bpm: '128'
 },
+
 client_2: {
 
 }

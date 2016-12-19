@@ -121,22 +121,22 @@ var Filemanager = function() {
       //_self.change_channels();
     //}
   }
+}
 
-  // helper
-  getUrlByQuality = function( program, quality ) {
-    var url = "";
-    // console.log(program);
-    if (program == undefined) return; // failsafe
+// helper ==> move to utilitiess ?
+getUrlByQuality = function( program, quality ) {
+  var url = "";
+  // console.log(program);
+  if (program == undefined) return; // failsafe
 
-    console.log(program.id);
-    $.each( program.assets.versions, function(i, version ) {
-      //console.log("trr", version.label, quality)
-      if ( version.label == quality ) {
-        url = version.url //.replace("http://", "//");
-        console.log("match & load:", version.url )
-      }
-    });
-    // console.log("return:", url)
-    return url;
-  }
+  console.log(program.id);
+  $.each( program.assets.versions, function(i, version ) {
+    //console.log("trr", version.label, quality)
+    if ( version.label == quality ) {
+      url = version.url //.replace("http://", "//");
+      console.log("match & load:", version.url )
+    }
+  });
+  // console.log("return:", url)
+  return url;
 }
