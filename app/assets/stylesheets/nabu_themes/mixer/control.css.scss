@@ -1,0 +1,225 @@
+body {
+  overflow-y: scroll;
+  width: calc( 100vw + 17px );
+}
+
+.background {
+  z-index: -1;
+  position:absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  top: 0;
+  left: 0;
+}
+
+.control_container {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.control_container input, .control_container button,  {
+  margin-bottom: 12px;
+}
+
+#chatbox {
+  background-color: grey;
+  width: 100%;
+  height: 10vh;
+}
+
+.btn {
+  flex-grow: 1;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  padding-top: 12px;
+  padding-bottom: 2px;
+  padding-right: 12px;
+  margin-bottom: 8px;
+  text-align: right;
+  height: 12.5vw;
+  transition-delay: 0s;
+  transition-duration: 0s;
+  border: solid 12px white;
+  border-color: #ccc #333 #333 #DDD;
+  background: url();
+}
+
+.btn.btn-material-grey-400.small {
+  background-color: #AAA;
+  width: 12.5vw;
+}
+
+.btn.btn-material-grey-400.wide {
+  background-color: #AAA;
+  width: 25vw;
+}
+
+.btn:hover, .btn:focus, .btn:active {
+  box-shadow: inherit !important;
+}
+
+.btn_down, .btn_down:hover {
+  box-shadow: inset 3px 8px 12px rgba(30,30,30,0.4) !important;
+  font-weight: bold;
+  border-color: #ccc #ccc #ccc #ccc;
+}
+
+#bpm_display {
+  width: 25%;
+  font-size: 7vh;
+  text-align: center;
+  font-family: monospace;
+  color: #6F0000;
+  position: relative;
+
+  .display_button {
+    display:inline-block;
+    float:left;
+    background-color: rgba(20,0,0,0.1);
+    color: #6F0000;
+    opacity: 0.5;
+    width: 50%;
+    height: 100%;
+    transition-duration: 0.8s;
+  }
+
+  .display_button:hover {
+    background-color: rgba(60,0,0,0.5);
+    color: #8F6F6F;
+    cursor: pointer;
+    opacity: 1;
+  }
+
+  .bpm {
+    position: absolute;
+    width: 25vw;
+    pointer-events: none;
+    text-align: center;
+  }
+}
+
+video {
+  float:left;
+  width: calc( 100% - 10px);
+}
+
+.video {
+  background-color: black;
+  width: 47%;
+  margin: 1%;
+  height: 19vh;
+}
+
+input[type=range][orient=vertical] {
+  writing-mode: bt-lr; /* IE */
+  -webkit-appearance: slider-vertical; /* WebKit */
+  width: 8px;
+  height: 100%;
+  padding: 0 5px;
+}
+
+select {
+  width: 25vw;
+}
+
+.effect_clm {
+  flex-grow: 1;
+  background-color: #666;
+}
+
+.effects_container {
+  width: 100%;
+
+  #effects_settings {
+    display: inline-flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    width: 50%;
+    float: left;
+  }
+
+  #effects_sliders {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    width: 50%;
+  }
+}
+
+@keyframes glowing-blue {
+  0% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
+  49% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
+  50% { background-color: #0094FF; box-shadow: 0 0 10px #0094FF; }
+  100% { background-color: #0094FF; box-shadow: 0 0 10px #0094FF; }
+}
+
+@keyframes glowing-yello {
+  0% { background-color: #FF9400; box-shadow: 0 0 3px #FF9400; }
+  49% { background-color: #FF9400; box-shadow: 0 0 3px #FF9400; }
+  50% { background-color: #FFD400; box-shadow: 0 0 10px #FFD400; }
+  100% { background-color: #FFD400; box-shadow: 0 0 10px #FFD400; }
+}
+
+@keyframes glowing-green {
+  0% { background-color: #004A00; box-shadow: 0 0 3px #004A00; }
+  49% { background-color: #004A00; box-shadow: 0 0 3px #004A00; }
+  50% { background-color: #009400; box-shadow: 0 0 10px #009400; }
+  100% { background-color: #009400; box-shadow: 0 0 10px #009400; }
+}
+
+@keyframes glowing-red {
+  0% { background-color: #6F0000; box-shadow: 0 0 3px #6F0000; }
+  49% { background-color: #6F0000; box-shadow: 0 0 3px #6F0000; }
+  50% { background-color: #943333; box-shadow: 0 0 10px #943333; }
+  100% { background-color: #943333; box-shadow: 0 0 10px #943333; }
+}
+
+.blink_blue {
+  animation: glowing-blue 800ms infinite;
+}
+
+.yellow {
+  background-color: #FF9400 !important;
+  box-shadow: 0 0 3px #FF9400 !important;
+}
+
+.blink_yellow {
+  animation: glowing-yello 800ms infinite;
+}
+
+.green {
+  background-color: #009400 !important;
+  box-shadow: 0 0 3px #009400 !important;
+}
+
+.blink_green {
+  animation: glowing-green 800ms infinite;
+}
+
+.red {
+  background-color: #943333 !important;
+  box-shadow: 0 0 3px #943333 !important;
+}
+
+.blink_red {
+  animation: glowing-red 800ms infinite;
+}
+
+.program_list {
+  width: 40%;
+  text-align: center;
+  height: 100vh;
+  overflow-y: scroll;
+
+  #programs_left {
+    margin-right: 5vh;
+  }
+
+  #programs_right {
+    margin-left: 5vh;
+  }
+}

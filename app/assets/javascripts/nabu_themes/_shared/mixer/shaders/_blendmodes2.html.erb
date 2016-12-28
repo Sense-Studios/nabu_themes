@@ -1,0 +1,152 @@
+<script type="x-shader/x-vertex" id="vertexShader">
+
+  varying vec2 vUv;
+  //varying vec2 texCoord;
+  //varying vec4 afterimage;
+
+  void main() {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+      vUv = uv;
+      // Flip y-axis
+      // vUv = vec2(Uv.x, 1.0 - Uv.y);
+  }
+
+</script>
+
+<script type="x-shader/x-fragment" id="fragmentShader">
+
+    // blendmodes
+    vec3 blend ( vec3 src, vec3 dst, int blendmode ) {
+
+      /*
+      1 ADD
+      2 SUBSTRACT
+      3 MULTIPLY
+      4 DARKEN
+      5 COLOUR BURN
+      6 LINEAR_BURN
+      7 LIGHTEN
+      8 SCREEN
+      9 COLOUR_DODGE
+      10 LINEAR_DODGE
+      11 OVERLAY
+      12 SOFT_LIGHT
+      13 HARD_LIGHT
+      14 VIVID_LIGHT
+      15 LINEAR_LIGHT
+      16 PIN_LIGHT
+      17 DIFFERENCE
+      18 EXCLUSION
+      */
+
+      if ( blendmode ==  1 ) return src + dst;
+      if ( blendmode ==  2 ) return src - dst;
+      if ( blendmode ==  3 ) return src * dst;
+      if ( blendmode ==  4 ) return min(src, dst);
+      if ( blendmode ==  5)  return vec3((src.x == 0.0) ? 0.0 : (1.0 - ((1.0 - dst.x) / src.x)), (src.y == 0.0) ? 0.0 : (1.0 - ((1.0 - dst.y) / src.y)), (src.z == 0.0) ? 0.0 : (1.0 - ((1.0 - dst.z) / src.z)));
+      if ( blendmode ==  6 ) return (src + dst) - 1.0;
+      if ( blendmode ==  7 ) return max(src, dst);
+      if ( blendmode ==  8 ) return (src + dst) - (src * dst);
+      if ( blendmode ==  9 ) return vec3((src.x == 1.0) ? 1.0 : min(1.0, dst.x / (1.0 - src.x)), (src.y == 1.0) ? 1.0 : min(1.0, dst.y / (1.0 - src.y)), (src.z == 1.0) ? 1.0 : min(1.0, dst.z / (1.0 - src.z)));
+      if ( blendmode == 10 ) return src + dst;
+      if ( blendmode == 11 ) return vec3((dst.x <= 0.5) ? (2.0 * src.x * dst.x) : (1.0 - 2.0 * (1.0 - dst.x) * (1.0 - src.x)), (dst.y <= 0.5) ? (2.0 * src.y * dst.y) : (1.0 - 2.0 * (1.0 - dst.y) * (1.0 - src.y)), (dst.z <= 0.5) ? (2.0 * src.z * dst.z) : (1.0 - 2.0 * (1.0 - dst.z) * (1.0 - src.z)));
+      if ( blendmode == 12 ) return vec3((src.x <= 0.5) ? (dst.x - (1.0 - 2.0 * src.x) * dst.x * (1.0 - dst.x)) : (((src.x > 0.5) && (dst.x <= 0.25)) ? (dst.x + (2.0 * src.x - 1.0) * (4.0 * dst.x * (4.0 * dst.x + 1.0) * (dst.x - 1.0) + 7.0 * dst.x)) : (dst.x + (2.0 * src.x - 1.0) * (sqrt(dst.x) - dst.x))), (src.y <= 0.5) ? (dst.y - (1.0 - 2.0 * src.y) * dst.y * (1.0 - dst.y)) : (((src.y > 0.5) && (dst.y <= 0.25)) ? (dst.y + (2.0 * src.y - 1.0) * (4.0 * dst.y * (4.0 * dst.y + 1.0) * (dst.y - 1.0) + 7.0 * dst.y)) : (dst.y + (2.0 * src.y - 1.0) * (sqrt(dst.y) - dst.y))), (src.z <= 0.5) ? (dst.z - (1.0 - 2.0 * src.z) * dst.z * (1.0 - dst.z)) : (((src.z > 0.5) && (dst.z <= 0.25)) ? (dst.z + (2.0 * src.z - 1.0) * (4.0 * dst.z * (4.0 * dst.z + 1.0) * (dst.z - 1.0) + 7.0 * dst.z)) : (dst.z + (2.0 * src.z - 1.0) * (sqrt(dst.z) - dst.z))));
+      if ( blendmode == 13 ) return vec3((src.x <= 0.5) ? (2.0 * src.x * dst.x) : (1.0 - 2.0 * (1.0 - src.x) * (1.0 - dst.x)), (src.y <= 0.5) ? (2.0 * src.y * dst.y) : (1.0 - 2.0 * (1.0 - src.y) * (1.0 - dst.y)), (src.z <= 0.5) ? (2.0 * src.z * dst.z) : (1.0 - 2.0 * (1.0 - src.z) * (1.0 - dst.z)));
+      if ( blendmode == 14 ) return vec3((src.x <= 0.5) ? (1.0 - (1.0 - dst.x) / (2.0 * src.x)) : (dst.x / (2.0 * (1.0 - src.x))), (src.y <= 0.5) ? (1.0 - (1.0 - dst.y) / (2.0 * src.y)) : (dst.y / (2.0 * (1.0 - src.y))), (src.z <= 0.5) ? (1.0 - (1.0 - dst.z) / (2.0 * src.z)) : (dst.z / (2.0 * (1.0 - src.z))));
+      if ( blendmode == 15 ) return 2.0 * src + dst - 1.0;
+      if ( blendmode == 16 ) return vec3((src.x > 0.5) ? max(dst.x, 2.0 * (src.x - 0.5)) : min(dst.x, 2.0 * src.x), (src.x > 0.5) ? max(dst.y, 2.0 * (src.y - 0.5)) : min(dst.y, 2.0 * src.y), (src.z > 0.5) ? max(dst.z, 2.0 * (src.z - 0.5)) : min(dst.z, 2.0 * src.z));
+      if ( blendmode == 17 ) return abs(dst - src);
+      if ( blendmode == 18 ) return src + dst - 2.0 * src * dst;
+
+      // defaults to ADD
+      return src + dst;
+
+    } // end blend
+
+    // effects
+    vec3 do_effect ( vec3 src, int effect, vec2 vUv, float time, float baseSpeed, sampler2D noiseTexture, float noiseScale, sampler2D baseTexture1 ) {
+      if ( effect == 1 ) {
+        vec2 uvTimeShift = vUv + vec2( -0.7, 1.5 ) * time * baseSpeed;
+        vec4 noiseGeneratorTimeShift = texture2D( noiseTexture, uvTimeShift );
+        vec2 uvNoiseTimeShift = vUv + noiseScale * vec2( noiseGeneratorTimeShift.r, noiseGeneratorTimeShift.a );
+        return texture2D( baseTexture1, uvNoiseTimeShift ).xyz;
+      }
+
+      // defaults to nothing
+      return src;
+    }
+
+    uniform sampler2D baseTexture1;
+    uniform sampler2D baseTexture2;
+    uniform sampler2D noiseTexture;
+    // uniform sampler2D delayed_image;
+    uniform float alpha;
+    uniform float alpha1;
+    uniform float alpha2;
+
+    uniform float noiseScale;
+    uniform float baseSpeed;
+    uniform float time;
+    uniform float counter;
+
+    uniform int blendmode;
+    uniform int effect;
+
+    varying vec2 vUv;
+
+    void main() {
+
+      // overlay
+      // overlay: function(a, b) {
+      //  return b < 128
+      //    ? (2 * a * b / 255)
+      //    : (255 - 2 * (255 - a) * (255 - b) / 255);
+      //},
+
+      // http://www.nutty.ca/articles/blend_modes/
+      // http://www.andersriggelsen.dk/glblendfunc.php
+      // http://nabu.sense-studios.com/clients/mixer1/js/blendmodes.js
+
+      // vec4 a = texture2D(baseTexture1, vUv )
+      // vec4 b = texture2D(baseTexture2, vUv )
+      // vec4 overlayed =
+      //  if b < 128
+      //    (2 * a * b / 255)
+      //  else
+      //    ()
+
+      //vec4 part1 = ( texture2D( baseTexture1, uvNoiseTimeShift ) * alpha1 ) + vec4( 0, 0, 0.4-vUv.y, 0.5 );
+      //vec4 part2 = vec4(0,0,0,0);
+
+      // #ifdef FOO
+      //   part2 = ( texture2D( baseTexture2, uvNoiseTimeShift ) * alpha2 );
+      // #endif
+
+      // vec3 test1 = texture2D( baseTexture1, uvNoiseTimeShift ).xyz * alpha1; // + vec3(0.1,0.1,0.1);
+      // vec3 test2 = texture2D( baseTex ture2, vUv ).xyz * alpha2; // + vec3(0.2,0.2,0.1);
+
+      // lets blend
+      // vec4 baseColor = vec4( blend( test1, test2, mode ), 1); // + echo;
+
+      // FOO
+      // vec4 baseColor = part1 + part2;
+      // vec4 result = vec4( texture2D( baseTexture2, vUv).xyz, 1.0);
+      // vec4 startT = texture2D( afterimage, vUv);
+      // result.rgb = mod(result.rgb, 1.0);
+
+      vec2 uvTimeShift = vUv + vec2( -0.7, 1.5 ) * vec2( sin( time ), cos( time ) ) * baseSpeed;
+      vec4 noiseGeneratorTimeShift = texture2D( noiseTexture, uvTimeShift );
+
+      vec3 video1 = ( texture2D( baseTexture1, vUv ).xyz * alpha1 ) + ( vec4( 0.83, 0.50, 0.50, 1.0).rgb * ( noiseGeneratorTimeShift.a * alpha1 ) );  // src
+      vec3 video2 = ( texture2D( baseTexture2, vUv ).xyz * alpha2 ) + ( vec4( 0.54, 0.32, 0.32, 1.0).rgb * ( noiseGeneratorTimeShift.a * alpha2 ) );  // dst
+      // vec4 delayed = vec4( texture2D( delayed_image, vUv ).xyz, 1.0 );
+
+      // vec4 baseColor =
+      // if ( vUv.x > 0.5 ) baseColor = delayed;
+      //  + vec4( texture2D( afterimage, vUv ).xyz, 1.0 );
+      //  baseColor.a = alpha;
+      gl_FragColor = vec4( blend( video1, video2, blendmode ), 1.0 );
+      // afterimage = baseColor.xy;
+    }
+
+</script>

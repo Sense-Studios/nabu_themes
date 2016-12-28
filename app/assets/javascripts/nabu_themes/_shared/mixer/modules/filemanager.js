@@ -3,12 +3,9 @@ var Filemanager = function() {
   _self.renderer;
   _self.bypass = false;
   _self.defaultQuality = "720p_5000kbps_h264" //"320p_h264_mobile"
-
   var c = 0;
-  _self.nextUpdate = 400
-  _self.updateMax = 1600
-
   var eligables = []
+
   $.each( programs, function( i, p ) {
 
     // add all the code about which movie you want here
@@ -20,11 +17,16 @@ var Filemanager = function() {
 
   _self.update = function() {
     c++;
+
+
+    // MOVE TO AUTOPLAY
+    //_self.nextUpdate = 400
+    //_self.updateMax = 1600
     //if ( c%100 == 0 ) console.log(" ##### ", c, _self.nextUpdate );
-    if ( c >= _self.nextUpdate ) {
-      c = 0;
-      _self.change_channels();
-    }
+    //if ( c >= _self.nextUpdate ) {
+    //  c = 0;
+    //  _self.change_channels();
+    //}
 
     // console.log("update file")
   }
@@ -66,6 +68,8 @@ var Filemanager = function() {
     currentvideo.addEventListener('canplay', randomInPoint )
   }
 
+  // TODO CLEAN THE FOLLOWING MESS UP!
+
   // change source, randomly, on both channels
   _self.change_channels = function( _channel1, _channel2 ) {
     //try {
@@ -84,18 +88,31 @@ var Filemanager = function() {
       // console.log(rnd2, source2 );
       // console.log("next: ", _self.nextUpdate);
 
-      // update info
-      $('#program_title').hide().text(eligables[ rnd1 ].title).fadeIn('slow');
-      $('#program_description').hide().text( eligables[ rnd1 ].description ).fadeIn('slow');
-
-      console.log("source 1:", source1)
-      console.log("source 2:", source2)
+      console.log("picked random source 1:", source1)
+      console.log("picked random source 2:", source2)
 
       // pass source on to the renderer
       if (Math.random() > 0.5 ) {
         _self.renderer.updateSource( 1, source1 );
+        firebase.database().ref('/client_1/video1/').child('url').set( source1 );
+        firebase.database().ref('/client_1/video1/').child('title').set( eligables[ rnd1 ].title );
+        firebase.database().ref('/client_1/video1/').child('id').set( eligables[ rnd1 ].id );
+
+        // update info
+        $('#program_title').text(eligables[ rnd1 ].title) //.fadeIn('slow');
+        $('#program_description').text( eligables[ rnd1 ].description ) //.fadeIn('slow');
+        setTimeout( function() { doTypeOn("#footer") }, 200 );
+
       }else{
         _self.renderer.updateSource( 2, source2 );
+        firebase.database().ref('/client_1/video2/').child('url').set( source2 );
+        firebase.database().ref('/client_1/video2/').child('id').set( eligables[ rnd2 ].id );
+        firebase.database().ref('/client_1/video2/').child('title').set( eligables[ rnd2 ].title );
+
+        // update info
+        $('#program_title').text(eligables[ rnd2 ].title) //.fadeIn('slow');
+        $('#program_description').text( eligables[ rnd2 ].description ) //.fadeIn('slow');
+        setTimeout( function() { doTypeOn("#footer") }, 200 );
       }
 
     //} catch(e) {
@@ -104,22 +121,22 @@ var Filemanager = function() {
       //_self.change_channels();
     //}
   }
+}
 
-  // helper
-  getUrlByQuality = function( program, quality ) {
-    var url = "";
-    // console.log(program);
-    if (program == undefined) return; // failsafe
+// helper ==> move to utilitiess ?
+getUrlByQuality = function( program, quality ) {
+  var url = "";
+  // console.log(program);
+  if (program == undefined) return; // failsafe
 
-    console.log(program.id);
-    $.each( program.assets.versions, function(i, version ) {
-      //console.log("trr", version.label, quality)
-      if ( version.label == quality ) {
-        url = version.url //.replace("http://", "//");
-        console.log("match & load:", version.url )
-      }
-    });
-    // console.log("return:", url)
-    return url;
-  }
+  console.log(program.id);
+  $.each( program.assets.versions, function(i, version ) {
+    //console.log("trr", version.label, quality)
+    if ( version.label == quality ) {
+      url = version.url //.replace("http://", "//");
+      console.log("match & load:", version.url )
+    }
+  });
+  // console.log("return:", url)
+  return url;
 }

@@ -1,36 +1,36 @@
 !!!
 %head
 
+  / meta ?
+
   - if @program
     %title= @program.title
-    
-    - owner = User.find( @program.client_id )
-    - if !owner.account_id.nil?
-      - @account_id = User.find( owner.id ).account_id
-    - else
-      - @account_id = owner.id
 
-  -# translations and client settings
   :javascript
-    // translations
-    window.t = #{raw @t.to_json}
-    
-    // account and program    
-    program_id = "#{@program.id}";
-    client_id = "#{@program.client_id}";
-    account_id = "#{@account_id}";    
-    
-    // tracking
-    analytics_urchin = "#{owner.urchin}";
-    analytics_woopra_id  = "#{owner.woopra_id}"
-    
-  = stylesheet_link_tag "nabu_themes/sense/sense", media: "all", "data-turbolinks-track" => true
-  = javascript_include_tag "nabu_themes/sense/sense", "data-turbolinks-track" => true
-  = csrf_meta_tags
-      
+    // these need to be set in a rb parsed file
+    window.main_color = '#{@theme.main_color}';
+    window.support_color = '#{@theme.support_color}';
+    window.background_color = '#{@theme.background_color}';
+    window.menudata = #{@menudata};
+    window.menuconfig = #{@menuconfig};
+    window.channelsettings = #{@channelsettings};
+    window.programs = #{@filtered_programs.to_json};
+
+    window.kalturaPartnerId = #{@kalturaPartnerId};
+    window.kalturaUiConfigId = #{@kalturaUiConfigId};
+
+  = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true, "async" => true
+
+  // Firebase
+  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase.js"
+  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"
+  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"
+  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-database.js"
+  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-messaging.js"
+
+  = javascript_include_tag "nabu_themes/mixer/mixer"
+  = stylesheet_link_tag "nabu_themes/mixer/mixer", media: "all", "data-turbolinks-track" => true, "async" => true
+  = stylesheet_link_tag "nabu_themes/mixer/control", media: "all", "data-turbolinks-track" => true, "async" => true
+
 %body
-  #wrapper
-    = render 'nabu_themes/sense/header'
-    = render 'nabu_themes/sense/menu'
-    = yield
-    = render 'nabu_themes/sense/footer'
+  = yield

@@ -54,6 +54,7 @@ module NabuThemes
           tags: program.tags,
           created_at: program.created_at,
           assets: ass,
+          thumbnail: md.try(:thumbnail),
           meta: {
             moviedescription: {
               duration_in_ms: md.try(:duration_in_ms),

@@ -1,1 +1,50 @@
-These be the controls
+%h1#bigOne
+
+// -----------------------------------------------------------------------------
+
+// Firebase
+= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase.js"
+
+= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-database.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-messaging.js"
+
+
+:javascript
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDgrYfOUDN1QLRDcY4z45WwkcOjkXiImNQ",
+    authDomain: "mixerbase-829c2.firebaseapp.com",
+    databaseURL: "https://mixerbase-829c2.firebaseio.com",
+    storageBucket: "mixerbase-829c2.appspot.com",
+    messagingSenderId: "568387460963"
+  };
+
+  firebase.initializeApp(config);
+
+  var bigOne = document.getElementById('bigOne');
+  var dbRef = firebase.database().ref().child('text');
+  dbRef.on('value', snap => bigOne.innerText = snap.val());
+
+  var _c = 0
+  //setInterval( function() {
+  //  firebase.database().ref().child('text').set( _c++ );
+  //}, 100)
+  // now do this
+  // https://firebase.google.com/docs/database/web/read-and-write
+
+  //function writeUserData(userId, name, email, imageUrl) {
+  //  firebase.database().ref('users/' + userId).set({
+  //    username: name,
+  //    email: email,
+  //    profile_picture : imageUrl
+  //  });
+  //}
+
+  // return firebase.database().ref('/client_1/').once('value').then(function(t){console.log(t)})
+
+// -----------------------------------------------------------------------------
+
+%input{:id=>"input_test", :value=>"_test"} test
+%input{:id=>"input_bpm", :value=>"_bpm", :type=>"range"} bpm

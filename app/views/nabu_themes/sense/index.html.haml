@@ -1,30 +1,246 @@
-/ move this line to the controller ?
-/ it should be used in any theme/ channel
-- @items = JSON.parse( NabuThemes::Menu.find( @theme.menu ).items )['menu']
+%h1#bigOne
+// -----------------------------------------------------------------------------
 
-#slider
-  %ul
-    - @items.each_with_index do |item, index|
-      - if item['items'].count == 0
-        %li{ 'data-idx' => index, style: "background-image: url('http://i.ytimg.com/vi/8Ny55xLU6l0/maxresdefault.jpg')"}
-      - else
-        - begin
-          - current_program = MarduqResource::Program.find( item['items'][0]['id'] )
-          %li{ 'data-idx' => index, style: "background-image: url( #{ current_program.meta.moviedescription.thumbnail} )"}
-            .player
-              %iframe{ src: "", scrolling: 'no', frameborder: 0, allowfullscreen: false, width: '100%', height: '100%' }
-              / "/embed/#{ current_program.id }"
-              %span{:class=>'glyphicon glyphicon-play item-play'}
+// Firebase
+= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-database.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-messaging.js"
 
-            .item
-              -%w{news showcase more}.each do |b|
-                %div{ class: "block #{b}" }
-                  = render partial: 'nabu_themes/sense/item', locals: { current_program: current_program, "#{b}".to_sym => true, items: item['items'], category: item['name'] }
-        - rescue
-          %h1 You broke it
 
-#category
-  %ul
-    - @items.each_with_index do |n, index|
-      %li.skew{ 'data-idx' => index }
-        .unskew= "#{n['name']}".html_safe
+:javascript
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDgrYfOUDN1QLRDcY4z45WwkcOjkXiImNQ",
+    authDomain: "mixerbase-829c2.firebaseapp.com",
+    databaseURL: "https://mixerbase-829c2.firebaseio.com",
+    storageBucket: "mixerbase-829c2.appspot.com",
+    messagingSenderId: "568387460963"
+  };
+
+  firebase.initializeApp(config);
+
+  // test
+  var bigOne = document.getElementById('bigOne');
+  var dbRef = firebase.database().ref().child('text');
+  var local_client = "player_1"
+  dbRef.on('value', snap => bigOne.innerText = snap.val());
+
+  // now do this
+  // https://firebase.google.com/docs/database/web/read-and-write
+
+// -----------------------------------------------------------------------------
+
+
+// Render Shaders
+= render "../assets/javascripts/nabu_themes/_shared/mixer/shaders/blendmodes2"
+
+// Render menu
+#sidebar
+  #button-play.btn.btn-material-grey-800
+    .glyphicon.glyphicon-align-justify
+  #button-user.btn.btn-material-grey-800
+    .glyphicon.glyphicon-play
+  #button-beat.btn.btn-material-sense-yellow
+    BEAT
+  #button-cat.btn.btn-material-sense-yellow
+    CAT.
+  #button-menu.btn.btn-material-blue-600
+    BLND.
+  #button-cont.btn.btn-material-red-500
+    CONT.
+
+  .background
+
+
+#content
+  // content goes here
+  // content is taken from the channel settings
+  // untill we get bored from that :p
+
+
+#footer
+  %h1.title
+    %span.small Now playing:
+    %span#program_title collection of videos from the account
+  %h2.subtitle#program_description
+    Actually Some have their crosses and their golden gates.
+    %br
+    Well she is the grace I wear when I lose my faith
+  #logo_smaller
+    = image_tag 'nabu_themes/sense/sense_logo_smaller.png'
+  .background
+
+// add a vignet
+#vignet
+
+// add the video &c necc. for the mixer
+%video#video1.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
+%video#video2.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
+%video#video3.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
+
+%canvas#buffer1.hidden
+%canvas#buffer2.hidden
+%canvas#buffer3.hidden
+%canvas#buffer4.hidden
+
+%canvas#canvas
+%canvas#glcanvas
+
+// -----------------------------------------------------------------------------
+:css
+  .grey_back {
+    background-color: #a5a5a5;
+    color: #333333;
+    font-weight: 600;
+
+  }
+
+  .white_back {
+    background-color: #f5f5f5;
+    color: #666666;
+    font-weight: 100;
+  }
+
+  #glcanvas {
+    position: absolute;
+    z-index: -3;
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+
+// -----------------------------------------------------------------------------
+:javascript
+  // set up renderer
+  var options = {};
+
+  var r = new GLRenderer(options)
+  var b = new BPM()
+  var c = new Control()
+  var f = new Filemanager()
+
+  r.addModule(b)
+  r.addModule(c)
+  r.addModule(f)
+  r.start()
+
+// -----------------------------------------------------------------------------
+// SET UP Menu BUTTONS
+:javascript
+  // hook up videos
+  $('#button-user').click( function() {
+    if (document.getElementById('video1').paused) {
+      document.getElementById('video1').play();
+      document.getElementById('video2').play();
+    }else{
+      document.getElementById('video1').pause();
+      document.getElementById('video2').pause();
+    }
+  });
+
+  $('#button-play').click( function() {
+    if ( $(".col_m:eq(0)").css("opacity") == 0 ) {
+      $(".header_m:eq(0)").css("opacity", 0).animate({"opacity":1}, 700);
+      setTimeout( function() { doTypeOn(".col_m:eq(0)") }, 400 );
+      setTimeout( function() { doTypeOn(".col_m:eq(1)") }, 900 );
+      setTimeout( function() { doTypeOn(".col_m:eq(2)") }, 1300 );
+    } else {
+      $(".header_m:eq(0)").css("opacity", 0)
+      $(".col_m:eq(0)").css("opacity", 0);
+      $(".col_m:eq(1)").css("opacity", 0);
+      $(".col_m:eq(2)").css("opacity", 0);
+    }
+  });
+
+  //var bpms = [ 0, 2, 4, 8, 16, 24, 32, 42, 64, 72, 90, 100, 120, 128, 160, 200, 240, 400 ]
+  //var bpms = [ 64, 128, 256, 128, 64, 28, 0 ]
+  var bpms = [ 2, 4, 8, 16, 28, 32, 64 ]
+  //var cols = [  ]
+  var current_bpm = 6
+  b.bpm = 28;
+  $('#button-beat').click( function() {
+    current_bpm += 1
+    if ( current_bpm >= bpms.length ) current_bpm = 0
+    b.bpm = bpms[current_bpm]
+    console.log( "bpm set to: ", bpms[current_bpm])
+    $('#button-beat').text( bpms[current_bpm] )
+  })
+
+  $('#button-cat').click( function() {
+    v1 = document.getElementById('video1')
+    v2 = document.getElementById('video2')
+    v1.currentTime = Math.random() * v1.duration
+    v2.currentTime = Math.random() * v2.duration
+  })
+
+  var blms = [ 1, 7, 13, 4, 12, 8 ]
+  var blend_names = ["add", "light", "hard", "dark", "soft", "scrn"]
+  var current_blm = 0
+  $('#button-menu').click( function() {
+    current_blm += 1
+    if ( current_blm >= blms.length ) current_blm = 0
+    //r.blendingMode = blms[current_blm]
+    customUniforms.blendmode.value = blms[current_blm]
+    console.log( "blendingMode set to: ", blms[current_blm])
+    $('#button-menu').text(blend_names[current_blm])
+  })
+
+  $('#button-cont').click( function() {
+    f.change_channels()
+  })
+
+// -----------------------------------------------------------------------------
+// SET UP CONTENT (HELPER)
+:javascript
+  // type on
+  function doTypeOn( elm ) {
+    var str = $(elm).html(),
+        i = 0,
+        isTag,
+        text;
+
+    console.log("dotypeon", str )
+
+    if (!str) return;
+
+    (function type() {
+        rnd = Math.round( Math.random() * 120 ) + 24
+        rc = (0|Math.random()*9e6).toString(36)
+        text = str.slice(0, i);
+        newt = str.slice(i-rnd, i);
+        //console.log(i-r, i)
+        text = text + "<span class='white_back'>" + newt + "</span> <span class='grey_back'>" + rc + "</span>";
+        i += rnd;
+
+        if (text === str) return;
+        $(elm).html( text );
+        $(elm).find('.white_back').fadeOut(60)
+        $(elm).find('.grey_back').hide().fadeIn(80)
+        $(elm).css('opacity', 1)
+
+        var char = text.slice(-1);
+        if( char === '<' ) isTag = true;
+        if( char === '>' ) isTag = false;
+        if (isTag) return type();
+
+        if ( i < str.length ) {
+          setTimeout( type, Math.round( Math.random() * 180 ) );
+        }else{
+          $(elm).html( str )
+        }
+    }());
+  }
+
+  // add more for more colums
+  setTimeout( function() { doTypeOn(".col_m:eq(0)") }, 1600 )
+  setTimeout( function() { doTypeOn(".col_m:eq(1)") }, 2250 )
+  setTimeout( function() { doTypeOn(".col_m:eq(2)") }, 2600 )
+
+  // ---------------------------------------------------------------------------
+  // RENDER CONTENT
+  $('#content').html(channelsettings.home)
