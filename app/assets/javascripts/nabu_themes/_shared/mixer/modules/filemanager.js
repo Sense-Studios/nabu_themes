@@ -2,7 +2,7 @@ var Filemanager = function() {
   var _self = this;
   _self.renderer;
   _self.bypass = false;
-  _self.defaultQuality = "320p_h264_mobile"
+  _self.defaultQuality = "720p_5000kbps_h264" //"320p_h264_mobile"
 
   var c = 0;
   _self.nextUpdate = 400
@@ -12,19 +12,21 @@ var Filemanager = function() {
   $.each( programs, function( i, p ) {
 
     // add all the code about which movie you want here
-    console.log(p.id)
     if ( p.assets._type == "Video" ) {
       eligables.push(p)
     }
   });
+  console.log("elegible: ", programs.length)
 
   _self.update = function() {
     c++;
-    if ( c%100 == 0 ) console.log(" ##### ", c, _self.nextUpdate );
+    //if ( c%100 == 0 ) console.log(" ##### ", c, _self.nextUpdate );
     if ( c >= _self.nextUpdate ) {
       c = 0;
       _self.change_channels();
     }
+
+    // console.log("update file")
   }
 
   // note
@@ -66,7 +68,7 @@ var Filemanager = function() {
 
   // change source, randomly, on both channels
   _self.change_channels = function( _channel1, _channel2 ) {
-    try {
+    //try {
 
       // set time to next update
       // _self.nextUpdate = Math.round( Math.random() * _self.updateMax );
@@ -90,14 +92,17 @@ var Filemanager = function() {
       console.log("source 2:", source2)
 
       // pass source on to the renderer
-      _self.renderer.updateSource( 1, source1 );
-      _self.renderer.updateSource( 2, source2 );
+      if (Math.random() > 0.5 ) {
+        _self.renderer.updateSource( 1, source1 );
+      }else{
+        _self.renderer.updateSource( 2, source2 );
+      }
 
-    } catch(e) {
+    //} catch(e) {
 
-      // console.log("caught an error: ", e);
-      _self.change_channels();
-    }
+      // console.log(" ### ERROR ### caught an error: ", e);
+      //_self.change_channels();
+    //}
   }
 
   // helper
@@ -108,10 +113,10 @@ var Filemanager = function() {
 
     console.log(program.id);
     $.each( program.assets.versions, function(i, version ) {
-      console.log("trr", version.label, quality)
+      //console.log("trr", version.label, quality)
       if ( version.label == quality ) {
         url = version.url //.replace("http://", "//");
-        console.log("match:", version.url )
+        console.log("match & load:", version.url )
       }
     });
     // console.log("return:", url)

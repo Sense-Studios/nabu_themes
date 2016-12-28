@@ -5,7 +5,9 @@ body, html {
 }
 
 a {
-  text-decoration: underline;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: Playfair;
   color: #e0b52b;
   &:hover {
     color: #e0b52b;
@@ -13,6 +15,16 @@ a {
   &:visited {
     color: #e0b52b;
   }
+  &:active {
+    color: #e0b52b;
+  }
+  &:focus {
+    color: #e0b52b;
+  }
+}
+
+#bigOne {
+  color:white;
 }
 
 #video1 {
