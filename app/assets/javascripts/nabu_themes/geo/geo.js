@@ -310,9 +310,9 @@ function initMap() {
 
       var iwCloseBtn = iwOuter.next();
       iwCloseBtn.css({opacity: '1', right: '38px', top: '3px', width: '15px', height: '15px', border: '1px solid #DA291C', 'border-radius': '13px', 'box-shadow': '0 0 5px #DA291C'});
-
       iwCloseBtn.click(function(){
         $('.gm-style-iw').removeClass('gva_style')
+        closeAllSpots()
       });
 
       iwCloseBtn.mouseout(function(){

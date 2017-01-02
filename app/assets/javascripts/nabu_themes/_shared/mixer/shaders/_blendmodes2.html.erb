@@ -137,8 +137,12 @@
       vec2 uvTimeShift = vUv + vec2( -0.7, 1.5 ) * vec2( sin( time ), cos( time ) ) * baseSpeed;
       vec4 noiseGeneratorTimeShift = texture2D( noiseTexture, uvTimeShift );
 
-      vec3 video1 = ( texture2D( baseTexture1, vUv ).xyz * alpha1 ) + ( vec4( 0.83, 0.50, 0.50, 1.0).rgb * ( noiseGeneratorTimeShift.a * alpha1 ) );  // src
-      vec3 video2 = ( texture2D( baseTexture2, vUv ).xyz * alpha2 ) + ( vec4( 0.54, 0.32, 0.32, 1.0).rgb * ( noiseGeneratorTimeShift.a * alpha2 ) );  // dst
+      // idea of the generator should be to 'fill' the blendmodes when they add to 0 or lower
+      vec3 effect1_1 = ( vec4( 0.83, 0.50, 0.50, 1.0).rgb * ( noiseGeneratorTimeShift.a * alpha1 ) );  // src
+      vec3 effect1_2 = ( vec4( 0.54, 0.32, 0.32, 1.0).rgb * ( noiseGeneratorTimeShift.a * alpha2 ) );  // dst
+
+      vec3 video1 = ( texture2D( baseTexture1, vUv ).xyz * alpha1 );
+      vec3 video2 = ( texture2D( baseTexture2, vUv ).xyz * alpha2 );
       // vec4 delayed = vec4( texture2D( delayed_image, vUv ).xyz, 1.0 );
 
       // vec4 baseColor =

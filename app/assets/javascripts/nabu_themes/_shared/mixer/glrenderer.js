@@ -7,8 +7,6 @@ var _height = window.innerHeight;
 
 // quality and video need to match!
 var video_quality = "720p_h264";
-// src_width  = 1080
-// src_height = 720
 var video_width  = 1024;  // as texture
 var video_height = 1024;  // as texture
 
@@ -18,14 +16,11 @@ var camera = new THREE.PerspectiveCamera( 75, _width / _height, 0.1, 1000 );
 var clock = new THREE.Clock();
 var renderer;
 
+// MOVE TO SETTINGS
 // set up alphas
-var alpha1 = 0.5;
-var alpha2 = 0.5;
-var alpha3 = 0.5;
-
-// set up fader
-var bpm = 128;
-var fadeSpeed = 0.02;
+var alpha1 = 0.5; // not used ?
+var alpha2 = 0.5; // not used ?
+var alpha3 = 0.5; // not used ?
 
 // set up texture holders
 var videoTexture1;
@@ -38,47 +33,40 @@ var bufferImage2;
 var bufferImage3;
 var bufferImage4;
 
+// MOVE TO SETTINGS
 // set up defines and uniforms
 var customDefines;
 var customUniforms;
 
 // Renderer, constructor
-var GLRenderer = function( _settings ) {
+var GLRenderer = function( _options ) {
 
-  // le variables
+  /*
+  var options = {
+    canvas: ''
+    video1:
+    video2:
+    videi3:
+    src1
+    src2
+    src3 
+  }
+
+  */
+
   var _self = this
+
+  // define canvas
+  var glcanvas = document.getElementById('glcanvas')
 
   // public
   _self.src1 = "//nabu-dev.s3.amazonaws.com/uploads/video/567498216465766873000000/720p_h264.mp4"
   _self.src2 = "//nabu-dev.s3.amazonaws.com/uploads/video/558b39266465760a3700001b/720p_h264.mp4" //720p_5000kbps_h264
-
-  /*
-  $('body').append("<div class='render_info'> info </div>")
-  $('.render_info').css({
-    'position': 'absolute',
-    'right': '0px',
-    'top': '0px',
-    'height': '80px',
-    'width': '320px',
-    'z-index': '1000000000','right': '0',
-    'font-size': '8px',
-    'text-align': 'right',
-    'color': 'rgba(250,250,250,0.5)'
-  }).text('render info?');
-  */
+  _self.src3 = "//nabu-dev.s3.amazonaws.com/uploads/video/556b99326465764bdf000000/720p_5000kbps_h264.mp4"; //http://nabu-dev.s3.amazonaws.com/uploads/video/556b99a86465764bdf140000/480p_h264.mp4";
 
   // gonna need that counter
   var c = 0
-
-
-  // new
   var modules = []
-
-  // reset with _self.c_a = Math.PI * 1.5; _self.bpm = 0
-
-  // find me in js/blendmodes
-  //_self.blendingMode = blendingModes.add;
-  //_self.blendingMode = blendingModes.linearBurn;
 
   _self.addModule = function(  _module ) {
     console.log( "adding",  _module )
@@ -97,7 +85,7 @@ var GLRenderer = function( _settings ) {
     video1.src = _self.src1 //"http://nabu-dev.s3.amazonaws.com/uploads/video/5567a5936465766d5f0b0000/480p_h264.mp4";
     video1.load(); // must call after setting/changing source
     video1.play();
-    video1.addEventListener('timeupdate', function() {firebase.database().ref('/client_1/video1').child('currentTime').set( video1.currentTime );})
+    //video1.addEventListener('timeupdate', function() {firebase.database().ref('/client_1/video1').child('currentTime').set( video1.currentTime );})
     video1.height = video_width
     video1.width = video_height
     video1.volume = 0;
@@ -120,7 +108,7 @@ var GLRenderer = function( _settings ) {
     video2.width = video_height
     video2.volume = 0;
     //video2.currentTime = 20;
-    video2.addEventListener('timeupdate', function() { firebase.database().ref('/client_1/video2').child('currentTime').set( video2.currentTime ) })
+    //video2.addEventListener('timeupdate', function() { firebase.database().ref('/client_1/video2').child('currentTime').set( video2.currentTime ) })
     videoImage2 = document.createElement( 'canvas' );
     videoImage2.width = video_width;  // these need to match the video size!
     videoImage2.height = video_height; // these need to match the video size!
@@ -139,14 +127,14 @@ var GLRenderer = function( _settings ) {
     video3.width = video_height
     video3.volume = 0;
     //video3.currentTime = 20;
-    video3.addEventListener('timeupdate', function() { firebase.database().ref('/client_1/video3').child('currentTime').set( video3.currentTime ) })
+    //video3.addEventListener('timeupdate', function() { firebase.database().ref('/client_1/video3').child('currentTime').set( video3.currentTime ) })
     videoImage3 = document.createElement( 'canvas' );
     videoImage3.width = video_width;  // these need to match the video size!
     videoImage3.height = video_height; // these need to match the video size!
     videoImageContext3 = videoImage3.getContext( '2d' );
     videoTexture3 = new THREE.Texture( videoImage3 );
-    //videoTexture2.minFilter = THREE.LinearFilter;
-    //videoTexture2.magFilter = THREE.LinearFilter;
+    //videoTexture3.minFilter = THREE.LinearFilter;
+    //videoTexture3.magFilter = THREE.LinearFilter;
 
 
     // -------------------------------------------------------------------------
@@ -166,35 +154,9 @@ var GLRenderer = function( _settings ) {
       depthBuffer:false
     };
 
-    // TODO, FIXME
-    // TODO, add 4 canvasses, and assign a different renderer to them, use them
-    // as image buffers. It appears one cannot feed the output back into the input
-    // unless I'm mistaken.
-
     afterimage = new THREE.WebGLRenderTarget( 512, 512, renderTargetParams );
     //afterimage_tex = new THREE.Texture( afterimage.texture )
     //afterimage_tex.needsUpdate = true;
-
-    /*
-    1 ADD
-    2 SUBSTRACT
-    3 MULTIPLY
-    4 DARKEN
-    5 COLOUR BURN
-    6 LINEAR_BURN
-    7 LIGHTEN
-    8 SCREEN
-    9 COLOUR_DODGE
-    10 LINEAR_DODGE
-    11 OVERLAY
-    12 SOFT_LIGHT
-    13 HARD_LIGHT
-    14 VIVID_LIGHT
-    15 LINEAR_LIGHT
-    16 PIN_LIGHT
-    17 DIFFERENCE
-    18 EXCLUSION
-    */
 
 
     // use "this." to create global object
@@ -215,7 +177,8 @@ var GLRenderer = function( _settings ) {
       counter:		   { type: "f", value: 0.0 },
       alpha: 			   { type: "f", value: 1.0 },
       alpha1: 			 { type: "f", value: alpha1 },
-      alpha2: 			 { type: "f", value: alpha2 }
+      alpha2: 			 { type: "f", value: alpha2 },
+      alpha3: 			 { type: "f", value: alpha3 }
     };
 
     // not used
@@ -244,27 +207,7 @@ var GLRenderer = function( _settings ) {
 
     //surface.position.set(60,50,150);
     scene.add( surface );
-
-
-
-// -----------------------------------------------------------------------------
-
-    // first run
-    //_self.update();
-
-    // dunno what this does
-    //var once = false;
-    //video2.oncanplay=function() {
-    //  if (!once) {
-    //    once = true   ;
-    //    setTimeout( function() {
-    //      var gotoTime = Math.random() * video1.duration;
-    //      video2.currentTime = gotoTime
-    //      console.log("has time", gotoTime);
-    //    }, 200 )
-    //  };
-    //};// end oncanplay
-
+    _self.update()
   }
 
   // Renderer shouldn't be doing this, phase this function out
@@ -282,12 +225,6 @@ var GLRenderer = function( _settings ) {
     }
   }
 
-  // MOVE! to the BEAT controller
-  //var pixels1, pixels2, image1, image2, imageData1, imageData2
-  //var r, g, b, oR, oG, oB, alpha1 = 1 - _self.alpha;
-  var bar = "||||||||||||||||||||"
-  var c = 0;
-
   _self.updateModules = function() {
     // update other functions
     $.each( modules, function(i, module) {
@@ -296,24 +233,16 @@ var GLRenderer = function( _settings ) {
   }
 
   _self.update = function(){
-
   	var delta = clock.getDelta();
   	customUniforms.time.value += delta;
-
-
   }
 
   camera.position.z = 24
 
   _self.render = function() {
+
   	requestAnimationFrame( _self.render );
-
   	renderer.render( scene, camera );
-
-    // FIXME UPPDATE
-    // add renderers for frame buffer canvasses here
-    // adjust framerate for desired effect
-    // if ( Math.random() < 0.5 ) renderer.render( scene, camera, afterimage, true );
 
     _self.update();
     _self.updateModules()
@@ -324,15 +253,19 @@ var GLRenderer = function( _settings ) {
   		videoImageContext1.drawImage( video1, 0, 0,video_width , video_height );
   		if ( videoTexture1 ) videoTexture1.needsUpdate = true;
   	}
-    if ( video2.readyState === video1.HAVE_ENOUGH_DATA ) {
+    if ( video2.readyState === video2.HAVE_ENOUGH_DATA ) {
       videoImageContext2.drawImage( video2, 0, 0, video_width, video_height );
       if ( videoTexture2 ) videoTexture2.needsUpdate = true;
     }
+
+    // when we have a third video
+    // if ( video3.readyState === video3.HAVE_ENOUGH_DATA ) {
+    //  videoImageContext3.drawImage( video3, 0, 0, video_width, video_height );
+    //  if ( videoTexture3 ) videoTexture3.needsUpdate = true;
+    // }
   }
 
   _self.start = function() {
-    // document.getElementById('startbutton').remove();
-    // document.getElementById('glcanvas').webkitRequestFullScreen();
     _self.init();         // init
     _self.render();       // start update & animation
   }

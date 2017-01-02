@@ -23,9 +23,6 @@ firebase.initializeApp(config);
 //  $('#video2')[0].currentTime = e.val();
 //})
 
-var _dbRef = firebase.database()
-var _clientRef = "/client_1/"
-var _client = _dbRef.ref(_clientRef)
 
 // inits
 //_dbRef.ref(_clientRef + "video1/").child('title').set( "default 1" )
@@ -33,6 +30,7 @@ var _client = _dbRef.ref(_clientRef)
 //_dbRef.ref(_clientRef + "video2/").child('title').set( "default 2")
 //_dbRef.ref(_clientRef + "video2/").child('url').set( "https://nabu-dev.s3.amazonaws.com/uploads/video/558b39266465760a3700001b/320p_h264_mobile.mp4" )
 
+/*
 var autoTimeout = 0
 var auto_bpm = false
 var _c = 0
@@ -55,13 +53,24 @@ var mixes = [
   [ 3, "nam" ],
   [ 4, "fam" ]
 ]
+*/
 
-_client.on('value', function( e ) {
+var _dbRef = firebase.database()
+var _clientRef = "/client_1/"
+var _client = _dbRef.ref(_clientRef)
+
+
   //console.log("client update", $('#control_container').length)
-  if ( local_client == "player_1" ) player_1( e ); // player_container?
-  if ( local_client == "controls" ) control( e );
+  //if ( local_client == "player_1" ) player_1( e ); // player_container?
+  //if ( local_client == "controls" ) control( e );
+  $.each( clients, function( i, c ) {
+    c.dbref.ref('/client/').on('value', function( e ) {
+      c.update( e )
+    })
+  })
 });
 
+/*
 var player_1 = function( e ) {
   if ( $('#video1')[0].src != e.val().video1.url ) {
     $('#video1')[0].src = e.val().video1.url;
@@ -83,6 +92,7 @@ var player_1 = function( e ) {
   trans_left = e.val().trans_left
   trans_right = e.val().trans_left
 }
+*/
 
 var control = function( e ) {
 
@@ -182,11 +192,23 @@ setInterval( function() {
 
 }, 100 )
 
+var player_1 = new SenseClient()
+var control = new Control() // SenseControl ?
+var clients = [ player_1, control ]
+
 $(function() {
 
-  var vid1 = document.getElementById('content_video1')
-  var vid2 = document.getElementById('content_video2')
 
+
+  // init
+  $.each( clients, function( i, c ) {
+    c.init()
+  })
+
+  //var vid1 = document.getElementById('content_video1')
+  //var vid2 = document.getElementById('content_video2')
+
+  /*
   $('#left_cue_a')
   $('#left_cue_b')
   $('#left_cue_c')
@@ -232,10 +254,11 @@ $(function() {
         $('#right_out').addClass('yellow')
       }
   })
+  */
 
   // init controls if in controls
-  if ( local_client == "controls" ) init_control();
-  if ( local_client == "player_1" ) init_player_1();
+  // if ( local_client == "controls" ) init_control();
+  // if ( local_client == "player_1" ) init_player_1();
 
   // ---------------------------------------------------------------------------
 
@@ -246,6 +269,7 @@ $(function() {
 
 // ---------------------------------------------------------------------------
 
+/*
 var init_player_1 = function() {
   _dbRef.ref(_clientRef).child('left_scratch').on('value', function(e) {
       $('#video1')[0].currentTime = e.val();
@@ -260,6 +284,7 @@ var init_player_1 = function() {
     //console.log("mixer: ", e.val(), b.c_a)
   })
 }
+*/
 
 var init_control = function() {
 

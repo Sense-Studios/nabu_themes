@@ -2,9 +2,10 @@
 
 // -----------------------------------------------------------------------------
 
-// Firebase
+// Firebase Base
 = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase.js"
 
+// Firebase subs
 = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"
 = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"
 = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-database.js"
@@ -27,7 +28,8 @@
   var dbRef = firebase.database().ref().child('text');
   dbRef.on('value', snap => bigOne.innerText = snap.val());
 
-  var _c = 0
+  var _c = 0;
+
   //setInterval( function() {
   //  firebase.database().ref().child('text').set( _c++ );
   //}, 100)

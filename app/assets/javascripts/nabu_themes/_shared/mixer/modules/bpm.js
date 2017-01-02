@@ -28,7 +28,7 @@ var BPM = function() {
 
     // MOVE! THIS TO THE BPM
     if ( _self.bypass || _self.bpm == 0) {
-      //_self.c_a = Math.PI      
+      //_self.c_a = Math.PI
     } else {
       _self.c_a = ((new Date()).getTime() - n) / 1000
     }
@@ -86,6 +86,10 @@ var BPM = function() {
 
     // add a dot, visual feedback?
     // $('#_self.bpm_bulp').css({'opacity': _self.alpha } );
+  }
+
+  _self.tap = function( num ) {
+    // add timed/ tapping function for bpm control
   }
 
   // reset to a certain value

@@ -5,8 +5,12 @@
 
   - if @program
     %title= @program.title
+  - else
+    %title Sense Studios
 
   :javascript
+
+    // (Marduq Settings &c)
     // these need to be set in a rb parsed file
     window.main_color = '#{@theme.main_color}';
     window.support_color = '#{@theme.support_color}';
@@ -19,8 +23,6 @@
     window.kalturaPartnerId = #{@kalturaPartnerId};
     window.kalturaUiConfigId = #{@kalturaUiConfigId};
 
-  = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true, "async" => true
-
   // Firebase
   = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase.js"
   = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"
@@ -28,9 +30,12 @@
   = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-database.js"
   = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-messaging.js"
 
-  = javascript_include_tag "nabu_themes/mixer/mixer"
-  = stylesheet_link_tag "nabu_themes/mixer/mixer", media: "all", "data-turbolinks-track" => true, "async" => true
-  = stylesheet_link_tag "nabu_themes/mixer/control", media: "all", "data-turbolinks-track" => true, "async" => true
+  // Sense
+  = javascript_include_tag "nabu_themes/sense/sense"
+
+  // Stylesheets
+  = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true, "async" => true
+  = stylesheet_link_tag "nabu_themes/sense/sense", media: "all", "data-turbolinks-track" => true, "async" => true
 
 %body
   = yield

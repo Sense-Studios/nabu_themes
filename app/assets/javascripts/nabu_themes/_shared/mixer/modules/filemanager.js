@@ -94,9 +94,9 @@ var Filemanager = function() {
       // pass source on to the renderer
       if (Math.random() > 0.5 ) {
         _self.renderer.updateSource( 1, source1 );
-        firebase.database().ref('/client_1/video1/').child('url').set( source1 );
-        firebase.database().ref('/client_1/video1/').child('title').set( eligables[ rnd1 ].title );
-        firebase.database().ref('/client_1/video1/').child('id').set( eligables[ rnd1 ].id );
+        //firebase.database().ref('/client_1/video1/').child('url').set( source1 );
+        //firebase.database().ref('/client_1/video1/').child('title').set( eligables[ rnd1 ].title );
+        //firebase.database().ref('/client_1/video1/').child('id').set( eligables[ rnd1 ].id );
 
         // update info
         $('#program_title').text(eligables[ rnd1 ].title) //.fadeIn('slow');
@@ -105,9 +105,9 @@ var Filemanager = function() {
 
       }else{
         _self.renderer.updateSource( 2, source2 );
-        firebase.database().ref('/client_1/video2/').child('url').set( source2 );
-        firebase.database().ref('/client_1/video2/').child('id').set( eligables[ rnd2 ].id );
-        firebase.database().ref('/client_1/video2/').child('title').set( eligables[ rnd2 ].title );
+        //firebase.database().ref('/client_1/video2/').child('url').set( source2 );
+        //firebase.database().ref('/client_1/video2/').child('id').set( eligables[ rnd2 ].id );
+        //firebase.database().ref('/client_1/video2/').child('title').set( eligables[ rnd2 ].title );
 
         // update info
         $('#program_title').text(eligables[ rnd2 ].title) //.fadeIn('slow');
