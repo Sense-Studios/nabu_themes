@@ -1,6 +1,8 @@
-body {
-  overflow-y: scroll;
-  width: calc( 100vw + 17px );
+body, html {
+  overflow-y: inherit;
+  overflow-x: hidden;
+  width: calc(100vw + 17px );
+  background: black;
 }
 
 .background {
@@ -214,6 +216,7 @@ select {
   text-align: center;
   height: 100vh;
   overflow-y: scroll;
+  overflow-x: hidden;
 
   #programs_left {
     margin-right: 5vh;

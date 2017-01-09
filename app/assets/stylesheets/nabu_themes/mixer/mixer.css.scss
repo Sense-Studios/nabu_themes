@@ -1,0 +1,47 @@
+body, html {
+  /* not sure why I need to add this */
+  background: transparent !important;
+}
+
+.grey_back {
+  background-color: #a5a5a5;
+  color: #333333;
+  font-weight: 600;
+}
+
+.white_back {
+  background-color: #f5f5f5;
+  color: #666666;
+  font-weight: 100;
+}
+
+#canvas, #glcanvas {
+  z-index: -3;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#video1 {
+  width: 320px;
+  height: 200px;
+  position: absolute;
+  right: 700px;
+  bottom: 20px;
+}
+
+#video2 {
+  width: 320px;
+  height: 200px;
+  position: absolute;
+  right: 360px;
+  bottom: 20px;
+}
+
+#video3 {
+  width: 320px;
+  height: 200px;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}

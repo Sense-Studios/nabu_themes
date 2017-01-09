@@ -5,5 +5,15 @@
 //= require tween/tween
 //= require_tree .
 
-// just add this for mixer
-//= require_tree ../_shared/mixer/
+// mixer elements
+//= require nabu_themes/_shared/mixer/settings
+//= require nabu_themes/_shared/mixer/modules/bpm
+//= require nabu_themes/_shared/mixer/modules/filemanager
+//= require nabu_themes/_shared/mixer/glrenderer
+
+// firebase
+//= require nabu_themes/_shared/firebase/firebase
+
+// main
+//= require nabu_themes/mixer/main
+//= require nabu_themes/mixer/control

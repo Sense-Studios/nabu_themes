@@ -2,8 +2,8 @@
 /* set up global variables */
 
 // viewport
-var _width  = window.innerWidth;
-var _height = window.innerHeight;
+var _width  = window.innerWidth;  // unless < video_width ( 1280 )
+var _height = window.innerHeight; // unless < video_height ( 720 )
 
 // quality and video need to match!
 var video_quality = "720p_h264";
@@ -49,7 +49,7 @@ var GLRenderer = function( _options ) {
     videi3:
     src1
     src2
-    src3 
+    src3
   }
 
   */
@@ -60,9 +60,9 @@ var GLRenderer = function( _options ) {
   var glcanvas = document.getElementById('glcanvas')
 
   // public
-  _self.src1 = "//nabu-dev.s3.amazonaws.com/uploads/video/567498216465766873000000/720p_h264.mp4"
-  _self.src2 = "//nabu-dev.s3.amazonaws.com/uploads/video/558b39266465760a3700001b/720p_h264.mp4" //720p_5000kbps_h264
-  _self.src3 = "//nabu-dev.s3.amazonaws.com/uploads/video/556b99326465764bdf000000/720p_5000kbps_h264.mp4"; //http://nabu-dev.s3.amazonaws.com/uploads/video/556b99a86465764bdf140000/480p_h264.mp4";
+  _self.src1 = "//nabu-dev.s3.amazonaws.com/uploads/video/567498216465766873000000/720p_5000kbps_h264.mp4"
+  _self.src2 = "//nabu-dev.s3.amazonaws.com/uploads/video/558b39266465760a3700001b/720p_5000kbps_h264.mp4" //720p_5000kbps_h264
+  _self.src3 = "//nabu-dev.s3.amazonaws.com/uploads/video/556b99326465764bdf000000/320p_h264_mobile.mp4"; //http://nabu-dev.s3.amazonaws.com/uploads/video/556b99a86465764bdf140000/480p_h264.mp4";
 
   // gonna need that counter
   var c = 0
@@ -76,7 +76,7 @@ var GLRenderer = function( _options ) {
 
   _self.init = function() {
 
-    renderer = new THREE.WebGLRenderer( {canvas: glcanvas, alpha: false} );
+    renderer = new THREE.WebGLRenderer( { canvas: glcanvas, alpha: false } );
     renderer.setSize( _width, _height );
 
     // -------------------------------------------------------------------------
@@ -154,6 +154,7 @@ var GLRenderer = function( _options ) {
       depthBuffer:false
     };
 
+    // this is not yet implemented ... :-/
     afterimage = new THREE.WebGLRenderTarget( 512, 512, renderTargetParams );
     //afterimage_tex = new THREE.Texture( afterimage.texture )
     //afterimage_tex.needsUpdate = true;
@@ -163,7 +164,7 @@ var GLRenderer = function( _options ) {
     customUniforms = {
       baseTexture1:	 { type: "t", value: videoTexture1 },
       baseTexture2:	 { type: "t", value: videoTexture2 },
-      //baseTexture3:	 { type: "t", value: videoTexture3 },
+      // baseTexture3:	 { type: "t", value: videoTexture3 },
       blendmode: 		 { type: "i", value: 1 },
       effect:        { type: "i", value: 1 },
 
@@ -253,16 +254,17 @@ var GLRenderer = function( _options ) {
   		videoImageContext1.drawImage( video1, 0, 0,video_width , video_height );
   		if ( videoTexture1 ) videoTexture1.needsUpdate = true;
   	}
+
     if ( video2.readyState === video2.HAVE_ENOUGH_DATA ) {
       videoImageContext2.drawImage( video2, 0, 0, video_width, video_height );
       if ( videoTexture2 ) videoTexture2.needsUpdate = true;
     }
 
     // when we have a third video
-    // if ( video3.readyState === video3.HAVE_ENOUGH_DATA ) {
-    //  videoImageContext3.drawImage( video3, 0, 0, video_width, video_height );
-    //  if ( videoTexture3 ) videoTexture3.needsUpdate = true;
-    // }
+    if ( video3.readyState === video3.HAVE_ENOUGH_DATA ) {
+      videoImageContext3.drawImage( video3, 0, 0, video_width, video_height );
+      if ( videoTexture3 ) videoTexture3.needsUpdate = true;
+    }
   }
 
   _self.start = function() {

@@ -9,12 +9,15 @@
       var local_client = "controls"
 
   #mix_video1.video
-    %video#content_video1{:autoplay=>true, :loop=>true}
+    %video#video1{:autoplay=>true, :loop=>true}
     %input#video1_speed{:type=>"range", :orient=>"vertical", :value=>"1.0", :max=>"2.0"}
 
   #mix_video2.video
-    %video#content_video2{:autoplay=>true, :loop=>true}
+    %video#video2{:autoplay=>true, :loop=>true}
     %input#video2_speed{:type=>"range", :orient=>"vertical", :value=>"1.0", :max=>"2.0"}
+
+  #mix_video2.video.hidden
+    %video#video3{:autoplay=>true, :loop=>true}
 
   %button#left_cue_a.btn.btn-material-grey-400.small A
   %button#left_cue_b.btn.btn-material-grey-400.small B

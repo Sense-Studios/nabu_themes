@@ -2,6 +2,7 @@
 %head
 
   / meta ?
+  %meta{:name => "viewport", :content => "width=650, initial-scale=0.6, max-scale=0.6" }
 
   - if @program
     %title= @program.title
@@ -35,6 +36,7 @@
 
   // Stylesheets
   = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true, "async" => true
+  = stylesheet_link_tag "nabu_themes/sense/site_content", media: "all", "data-turbolinks-track" => true, "async" => true
   = stylesheet_link_tag "nabu_themes/sense/sense", media: "all", "data-turbolinks-track" => true, "async" => true
 
 %body

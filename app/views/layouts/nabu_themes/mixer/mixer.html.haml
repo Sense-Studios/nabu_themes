@@ -1,5 +1,8 @@
 !!!
 %head
+
+  %meta{:name=>"viewport", :content=>"width=device-width, initial-scale=1.0, user-scalable=no"}
+
   - if @program
     %title= @program.title
 
@@ -16,9 +19,18 @@
     window.kalturaPartnerId = #{@kalturaPartnerId};
     window.kalturaUiConfigId = #{@kalturaUiConfigId};
 
-  = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true, "async" => true
+  // Firebase
+  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase.js"
+  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"
+  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"
+  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-database.js"
+  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-messaging.js"
+
   = javascript_include_tag "nabu_themes/mixer/mixer"
+
+  = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true, "async" => true
   = stylesheet_link_tag "nabu_themes/mixer/mixer", media: "all", "data-turbolinks-track" => true, "async" => true
+  = stylesheet_link_tag "nabu_themes/mixer/control", media: "all", "data-turbolinks-track" => true, "async" => true
 
 %body
   = yield

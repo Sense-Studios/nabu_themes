@@ -1,20 +1,5 @@
 var r, b, f
 
-$(window).on('hashchange', function() {
-  // set up default text
-  $('#content').html(channelsettings[location.hash.substring(1)].text)
-
-  $(".header_m:eq(0)").css("opacity", 0)
-  $(".col_m:eq(0)").css("opacity", 0);
-  $(".col_m:eq(1)").css("opacity", 0);
-  $(".col_m:eq(2)").css("opacity", 0);
-
-  // add more for more colums
-  setTimeout( function() { doTypeOn(".col_m:eq(0)") }, 200 )
-  setTimeout( function() { doTypeOn(".col_m:eq(1)") }, 1250 )
-  setTimeout( function() { doTypeOn(".col_m:eq(2)") }, 1600 )
-});
-
 $(function() {
 
   // Set up the renderer
@@ -41,34 +26,28 @@ $(function() {
     }
   });
 
+  $('#button-home').click( function() {
+    window.location.hash = "home"
+  })
 
   // toggle content
-  $('#button-play').click( function() {
-    if ( $(".col_m:eq(0)").css("opacity") == 0 ) {
-      $(".header_m:eq(0)").css("opacity", 0).animate({"opacity":1}, 700);
-      setTimeout( function() { doTypeOn(".col_m:eq(0)") }, 400 );
-      setTimeout( function() { doTypeOn(".col_m:eq(1)") }, 900 );
-      setTimeout( function() { doTypeOn(".col_m:eq(2)") }, 1300 );
-
-    } else {
-      $(".header_m:eq(0)").css("opacity", 0)
-      $(".col_m:eq(0)").css("opacity", 0);
-      $(".col_m:eq(1)").css("opacity", 0);
-      $(".col_m:eq(2)").css("opacity", 0);
+  $('#button-content').click( function() {
+    if ( $('#content').data("is_visible") == "true" ) {
+      $('#content').data("is_visible", "false")
+    }else{
+      $('#content').data("is_visible", "true")
+       doTypeOn(".col")
     }
   });
 
-  //var bpms = [ 0, 2, 4, 8, 16, 24, 32, 42, 64, 72, 90, 100, 120, 128, 160, 200, 240, 400 ]
-  //var bpms = [ 64, 128, 256, 128, 64, 28, 0 ]
   var bpms = [ 2, 4, 8, 16, 28, 32, 64 ]
-  //var cols = [  ]
   var current_bpm = 6
   b.bpm = 28;
   $('#button-beat').click( function() {
     current_bpm += 1
     if ( current_bpm >= bpms.length ) current_bpm = 0
     b.bpm = bpms[current_bpm]
-    console.log( "bpm set to: ", bpms[current_bpm])
+    //console.log( "bpm set to: ", bpms[current_bpm])
     $('#button-beat').text( bpms[current_bpm] )
   })
 
@@ -87,7 +66,7 @@ $(function() {
     if ( current_blm >= blms.length ) current_blm = 0
     //r.blendingMode = blms[current_blm]
     customUniforms.blendmode.value = blms[current_blm]
-    console.log( "blendingMode set to: ", blms[current_blm])
+    //console.log( "blendingMode set to: ", blms[current_blm])
     $('#button-menu').text(blend_names[current_blm])
   })
 
@@ -96,30 +75,47 @@ $(function() {
     f.change_channels()
   })
 
-  // init
-  // set up default text
-  $('#content').html(channelsettings.home.text)
-
-  // add more for more colums
-  setTimeout( function() { doTypeOn(".col_m:eq(0)") }, 1600 )
-  setTimeout( function() { doTypeOn(".col_m:eq(1)") }, 2250 )
-  setTimeout( function() { doTypeOn(".col_m:eq(2)") }, 2600 )
-
+  setPage()
+  $(window).on( 'hashchange', function() { setPage( ); } );
 
 }); // end load
 
+
+// set up default text
+var setPage = function( _page ) {
+  // _page should work as an override
+  if ( _page != undefined ) window.location.hash = _page
+  if ( window.location.hash.substring(1) == "" ) window.location.hash = "home"
+
+  $('#content').html( channelsettings [ window.location.hash.substring(1) ].text)
+  doTypeOn(".col")
+  doTypeOn(".item:eq(0)", 100 )
+  doTypeOn(".item:eq(1)", 300 )
+  doTypeOn(".item:eq(2)", 500 )
+  doTypeOn(".item:eq(3)", 800 )
+  doTypeOn(".item:eq(4)", 1000 )
+
+  // set
+  // channelsettings.tags
+  // channelsettings.video1
+  // channelsettings.video2
+  // channelsettings.bpm
+  // channelsettings.blendmode
+}
+
 // type on helper
-function doTypeOn( elm ) {
+var doTypeOn = function( elm, delay ) {
   var str = $(elm).html(),
       i = 0,
       isTag,
       text;
 
   console.log("dotypeon", str )
+  if (delay == undefined) delay = 0
 
   if (!str) return;
 
-  (function type() {
+  setTimeout( function type() {
     rnd = Math.round( Math.random() * 120 ) + 24
     rc = (0|Math.random()*9e6).toString(36)
     text = str.slice(0, i);
@@ -144,5 +140,5 @@ function doTypeOn( elm ) {
     }else{
       $(elm).html( str )
     }
-  }());
+  }, delay );
 }

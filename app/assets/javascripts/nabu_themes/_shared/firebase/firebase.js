@@ -58,17 +58,17 @@ var mixes = [
 var _dbRef = firebase.database()
 var _clientRef = "/client_1/"
 var _client = _dbRef.ref(_clientRef)
-
+var clients = []
 
   //console.log("client update", $('#control_container').length)
   //if ( local_client == "player_1" ) player_1( e ); // player_container?
   //if ( local_client == "controls" ) control( e );
-  $.each( clients, function( i, c ) {
-    c.dbref.ref('/client/').on('value', function( e ) {
-      c.update( e )
-    })
+$.each( clients, function( i, c ) {
+  c.dbref.ref('/client/').on('value', function( e ) {
+    c.update( e )
   })
-});
+})
+//});
 
 /*
 var player_1 = function( e ) {
@@ -192,9 +192,10 @@ setInterval( function() {
 
 }, 100 )
 
-var player_1 = new SenseClient()
-var control = new Control() // SenseControl ?
-var clients = [ player_1, control ]
+// var player_1 = new SenseClient()
+// var control = new Control() // SenseControl ?
+// var clients = [ player_1, control ]
+var clients = []
 
 $(function() {
 

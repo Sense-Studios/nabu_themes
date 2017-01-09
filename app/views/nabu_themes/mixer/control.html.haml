@@ -1,52 +1,100 @@
-%h1#bigOne
+.control_container
+  #chatbox
+    %p No client found
+    %p local client: controls
+    :javascript
+      var local_client = "controls"
 
-// -----------------------------------------------------------------------------
+  #mix_video1.video
+    %video#content_video1{:autoplay=>true, :loop=>true}
+    %input#video1_speed{:type=>"range", :orient=>"vertical", :value=>"1.0", :max=>"2.0"}
 
-// Firebase Base
-= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase.js"
+  #mix_video2.video
+    %video#content_video2{:autoplay=>true, :loop=>true}
+    %input#video2_speed{:type=>"range", :orient=>"vertical", :value=>"1.0", :max=>"2.0"}
 
-// Firebase subs
-= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"
-= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"
-= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-database.js"
-= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-messaging.js"
+  %button#left_cue_a.btn.btn-material-grey-400.small A
+  %button#left_cue_b.btn.btn-material-grey-400.small B
+  %button#left_cue_c.btn.btn-material-grey-400.small C
+  %button#left_out.btn.btn-material-grey-400.small out
+
+  %button#right_cue_a.btn.btn-material-grey-400.small A
+  %button#right_cue_b.btn.btn-material-grey-400.small B
+  %button#right_cue_c.btn.btn-material-grey-400.small C
+  %button#right_out.btn.btn-material-grey-400.small out
+
+  %button#left_cue.btn.btn-material-grey-400.wide CUE
+  %button#left_play.btn.btn-material-grey-400.wide PLAY
+  %button#right_cue.btn.btn-material-grey-400.wide CUE
+  %button#right_play.btn.btn-material-grey-400.wide PLAY
+
+  %input#bpm_range{:type=>"range"}
+
+  %button#left_scratch.btn.btn-material-grey-400.small SCRATCH
+  %button#auto_bpm.btn.btn-material-grey-400.small auto
+  %button#half_bpm.btn.btn-material-grey-400.small ½
+  #bpm_display
+    #bpm_one_down.display_button ▼
+    #bpm_one_up.display_button ▲
+    .bpm 128
+  %button#double_bpm.btn.btn-material-grey-400.small 2
+  %button#tap_bpm.btn.btn-material-grey-400.small [ ]
+  %button#right_scratch.btn.btn-material-grey-400.small SCRATCH
+
+  %button#left_trans.btn.btn-material-grey-400.wide TRANS
+  %button#blend_mode.btn.btn-material-grey-400.wide soft-light
+  %button#mix.btn.btn-material-grey-400.wide MIX
+  /%button#curve.btn.btn-material-grey-400.small CURVE
+  %button#right_trans.btn.btn-material-grey-400.wide TRANS
+
+  .effects_container
+    #effects_settings.effect_clm
+      %select#effect
+      %button#mix.btn.btn-material-grey-400.small X
+      %button#mix.btn.btn-material-grey-400.small Y
+
+      %select#subeffect
+      %button#mix.btn.btn-material-grey-400.small A
+      %button#mix.btn.btn-material-grey-400.small B
+
+    #effects_sliders.effect_clm
+      %input{:type=>"range"}
+      %input{:type=>"range"}
+      %input{:type=>"range"}
+      %input{:type=>"range"}
+
+  %hr
+
+    #programs_left.program_list
+    #programs_right.program_list
+
+  .background
 
 
 :javascript
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyDgrYfOUDN1QLRDcY4z45WwkcOjkXiImNQ",
-    authDomain: "mixerbase-829c2.firebaseapp.com",
-    databaseURL: "https://mixerbase-829c2.firebaseio.com",
-    storageBucket: "mixerbase-829c2.appspot.com",
-    messagingSenderId: "568387460963"
-  };
+  // inits
+  $('#content_video1')[0].volume = 0
+  $('#content_video2')[0].volume = 0
+  $('#mix_video1').click( function() { $('#content_video1')[0].play(); console.log("klik") } )
+  $('#mix_video2').click( function() { $('#content_video2')[0].play(); console.log("klik") } )
 
-  firebase.initializeApp(config);
+  // generate list
+  $.each( programs, function( i, p ) {
+    if ( p.assets._type != "Video" ) return;
+    var program_list_item = ""
+    program_list_item += "<div data-index='" + i + "' data-id='" + p.id +"' id='program_"+ p.id +"' class='program_list_item'>"
+    program_list_item += "<h4>" + p.title + "</h4>"
+    program_list_item += "<div><img src='" + p.thumbnail + "' width='100%'></div>"
+    program_list_item += "</div>"
 
-  var bigOne = document.getElementById('bigOne');
-  var dbRef = firebase.database().ref().child('text');
-  dbRef.on('value', snap => bigOne.innerText = snap.val());
+    $('#programs_left').append( program_list_item );
+    $('#programs_right').append( program_list_item );
+  });
 
-  var _c = 0;
+  $('#programs_left .program_list_item').click( function() {
+    _dbRef.ref(_clientRef + "video1/").child('url').set( getUrlByQuality( programs[ $(this).data('index') ], "720p_h264" ) )
+  });
 
-  //setInterval( function() {
-  //  firebase.database().ref().child('text').set( _c++ );
-  //}, 100)
-  // now do this
-  // https://firebase.google.com/docs/database/web/read-and-write
-
-  //function writeUserData(userId, name, email, imageUrl) {
-  //  firebase.database().ref('users/' + userId).set({
-  //    username: name,
-  //    email: email,
-  //    profile_picture : imageUrl
-  //  });
-  //}
-
-  // return firebase.database().ref('/client_1/').once('value').then(function(t){console.log(t)})
-
-// -----------------------------------------------------------------------------
-
-%input{:id=>"input_test", :value=>"_test"} test
-%input{:id=>"input_bpm", :value=>"_bpm", :type=>"range"} bpm
+  $('#programs_right .program_list_item').click( function() {
+    _dbRef.ref(_clientRef + "video2/").child('url').set( getUrlByQuality( programs[ $(this).data('index') ], "720p_h264" ) )
+  });
