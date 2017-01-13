@@ -74,13 +74,13 @@ module NabuThemes
         @page = 'nabu_themes/' + @theme.theme + '/' + params[:page].to_s
       end
 
-      begin
+      #begin
         # try for the layout in /theme directory/layout/theme
         render @page, :layout => "nabu_themes/" + @theme.theme + "/" + @theme.theme
-      rescue
+      #rescue
         # render the default layout
-        render @page, :layout => "nabu_themes/application"
-      end
+        #render @page, :layout => "nabu_themes/application"
+      #end
     end
 
     # GET /themes
