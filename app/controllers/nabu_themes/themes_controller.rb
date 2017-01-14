@@ -77,7 +77,7 @@ module NabuThemes
       begin
         # try for the layout in /theme directory/layout/theme
         render @page, :layout => "nabu_themes/" + @theme.theme + "/" + @theme.theme + ".html.haml"
-      rescue Exception => error
+      rescue Exception => e
         # render the default layout
         logger.debug " HERE IS THE ERROR: #{e}"
         render @page, :layout => "nabu_themes/application"
