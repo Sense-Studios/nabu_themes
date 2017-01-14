@@ -74,14 +74,14 @@ module NabuThemes
         @page = 'nabu_themes/' + @theme.theme + '/' + params[:page].to_s
       end
 
-      begin
+      #begin
         # try for the layout in /theme directory/layout/theme
         render @page, :layout => "nabu_themes/" + @theme.theme + "/" + @theme.theme + ".html.haml"
-      rescue Exception => e
+      #rescue Exception => e
         # render the default layout
-        logger.debug " HERE IS THE ERROR: #{e}"
-        render @page, :layout => "nabu_themes/application"
-      end
+      #  logger.debug " HERE IS THE ERROR: #{e}"
+      #  render @page, :layout => "nabu_themes/application"
+      #end
     end
 
     # GET /themes
