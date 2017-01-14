@@ -19,16 +19,13 @@
     window.menudata = #{@menudata};
     window.menuconfig = #{@menuconfig};
     window.channelsettings = #{@channelsettings};
+    window.programs = #{@filtered_programs.to_json};
 
     window.kalturaPartnerId = #{@kalturaPartnerId};
     window.kalturaUiConfigId = #{@kalturaUiConfigId};
 
   // Firebase
-  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase.js"
-  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"
-  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"
-  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-database.js"
-  = javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.1/firebase-messaging.js"
+
 
   // Sense
   = javascript_include_tag "nabu_themes/sense/sense"
