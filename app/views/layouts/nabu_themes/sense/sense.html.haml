@@ -13,22 +13,13 @@
 
     // (Marduq Settings &c)
     // these need to be set in a rb parsed file
-    window.main_color = '#{@theme.main_color}';
-    window.support_color = '#{@theme.support_color}';
-    window.background_color = '#{@theme.background_color}';
-    window.menudata = #{@menudata};
-    window.menuconfig = #{@menuconfig};
-    window.channelsettings = #{@channelsettings};
-    window.programs = #{@filtered_programs.to_json};
-
-    window.kalturaPartnerId = #{@kalturaPartnerId};
-    window.kalturaUiConfigId = #{@kalturaUiConfigId};
-
-  // Firebase
-
-
-  // Sense
-  = javascript_include_tag "nabu_themes/sense/sense"
+    window.main_color = '#{@theme.main_color}'
+    window.support_color = '#{@theme.support_color}'
+    window.background_color = '#{@theme.background_color}'
+    window.menudata = #{@menudata}
+    window.menuconfig = #{@menuconfig}
+    window.channelsettings = #{@channelsettings}
+    window.programs = #{@filtered_programs.to_json}
 
   // Stylesheets
   = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true, "async" => true
