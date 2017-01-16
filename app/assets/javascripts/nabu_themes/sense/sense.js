@@ -4,14 +4,18 @@
 //= require threejs/three
 //= require tween/tween
 
+// main
+//= require firebase/firebase
+//= require firebase/firebase-app
+//= require firebase/firebase-auth
+//= require firebase/firebase-database
+//= require firebase/firebase-messaging
+
 // mixer elements
 //= require nabu_themes/_shared/mixer/settings
 //= require nabu_themes/_shared/mixer/modules/bpm
 //= require nabu_themes/_shared/mixer/modules/filemanager
 //= require nabu_themes/_shared/mixer/glrenderer
-
-// main
-//= require firebase/firebase-messaging
 
 // main
 //= require nabu_themes/sense/main
