@@ -11,4 +11,7 @@
 //= require nabu_themes/_shared/mixer/glrenderer
 
 // main
+//= require firebase/firebase-messaging
+
+// main
 //= require nabu_themes/sense/main
