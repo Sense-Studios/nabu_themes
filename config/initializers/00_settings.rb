@@ -6,8 +6,10 @@
 NABU_THEMES_MOUNT_POINT = "channel"
 
 # available themes
-NABU_THEMES_AVAILABLE_THEMES = [ "babylon", "sense", "oculus", "geo", "mixer" ]
+NABU_THEMES_AVAILABLE_THEMES = [ "babylon", "sense","geo", "mixer" ]
  # "sense", "babylon", "basicwhite", "destandaard", "gazetvanantwerpen", oculus
+ # clipcard",
+ # "oculus",
 
 # create extra menu items
 EXTRA_ADMIN_MENU_ITEMS.push( { "title" => "Nabu Channels", "header" => true } )
