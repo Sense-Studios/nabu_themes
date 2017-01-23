@@ -1,3 +1,73 @@
-this be the layout
+!!! HTML
+%html
 
-= yield
+  %head
+
+    %link{:rel=>"icon",:type=>"image/png",:href=>"/assets/favicon/Favicon_design.png"}
+
+    %title
+      Movietrader Clipcard -
+      = @clipcard.title
+
+    -# translations
+    :javascript
+      window.t = #{raw @t.to_json}
+      if (!window.console) console = {log: function() {}};
+
+    -# system information
+    = csrf_meta_tags
+    %meta{:name=>"apple-mobile-web-app-capable", :content=>"yes"}
+    %meta{:name=>"apple-mobile-web-app-status-bar-style", :content=>"black-translucent"}
+    %meta{:name=>"viewport", :content=>"width=device-height, initial-scale=1, maximum-scale=1, user-scalable=no, target-densitydpi=device-dpi"}
+    %meta{"http-equiv"=>"X-UA-Compatible", :content=>"IE=9"}
+
+    -# javascript holders
+    :javascript
+      var program = "#{@clipcard.programs.first}";
+      var program_id = "#{@clipcard.programs.first}";
+      var programs = #{@clipcard.programs.to_json};
+      var clipcard_id = "#{@clipcard.id}";
+      var client_id = "#{@clipcard.client_id}";
+      var account_id = "#{@account_id}";
+
+    -# meta information
+    %meta{:name=>"description", :content=>@clipcard.description.to_s }
+    %meta{:name=>"keywords", :content=>@clipcard.title }
+    %meta{:name=>"author", :content=>"Movietrader" }
+
+    -# opengraph
+    %meta{:property=>"og:image", :content => @clipcard.logo }
+    %meta{:property=>"og:url", :content => request.protocol + request.host_with_port + request.fullpath }
+    %meta{:property=>"og:title", :content => @clipcard.title }
+    %meta{:property=>"og:description", :content => @clipcard.description }
+
+  %body
+
+    /= render 'shared/flash_messages'
+
+    -##### For a nicer load ####
+    = stylesheet_link_tag "application", media: "all"
+    = stylesheet_link_tag 'ie8_fixes'
+
+    -#########################  YIELD  #######################################
+    = yield
+
+
+    :css
+      #{@clipcard.styling}
+
+    -# javascript_include_tag "//cdn.pubnub.com/pubnub-3.5.1.min.js", "data-turbolinks-track" => true, "async" => true
+    = javascript_include_tag "application"
+
+    :javascript
+      initClipCards()
+
+      function doFinalResize() {
+        // do resizing of the iframe with javascript, and not with css
+        //$('#video_frame').css({'height': $(window).height() + 'px' } );
+        //$('#video_frame').css({'width': $(window).width() + 'px' } );
+
+      }
+
+      $( window ).resize(function() {doFinalResize()} )
+      $(function() { doFinalResize() } )

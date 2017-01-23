@@ -11,6 +11,8 @@ module NabuThemes
     # note that slug checking is done in the routes
     def render_theme
 
+      set_whitelabel
+
       # ensure backward compatibility
       if params[:page] == "p2v"
         params[:id] = nil
@@ -37,6 +39,12 @@ module NabuThemes
       else
         @program = MarduqResource::Program.find( params[:id] ) # any id
       end
+
+      # TEST !
+      # for CLIPCARD functionality
+      #if (@theme. == 'clipcard')
+      clipcard
+      #end
 
       @owner = User.find( @theme.owner )
       @kalturaPartnerId = @owner.kaltura_partner_id
@@ -194,6 +202,50 @@ module NabuThemes
       end
     end
 
+    # MOVIETRADER clipcard functionality
+    # clipcard
+    def clipcard
+
+      params[:id] = 'pika'
+
+      if params[:id]
+        @clipcard = Clipcard.find params[:id] rescue nil
+        if @clipcard.nil?  # not found by id, try to find one by slug
+          @clipcard = Clipcard.find_by( :slug => params[:id] )
+        end
+        @highscores = Carder.where(:clipcard => params[:id]).sort(:total_score => -1).to_a
+
+        # find owner and account id through clipcard
+        @owner = User.find( @clipcard.client_id )
+        if !@owner.account_id.nil?
+          @owner = User.find( @owner.id )
+          @account_id = @owner.account_id
+        else
+          @account_id = @owner.id
+        end
+
+        logger.debug params.inspect
+
+        if @clipcard.password.present?
+          @validated = false
+          if params[:password] and params[:password]==@clipcard.password
+            @validated = true
+          end
+        else
+          @validated = true
+        end
+      end
+
+      # Check for cookie?
+      #@carder = Carder.where({:name => params[:email], :email => params[:email]})
+      #if @carder.nil?
+      #
+      #end
+      @carder = Carder.new()
+      # render layout: "clipcards"
+    end
+
+
     # PRIVATE, Stop reading!
     private
       def hasDupes( p )
@@ -233,13 +285,28 @@ module NabuThemes
         @theme = Theme.find(params[:id])
       end
 
+      def allow_iframe
+        response.headers.except! 'X-Frame-Options'
+      end
+
+      def set_whitelabel
+
+        # match url with labls
+        current_domain = request.host_with_port
+        current_whitelabel = 0
+        WHITELABELS.each_with_index do |w, i|
+          w["domains"].each do |d|
+            if d == current_domain
+              current_whitelabel = i
+            end
+          end
+        end
+        @whitelabel = WHITELABELS[current_whitelabel]
+      end
+
       # Only allow a trusted parameter "white list" through.
       def theme_params
         params.require(:theme).permit(:title, :description, :about, :contact, :slug, :owner, :home_program, :theme, :menu, :logo, :main_color, :support_color, :background_color, :settings )
-      end
-
-      def allow_iframe
-        response.headers.except! 'X-Frame-Options'
       end
   end
 end

@@ -1,0 +1,175 @@
+.container.clipcard-container
+
+  .row
+    .col-md-12
+      .header{:style=>'background-image:url("'+@clipcard.background+'");'}
+        .logo
+          - if @clipcard.title != ""
+            .top_title.pull-right.custom_color= @clipcard.title
+          .logo_img{:style=>'background-image:url("'+@clipcard.logo+'");'}
+
+        /.sharing
+        /.description
+        /  Onlinge cursus Aan de slag met Big Data. Denk groot, start klein.
+
+
+  - if @validated == false
+    = form_tag do
+      = label_tag(:password, _t('admin.clipcards.pwdprotected'))
+      %br
+      = password_field_tag :password
+      = submit_tag _t('admin.clipcards.submit'), :class => 'btn btn-default custom_color'
+  - else
+    .row
+      .col-md-12
+        .button-group.pull-left
+          .button.btn.btn-default.custom_color#load_button= _t('admin.clipcards.load')
+          .button.btn.btn-default.custom_color#save_button= _t('admin.clipcards.save')
+          .button.btn.btn-default.custom_color#highscore_button= _t('admin.clipcards.highscores')
+
+        .score.pull-right
+          .title
+            = _t('admin.clipcards.total_scores')
+          .scores#scores.custom_color
+            0
+
+    .row
+      .col-md-12
+        .program_container
+          - @clipcard.programs.each do |p|
+            - begin
+              - resolved_program = MarduqResource::Program.find( p )
+
+              .clipcard_program{:id => p, :alt=> resolved_program.tags.join(", "), :title=> resolved_program.title, :style=>"background-image: url(#{resolved_program.meta.moviedescription.thumbnail})"}
+                .program_score.pull-right.custom_color 0
+                .program_play_button
+                  .span.glyphicon.glyphicon-play
+                .program_title.custom_color= resolved_program.title
+                .program_tags= resolved_program.tags.join(", ")
+
+            -rescue
+              .clipcard_failed_program{:id=>p}
+
+    %br
+    %br
+    %br
+
+    =# render :partial => "shared/footer"
+
+    %footer
+      .row
+        .contactinfo.small.pull-left
+          = @clipcard.contactinfo
+
+        .brand.pull-right
+          %a{:href=>'http://www.movietrader.nl'}
+            = image_tag 'movietrader/powered_by_movietrader.png'
+
+
+    %br
+    %br
+
+  -# Analytics
+  = render :partial => "shared/analytics"
+
+  -#################
+  -# Movie - Modal #
+  -#################
+
+  .modal.fade#myModal{"tabindex" => "-1", "role" => "dialog", "aria-labelledby"=>"myModalLabel", "aria-hidden"=>"true"}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close.pull-right{"data-dismiss"=>"modal", "aria-hidden"=>"true"}×
+          -#%button{:type=>"button", :class=>"close", 'data-dismiss'=>"modal",'aria-hidden'=>"true"}
+          %h4.modal_title.custom_color
+            = _t('admin.clipcards.no_movie_found')
+
+        .modal-body
+          /#model_iframe_container{:style=>"-webkit-overflow-scrolling:touch;overflow:hidden;"}
+          /%iframe{ :frameBorder=>'0', :id=>"modal_iframe", :src=>"", :width=>'100%', :height=>'500px', :allowfullscreen => true  }
+          #video_container{:style=>"height:480px"}
+            #video_frame
+            = render "shared/player/controls"
+
+        .modal-footer
+          .row
+            .modal_footer_content
+              = _t('admin.clipcards.no_content_set')
+
+  -####################
+  -# Clipcard - Modal #
+  -####################
+
+  .modal.fade#clipkaartModal{"tabindex" => "-1", "role" => "dialog", "aria-labelledby"=>"myModalLabel", "aria-hidden"=>"true"}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close.pull-right{"data-dismiss"=>"modal", "aria-hidden"=>"true"}×
+          -#%button{:type=>"button", :class=>"close", 'data-dismiss'=>"modal",'aria-hidden'=>"true"}
+          %h3.modal_title
+            %span#modal_title_text
+              = _t('admin.clipcards.save_your_score')
+            %small
+              = _t('admin.clipcards.you_got')
+              %strong#modal_total_score 0
+              = _t('admin.clipcards.points')
+
+        .modal-body
+          .row.error.hidden
+            .form-horizontal.has-error
+              .form-group.email_input
+                %label.col-md-3.control-label.error_title ERROR
+                .col-md-6
+                  %textarea.code.form-control.error_messages{:disabled=>true}
+                    [[ CATASTROPHIC - FAILURE ]]
+                .col-md-3
+          .row
+            .form-horizontal
+              .form-group.email_input
+                %label.col-md-3.control-label{:placeholder => _t('admin.clipcards.type_email')}= _t('admin.clipcards.email')
+                .col-md-6
+                  %input.form-control{:id => 'carder_email', :type=>'email'}
+                .col-md-3
+
+
+          .modal-footer
+            .row
+              .modal_footer_content
+                .button.btn.btn-default#form_submit= _t('admin.clipcards.submit')
+
+  -####################
+  -# HIghscore  Modal #
+  -####################
+
+  .modal.fade#highScoresModal{"tabindex" => "-1", "role" => "dialog", "aria-labelledby"=>"myModalLabel", "aria-hidden"=>"true"}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close.pull-right{"data-dismiss"=>"modal", "aria-hidden"=>"true"}×
+          -#%button{:type=>"button", :class=>"close", 'data-dismiss'=>"modal",'aria-hidden'=>"true"}
+          %h3.modal_title.custom_color
+            = _t('admin.clipcards.highscores')
+
+        .modal-body
+          - c = 0
+          - @highscores[0..9].each do |h|
+            .row{:style=>'border-bottom: 1px solid #ccc;'}
+              .col-xs-2
+                %h1.pull-right= (c+= 1).to_s
+              .col-xs-7
+                %h3{:style=>'margin-top:31px'}= h.email
+              .col-xs-3
+                %h1.pull-right= h.total_score
+              .col-md-1
+
+          .modal-footer
+
+= stylesheet_link_tag "clipcards", media: "all"
+-# configurations #
+
+:javascript
+      var pop_under_set = false
+
+- begin
+  -
