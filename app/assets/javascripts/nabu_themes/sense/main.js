@@ -88,6 +88,8 @@ var setPage = function( _page ) {
   if ( window.location.hash.substring(1) == "" ) window.location.hash = "home"
 
   $('#content').html( channelsettings [ window.location.hash.substring(1) ].text)
+
+  // animated helpers
   doTypeOn(".col")
   doTypeOn(".item:eq(0)", 100 )
   doTypeOn(".item:eq(1)", 300 )

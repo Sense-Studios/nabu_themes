@@ -43,7 +43,7 @@ module NabuThemes
       # TEST !
       # for CLIPCARD functionality
       #if (@theme. == 'clipcard')
-      clipcard
+      # clipcard
       #end
 
       @owner = User.find( @theme.owner )

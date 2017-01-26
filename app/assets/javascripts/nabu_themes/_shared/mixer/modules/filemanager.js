@@ -5,6 +5,7 @@ var Filemanager = function() {
   _self.defaultQuality = "720p_5000kbps_h264" //"320p_h264_mobile"
   var c = 0;
   var eligables = []
+  window.holder = eligables
 
   $.each( programs, function( i, p ) {
 
@@ -34,6 +35,70 @@ var Filemanager = function() {
   // note
   //_self.set_Channel = function( tag? name? id? ) {}
 
+
+
+
+  _self.set_channel = function( _obj ) {
+    // _obj.tag
+    // _obj.name
+    // _obj.id
+  }
+
+  /*
+
+    files
+    elegible
+    programs
+
+    _self.set_channel( id, _channel  )
+    _self.set_channel_by_id( id, _channel  )
+    _self.set_channel_by_tags( [tags], _channel  )
+    _self.set_channel_by_stuff( {stuff}, _channel  )
+
+    _self.set_current_group( tag )
+
+    // source for program helper
+    _self.getVideoWithQuality( _program, _quality )
+    _self.
+
+    // channel (1, 2, 3), mp4 file
+    _self.renderer.updateSource( 1, source1 );
+
+    updateSource(1, 'myfile_1.mp4')
+    updateSource(2, 'myfile_2.mp4')
+
+    //  pseudocode
+    set: {
+      1, ["awesome"]
+      2, ["runner"]
+      3, ["runner"]
+    }
+
+    set: {
+      1, ["clients"],
+      2, ["blurs1"],
+      3, []
+    }
+
+    channel1.set = { channel_1: [ 'file.mp4', 'file.mp4' ] }
+    [ [ 'file.mp4', 'file.mp4' ], [ 'file.mp4', 'file.mp4' ], [ 'file.mp4', 'file.mp4' ] ] // 1, 2, 3
+
+    //behaviours?
+
+    [  weight, name: {options} ] // wieght == frequency
+    channel.behaviours  = []
+     [  1, backtoback: {} ]
+     [ 10, backtoback: {} ]
+     [  5, backtoback: {} ]
+     [ 80, sequencyer: { speed: '0.125', length: 16, pattern: '1010101112121234', cues: [ '', set[1][00:01:21], set[0][00:04:21], ]} ]
+
+    // actual code
+    f.renderer.updateSource( 1, f.getUrlByQuality( programs[1], '480p_h264' ) ) //program 1
+    f.renderer.updateSource( 1, f.getUrlByQuality( programs[ Math.floor( Math.random() * programs.length ) ], '480p_h264' ) ) // random
+
+
+  */
+
   // get file by tag and set it as to specific channel ( 1 or 2 )
   _self.change_channel = function( _obj, _channel ) {
     if (!_obj) return;
@@ -44,6 +109,7 @@ var Filemanager = function() {
       //if ( value.tags.toString().indexOf( tag ) != -1 ) shortlist.push( value );
       if ( program[obj.key].toString().toLowerCase().indexOf( obj.value.toLowerCase() ) != -1 ) shortlist.push( program );
       // console.log('match:', tag, channel);
+      console.log(obj)
     });
 
     var rnd = Math.floor( Math.random() * shortlist.length )
@@ -121,22 +187,22 @@ var Filemanager = function() {
       //_self.change_channels();
     //}
   }
-}
 
-// helper ==> move to utilitiess ?
-getUrlByQuality = function( program, quality ) {
-  var url = "";
-  // console.log(program);
-  if (program == undefined) return; // failsafe
+  // helper ==> move to utilitiess ?
+  _self.getUrlByQuality = function( program, quality ) {
+    var url = "";
+    // console.log(program);
+    if (program == undefined) return; // failsafe
 
-  console.log(program.id);
-  $.each( program.assets.versions, function(i, version ) {
-    //console.log("trr", version.label, quality)
-    if ( version.label == quality ) {
-      url = version.url //.replace("http://", "//");
-      console.log("match & load:", version.url )
-    }
-  });
-  // console.log("return:", url)
-  return url;
+    //console.log(program.id);
+    $.each( program. assets.versions, function(i, version ) {
+      //console.log("trr", version.label, quality)
+      if ( version.label == quality ) {
+        url = version.url //.replace("http://", "//");
+        //console.log("match & load:", version.url )
+      }
+    });
+    // console.log("return:", url)
+    return url;
+  }
 }
