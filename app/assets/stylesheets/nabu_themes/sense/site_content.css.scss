@@ -1,12 +1,13 @@
 #content {
   top: 0px;
-  left: 40px;
-  width: calc( 100% - 40px );
+  width: calc(100% - 25px ); /* -40 for the menu and then +15 to make up for the clipped scrollbar */
   position: absolute;
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc( 100vh - 63px );
+  height: calc(100vh - 63px );
   padding-bottom: 100px;
+  clip-path: inset(0px 15px 0px 0px); /* we want to be able to scroll, but not see the scrollbar */
+
 
   .article {
     top: 0;

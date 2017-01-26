@@ -71,12 +71,12 @@ a {
 }
 
 #footer {
-  width: 100%;
+  width: calc( 100% - 40px );
   position: absolute;
   bottom: 0;
   text-align: left;
   color: white;
-  padding-left: 204px;
+  padding-left: 166px;
   height: 100px;
 
   h1.title {
@@ -133,7 +133,7 @@ a {
 #logo_smaller {
   position: fixed;
   bottom: 18px;
-  left: 50px;
+  left: 10px;
   img {
     width: 148px;
     opacity: 0.7;
@@ -142,6 +142,7 @@ a {
 
 #sidebar {
   width: 40px;
+  float: right;
   height: 100%;
   text-align: center;
   padding-top: 6%;
