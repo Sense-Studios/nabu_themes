@@ -1,32 +1,67 @@
+
+// move them out of the filemanagaer
+// or move everything, inlucind behaviour in
+var getVideoWithQuality = function() {
+
+}
+
+var setSource = function( _progam, _channel ) {
+  // renderer.setSource( getVideoWithQuality( program ), _channel ))
+}
+
 // behaviour
-var behaviours = {
-  random_switch: {
-    run: function() {
-      console.log("running")
+var Behaviour = function( _behaviour, _options ) {
+  _self = this;
+
+  // if key, use
+  _self.options = _options;
+
+  _self.random_switch = function( _composition, _channel ) {
+    console.log( "random_switch", _composition );
+    if ( Math.random() < _self.options.frequency ) {
+      var lng = _composition.channel.sets[ _channel ].length
+      var next = _composition.channel.sets[ _channel ][ Math.floor( Math.random() * lng ) ]
+      setSource( next, _channel  )
     }
-  },
-  switch_one_two: {
-    run: function() {
-      console.log("run ...")
-    }
+  }
+
+  _self.switch_one_two = function( _composition ) {
+    console.log( "switch_one_two", _composition );
+  }
+
+  _self.run = function( _composition ) {
+    _self[ _behaviour ]( _composition );
   }
 }
 
+// pseudo code
+// f = new Filemanager()
+// beh = new f.Behaviour( "random_switch", { frequency: 0.01 } );
+
 var Filemanager = function() {
-  var _self = this;                           // this for that
-  var c = 0;                                  // some counter
-  _self.renderer;                             // reference
-  _self.bypass = false;                       // bypass
-  _self.defaultQuality = "720p_5000kbps_h264" //"320p_h264_mobile" -- default quality
-  _self.eligables = []                        // available files, only programs with _type Video are valid
-  _self.composition = {                       // hoder for the current composition
-    sets: [ [],[],[] ],
-    behaviours: [ [],[],[] ]
+  var _self = this;                            // this for that
+  var c = 0;                                   // some counter
+  _self.renderer;                              // reference
+  _self.bypass = false;                        // bypass
+  _self.defaultQuality = "720p_5000kbps_h264"  //"320p_h264_mobile" -- default quality
+  _self.eligables = []                         // available files, only programs with _type Video are valid
+  _self.composition = {                        // hoder for the current composition
+    sets: [],
+    behaviours: [],
+    renderer: renderer
   }
 
-  // fill elgibles
+  _self.Test = function( _test ) {
+    var that = this
+    that.foo = "bar"
+    console.log("you've made a test, ", _test, _self.renderer  )
+
+    that.doThis = function() {
+      console.log( "-->", _self.renderer, that.foo)
+    }
+  }
+
   $.each( programs, function( i, p ) {
-    // add all the code about which movie you want here
     if ( p.assets._type == "Video" ) {
       _self.eligables.push(p)
     }
@@ -37,37 +72,26 @@ var Filemanager = function() {
   _self.update = function() {
     c++;
 
-
-    // MOVE TO AUTOPLAY
-    //_self.nextUpdate = 400
-    //_self.updateMax = 1600
-    //if ( c%100 == 0 ) console.log(" ##### ", c, _self.nextUpdate );
-    //if ( c >= _self.nextUpdate ) {
-    //  c = 0;
-    //  _self.change_channels();
-    //}
-
-    // console.log("update file")
-
-    // run behaviour
-    $.each( _self.composition.behaviours[0], function(i, behaviour) { behaviour.run() } )
-    $.each( _self.composition.behaviours[1], function(i, behaviour) { behaviour.run() } )
-    $.each( _self.composition.behaviours[2], function(i, behaviour) { behaviour.run() } )
+    $.each( _self.composition.behaviours, function( i, channel_bhvs ) {
+      if ( channel_bhvs != undefined ) {
+        $.each( channel_bhvs, function( j, bhvs ) {
+          bhvs.run( _self.composition, j );
+        });
+      }
+    });
 
     // add beaviours like:
-    // f.composition.behaviours[0] = [ behaviours.random_switch ]
+    // f.composition.behaviours[0] = [ new Behaviour( "random_switch", { foo: 'bar', bar: 1 } ) ]
   }
 
   // note
   //_self.set_Channel = function( tag? name? id? ) {}
 
-
-
   _self.set_channel = function( _obj, _channel ) {
     if ( _obj.tags   != undefined ) _self.set_channel_by_tags( _obj.tags, _channel )
     if ( _obj.titles != undefined ) _self.set_channel_by_titles( _obj.titles, _channel )
-    if ( _obj.files  != undefined ) _self.set_channel_by_files( _obj.files, _channel )
     if ( _obj.ids    != undefined ) _self.set_channel_by_ids( _obj.ids, _channel )
+    // if ( _obj.files  != undefined ) _self.set_channel_by_files( _obj.files, _channel )
   }
 
   _self.set_behaviour = function( _behaviours, _channel ) {
@@ -76,10 +100,7 @@ var Filemanager = function() {
 
   _self.set_channel_by_tags = function( _tags, _channel ) {
     _self.composition.sets[_channel] = []
-    console.log( _self.eligables )
-
     $.each( _self.eligables, function( i, elg ) {
-      // if tags != array ?
       $.each( _tags, function( j, _tag ) {
         $.each( elg.tags, function( k, tag ) {
           if ( tag == _tag ) {
@@ -90,6 +111,27 @@ var Filemanager = function() {
     });
   }
 
+  _self.set_channel_by_ids = function( _ids, _channel ) {
+    _self.composition.sets[_channel] = []
+    $.each( _self.eligables, function( i, elg ) {
+      $.each( _ids, function( j, _id ) {
+        if ( _id == elg.id ) {
+          _self.composition.sets[_channel].push( elg )
+        }
+      });
+    });
+  }
+
+  _self.set_channel_by_titles = function( _titles, _channel ) {
+    _self.composition.sets[_channel] = []
+    $.each( _self.eligables, function( i, elg ) {
+      $.each( _titles, function( j, _title ) {
+        if ( elg.title.indexOf( _title ) != -1 ) {
+          _self.composition.sets[_channel].push( elg )
+        }
+      });
+    });
+  }
 
   /*
 

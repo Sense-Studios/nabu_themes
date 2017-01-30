@@ -5,11 +5,13 @@ $(function() {
   // Set up the renderer
   r = new GLRenderer()
   b = new BPM()
-  f = new Filemanager()
+  // f = new Filemanager()
+  comp = new Compositionmanager()
 
   // attach modules to renderer
   r.addModule(b)
-  r.addModule(f)
+  // r.addModule(f)
+  r.addModule(comp)
   r.start()
 
   var video1 = document.getElementById('video1')
@@ -80,6 +82,23 @@ $(function() {
 
 }); // end load
 
+var testconfig = function() {
+  // load the compo
+  console.log("setup test composition")
+  comp.set_channel_by_tags(["awesome"], 0)
+  var bhv1 = new Behaviour( "random_switch" )
+  comp.set_behaviour([bhv1], 0)
+
+  comp.set_channel_by_tags(["awesome"], 1)
+  var bhv2 = new Behaviour( "random_switch" )
+  comp.set_behaviour([bhv2], 1)
+
+  comp.set_channel_by_tags(["awesome"], 2)
+  var bhv3 = new Behaviour( "random_switch" )
+  comp.set_behaviour([bhv3], 2)
+
+  //console.log(comp.composition)
+}
 
 // set up default text
 var setPage = function( _page ) {

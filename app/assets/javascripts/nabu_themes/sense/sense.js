@@ -15,6 +15,7 @@
 //= require nabu_themes/_shared/mixer/settings
 //= require nabu_themes/_shared/mixer/modules/bpm
 //= require nabu_themes/_shared/mixer/modules/filemanager
+//= require nabu_themes/_shared/mixer/modules/compositionmanager
 //= require nabu_themes/_shared/mixer/glrenderer
 
 // main

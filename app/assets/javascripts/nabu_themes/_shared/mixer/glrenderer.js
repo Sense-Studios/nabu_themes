@@ -214,7 +214,12 @@ var GLRenderer = function( _options ) {
   // Renderer shouldn't be doing this, phase this function out
   _self.updateSource = function( num, url ) {
     // think of the num as resolume layers or a channels
-    console.log(">>> Set Source", num, url)
+    console.log(" >>> Update Source", num, url );
+
+    if ( num == 0 ) {
+      console.log("WARNING: channel ZERO does not exist");
+    }
+
     if ( num == 1 ) {
       document.getElementById('video1').src = url;
       _self.src1 = url
@@ -223,6 +228,11 @@ var GLRenderer = function( _options ) {
     if ( num == 2 ) {
       document.getElementById('video2').src = url;
       _self.src2 = url
+    }
+
+    if ( num == 3 ) {
+      document.getElementById('video3').src = url;
+      _self.src1 = url
     }
   }
 
