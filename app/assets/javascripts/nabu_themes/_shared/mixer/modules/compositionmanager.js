@@ -8,6 +8,7 @@ var Behaviour = function( _behaviour, _options ) {
 
   // mandatory
   _self.options = {};
+  _self.options.label = _behaviour
   _self.options.frequency = 0.0004;
   _self.options.bypass = false;
 
@@ -18,10 +19,13 @@ var Behaviour = function( _behaviour, _options ) {
     explanation here
   */
   _self.random_switch = function( _composition, _channel ) {
-    if ( Math.random() < _self.options.frequency ) {
+    if ( Math.random() < _options.frequency ) {
       var lng = _composition.sets[ _channel ].length;
       var next = _composition.sets[ _channel ][ Math.floor( Math.random() * lng ) ];
-      _composition.renderer.updateSource( _channel + 1, _composition.manager.getUrlByQuality( next, '720p_5000kbps_h264') );
+      _composition.renderer.updateSource( _channel + 1, _composition.manager.getUrlByQuality( next, '720p_h264') );
+      setTimeout( function() { window["video"+(_channel+1)].currentTime = Math.random() * 90 }, 800 )
+      console.log(_self)
+      console.log('switch', _options, this.options.label, _options.frequency, _channel)
     }
   }
 
@@ -29,18 +33,32 @@ var Behaviour = function( _behaviour, _options ) {
     explanation here
   */
   _self.switch_one_two = function( _composition, _channel  ) {
-    if ( Math.random() < _self.options.frequency ) {
+    if ( Math.random() < _options.frequency ) {
       //console.log( "switch_one_two", _composition );
       var set =  _composition.sets[ _channel ]
       //_Self.options.pattern = [1, 2, 1, 2, 3, 4, 3, 2, 1];
-      console.log( "pattern?", _self.options.pattern )
+      console.log( "pattern?", _options.pattern )
     }
   }
 
+  /* random_jump
+    explanation here
+  */
+  _self.random_jump = function( _composition, _channel  ) {
+    if ( Math.random() < _options.frequency ) {
+      console.log("jump!", _options, this.options.label, _options.frequency, _channel);
+      try {
+        window["video"+(_channel+1)].currentTime = Math.floor( Math.random() * window["video"+(_channel+1)].duration )
+      } catch(e) {
+        //
+      }
+    }
+  }
 
   // runner
-  _self.run = function( _composition, _channel ) {
-    _self[ _behaviour ]( _composition, _channel );
+  _self.run = function( _composition, _channel, _debug ) {
+    if (_debug == "true") console.log(" Running----------->", this.options.label )
+    this[ this.options.label ]( _composition, _channel );
   }
 }
 
@@ -54,7 +72,7 @@ var Compositionmanager = function() {
   var c = 0;                                   // some counter
   _self.renderer;                              // reference
   _self.bypass = false;                        // bypass
-  _self.defaultQuality = "720p_5000kbps_h264"; //"320p_h264_mobile" -- default quality
+  _self.defaultQuality = "720p_h264"; //"320p_h264_mobile" -- default quality
   _self.eligables = [];                        // available files, only programs with _type Video are valid
   _self.composition = {                        // hoder for the current composition
     sets: [[],[],[]],
@@ -77,13 +95,19 @@ var Compositionmanager = function() {
   // update
   _self.update = function() {
     c++;
-
     // run behaviours
     $.each( _self.composition.behaviours, function( i, channel_bhvs ) {
       // for each channel
+      //if (c%500 == 0) console.log("for each channel: ", i, channel_bhvs)
       if ( channel_bhvs != undefined ) {
         $.each( channel_bhvs, function( j, bhvs ) {
-          bhvs.run( _self.composition, i );
+          //console.log(j, bhvs)
+          if (c%500== 0) {
+            console.log("RUN behaviour", i, j, bhvs.options.label, bhvs.options.frequency)
+            bhvs.run( _self.composition, i, "true" );
+          }else{
+            bhvs.run( _self.composition, i );
+          }
         });
       }
     });
@@ -101,7 +125,7 @@ var Compositionmanager = function() {
     $.each( _self.eligables, function( i, elg ) {
       $.each( _tags, function( j, _tag ) {
         $.each( elg.tags, function( k, tag ) {
-          if ( tag == _tag ) {
+          if ( tag.toLowerCase() == _tag.toLowerCase() ) {
             _self.composition.sets[_channel].push( elg );
           }
         });

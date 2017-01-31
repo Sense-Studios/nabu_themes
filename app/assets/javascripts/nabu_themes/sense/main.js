@@ -1,3 +1,35 @@
+// *****************************************************************************
+
+// BWHAHAHAHAHAHA
+
+window.addEventListener("gamepadconnected", function(e) {
+  console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+    e.gamepad.index, e.gamepad.id,
+    e.gamepad.buttons.length, e.gamepad.axes.length);
+});
+
+function pollGamepads() {
+  setInterval( function() {
+    var gamepad = navigator.getGamepads()[0]
+    console.log(
+      gamepad.axes[0],
+      gamepad.axes[1],
+      gamepad.axes[2],
+      gamepad.axes[3],
+      gamepad.timestamp,
+      gamepad.id,
+      gamepad.buttons[0].pressed,
+      gamepad.buttons[0].touched,
+      gamepad.buttons[0].value
+    );
+
+
+  }, 500)
+
+}
+
+// *****************************************************************************
+
 var r, b, f
 
 $(function() {
@@ -16,6 +48,7 @@ $(function() {
 
   var video1 = document.getElementById('video1')
   var video2 = document.getElementById('video2')
+  // var video3 = document.getElementById('video3')
 
   // set up the buttons
   $('#button-user').click( function() {
@@ -106,6 +139,8 @@ var setPage = function( _page ) {
   if ( _page != undefined ) window.location.hash = _page
   if ( window.location.hash.substring(1) == "" ) window.location.hash = "home"
 
+  var page_settings = channelsettings [ window.location.hash.substring(1) ]
+
   $('#content').html( channelsettings [ window.location.hash.substring(1) ].text)
 
   // animated helpers
@@ -122,6 +157,37 @@ var setPage = function( _page ) {
   // channelsettings.video2
   // channelsettings.bpm
   // channelsettings.blendmode
+
+  // channelsettings.tags =
+  // channelsettings.behaviours = []
+
+  // comp.composition  = channelsettings.composition;
+  console.log( "--> ", page_settings.tags, page_settings.behaviours )
+  comp.set_channel_by_tags( page_settings.tags[0], 0 );
+  comp.set_channel_by_tags( page_settings.tags[1], 1 );
+  comp.set_channel_by_tags( page_settings.tags[2], 2 );
+
+  //if (page_settings.behaviours != undefined ) {
+  //  comp.set_behaviour( [ new Behaviour( page_settings.behaviours[0].label, page_settings.behaviours[0].options ), 0  );
+  //  comp.set_behaviour( [ new Behaviour( page_settings.behaviours[1].label, page_settings.behaviours[1].options ), 1  );
+  //  comp.set_behaviour( [ new Behaviour( page_settings.behaviours[2].label, page_settings.behaviours[2].options ), 2  );
+  //}
+
+  var behaviours = [[],[],[]];
+  page_settings.behaviours.map( function( bhv ) {
+    var behaviour = new Behaviour( bhv.label, bhv.options )
+    behaviours[ bhv.channel ].push( behaviour )
+  })
+
+  //$.each( page_settings.behaviours, function( i, bhv ) {
+  //  comp.set_behaviour( [  ], bhv.channel );
+  //}
+
+  console.log(" ------------------ ", behaviours )
+
+  comp.set_behaviour( behaviours[0], 0 );
+  comp.set_behaviour( behaviours[1], 1 );
+  comp.set_behaviour( behaviours[2], 2 );
 }
 
 // type on helper

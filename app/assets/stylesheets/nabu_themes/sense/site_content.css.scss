@@ -120,13 +120,15 @@
     color: rgba(250, 250, 250, 0.9);
     line-height: 81px;
     display: inline;
-    font-family: 'Playfair Display', serif;
     text-align: center;
+
+    font-family: 'Playfair Display', serif;
+    font-family: 'Raleway', sans-serifbody;
   }
 
   .header_s { max-width: 20%; }
   .header_m { max-width: 40%; }
-  .header_lg { width: 100%; display: inline-block; font-family: 'Raleway', sans-serifbody; }
+  .header_lg { width: 100%; display: inline-block; }
 
   .light {
     display: inline;
