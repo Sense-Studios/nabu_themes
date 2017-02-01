@@ -90,6 +90,7 @@ var BPM = function() {
 
   _self.tap = function( num ) {
     // add timed/ tapping function for bpm control
+    
   }
 
   // reset to a certain value

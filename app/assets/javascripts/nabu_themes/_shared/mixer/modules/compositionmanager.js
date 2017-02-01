@@ -18,14 +18,14 @@ var Behaviour = function( _behaviour, _options ) {
   /* random switch
     explanation here
   */
-  _self.random_switch = function( _composition, _channel ) {
-    if ( Math.random() < _options.frequency ) {
+  _self.random_switch = function( _composition, _channel, _force ) {
+    if ( Math.random() < _options.frequency || _force  ) {
+      console.log('switch', _options, this.options.label, _options.frequency, _channel, _force)
       var lng = _composition.sets[ _channel ].length;
       var next = _composition.sets[ _channel ][ Math.floor( Math.random() * lng ) ];
       _composition.renderer.updateSource( _channel + 1, _composition.manager.getUrlByQuality( next, '720p_h264') );
       setTimeout( function() { window["video"+(_channel+1)].currentTime = Math.random() * 90 }, 800 )
-      console.log(_self)
-      console.log('switch', _options, this.options.label, _options.frequency, _channel)
+      //console.log(_self)
     }
   }
 
@@ -34,7 +34,7 @@ var Behaviour = function( _behaviour, _options ) {
   */
   _self.switch_one_two = function( _composition, _channel  ) {
     if ( Math.random() < _options.frequency ) {
-      //console.log( "switch_one_two", _composition );
+      console.log( "switch_one_two", _composition );
       var set =  _composition.sets[ _channel ]
       //_Self.options.pattern = [1, 2, 1, 2, 3, 4, 3, 2, 1];
       console.log( "pattern?", _options.pattern )
@@ -44,20 +44,31 @@ var Behaviour = function( _behaviour, _options ) {
   /* random_jump
     explanation here
   */
-  _self.random_jump = function( _composition, _channel  ) {
-    if ( Math.random() < _options.frequency ) {
-      console.log("jump!", _options, this.options.label, _options.frequency, _channel);
+  _self.random_jump = function( _composition, _channel, _force ) {
+    if ( Math.random() < _options.frequency || _force ) {
+      //console.log("jump!", _options, this.options.label, _options.frequency, _channel);
       try {
         window["video"+(_channel+1)].currentTime = Math.floor( Math.random() * window["video"+(_channel+1)].duration )
       } catch(e) {
-        //
+        // ---
       }
     }
   }
 
+  /* jump_now
+    sada
+  */
+  _self.now = function( _composition, _channel ) {    
+    if ( this.hasrun == undefined ) {
+      console.log("now now", _composition, _channel )
+      this[ this.options.behaviour ]( _composition, _channel, true );
+    }
+
+    this.hasrun = true;
+  }
+
   // runner
-  _self.run = function( _composition, _channel, _debug ) {
-    if (_debug == "true") console.log(" Running----------->", this.options.label )
+  _self.run = function( _composition, _channel, _force ) {
     this[ this.options.label ]( _composition, _channel );
   }
 }
@@ -103,7 +114,7 @@ var Compositionmanager = function() {
         $.each( channel_bhvs, function( j, bhvs ) {
           //console.log(j, bhvs)
           if (c%500== 0) {
-            console.log("RUN behaviour", i, j, bhvs.options.label, bhvs.options.frequency)
+            //console.log("RUN behaviour", i, j, bhvs.options.label, bhvs.options.frequency)
             bhvs.run( _self.composition, i, "true" );
           }else{
             bhvs.run( _self.composition, i );

@@ -162,7 +162,8 @@ var setPage = function( _page ) {
   // channelsettings.behaviours = []
 
   // comp.composition  = channelsettings.composition;
-  console.log( "--> ", page_settings.tags, page_settings.behaviours )
+  console.log( "channel tags ", page_settings.tags )
+  console.log( "channel behaviours ", page_settings.behaviours )
   comp.set_channel_by_tags( page_settings.tags[0], 0 );
   comp.set_channel_by_tags( page_settings.tags[1], 1 );
   comp.set_channel_by_tags( page_settings.tags[2], 2 );
@@ -183,7 +184,7 @@ var setPage = function( _page ) {
   //  comp.set_behaviour( [  ], bhv.channel );
   //}
 
-  console.log(" ------------------ ", behaviours )
+  console.log(" set behaviour instances: ", behaviours )
 
   comp.set_behaviour( behaviours[0], 0 );
   comp.set_behaviour( behaviours[1], 1 );
