@@ -5,11 +5,11 @@
 //= require tween/tween
 
 // main
-// require firebase/firebase
-// require firebase/firebase-app
-// require firebase/firebase-auth
-// require firebase/firebase-database
-// require firebase/firebase-messaging
+//= require firebase/firebase
+//= require firebase/firebase-app
+//= require firebase/firebase-auth
+//= require firebase/firebase-database
+//= require firebase/firebase-messaging
 
 // mixer elements
 //= require nabu_themes/_shared/mixer/settings
