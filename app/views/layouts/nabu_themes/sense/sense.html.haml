@@ -26,8 +26,27 @@
   = stylesheet_link_tag "nabu_themes/sense/site_content", media: "all", "data-turbolinks-track" => true, "async" => true
   = stylesheet_link_tag "nabu_themes/sense/sense", media: "all", "data-turbolinks-track" => true, "async" => true
 
+  // I had this running with an inclusion, but that seems not to work
+  = javascript_include_tag "/assets/jquery.js"
+  = javascript_include_tag "/assets/jqueryui/jquery-ui-1.11.4.min.js"
+  = javascript_include_tag "/assets/jquery-touch-punch/jquery.ui.touch-punch.min.js"
+  = javascript_include_tag "/assets/threejs/three.js"
+  = javascript_include_tag "/assets/tween/tween.js"
+  = javascript_include_tag "/assets/firebase/firebase.js"
+  = javascript_include_tag "/assets/firebase/firebase-app.js"
+  = javascript_include_tag "/assets/firebase/firebase-auth.js"
+  = javascript_include_tag "/assets/firebase/firebase-database.js"
+  = javascript_include_tag "/assets/firebase/firebase-messaging.js"
+  = javascript_include_tag "/assets/nabu_themes/_shared/mixer/settings.js"
+  = javascript_include_tag "/assets/nabu_themes/_shared/mixer/modules/bpm.js"
+  = javascript_include_tag "/assets/nabu_themes/_shared/mixer/modules/filemanager.js"
+  = javascript_include_tag "/assets/nabu_themes/_shared/mixer/modules/compositionmanager.js"
+  = javascript_include_tag "/assets/nabu_themes/_shared/mixer/glrenderer.js"
+  = javascript_include_tag "/assets/nabu_themes/sense/main.js"
+
   // Sense
-  = javascript_include_tag "nabu_themes/sense/sense"
+  // = javascript_include_tag "nabu_themes/sense/sense"
+
 
 %body
   = yield
