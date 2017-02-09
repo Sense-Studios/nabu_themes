@@ -48,66 +48,93 @@ $(function() {
 
   var video1 = document.getElementById('video1')
   var video2 = document.getElementById('video2')
-  // var video3 = document.getElementById('video3')
-
-  // set up the buttons
-  $('#button-user').click( function() {
-    if (document.getElementById('video1').paused) {
-      video1.play();
-      video2.play();
-    }else{
-      video1.pause();
-      video2.pause();
-    }
-  });
+  var video3 = document.getElementById('video3')
 
   $('#button-home').click( function() {
     window.location.hash = "home"
   })
 
+  // set up the buttons
+  $('#button-play').click( function() {
+    if (document.getElementById('video1').paused) {
+      video1.play();
+      video2.play();
+      video3.play();
+    }else{
+      video1.pause();
+      video2.pause();
+      video3.pause();
+    }
+  });
+
   // toggle content
   $('#button-content').click( function() {
     if ( $('#content').data("is_visible") == "true" ) {
       $('#content').data("is_visible", "false")
+      $('#content').hide()
     }else{
       $('#content').data("is_visible", "true")
+      $('#content').fadeIn('fast')
        doTypeOn(".col")
+       doTypeOn(".item")
     }
   });
 
-  var bpms = [ 2, 4, 8, 16, 28, 32, 64 ]
-  var current_bpm = 6
-  b.bpm = 28;
-  $('#button-beat').click( function() {
-    current_bpm += 1
-    if ( current_bpm >= bpms.length ) current_bpm = 0
-    b.bpm = bpms[current_bpm]
-    //console.log( "bpm set to: ", bpms[current_bpm])
-    $('#button-beat').text( bpms[current_bpm] )
-  })
 
-  // scratch videos
+  $('#button-beat').on('mousedown touch-start', b.tap )
+
+  // show bpm
+  var doBpmBlink = function() {
+    $('#button-beat').toggleClass('btn-material-sense-yellow')
+    $('#button-beat').toggleClass('btn-material-red-500')
+    setTimeout( doBpmBlink, ( 60/b.bpm ) * 1000 )
+  }
+  doBpmBlink()
+
+  // scratch a video
   $('#button-cat').click( function() {
-    video1.currentTime = Math.random() * video1.duration
-    video2.currentTime = Math.random() * video2.duration
+    var dice = Math.random()
+    if ( dice < 0.33 ) {
+      video1.currentTime = Math.random() * video1.duration
+    }else if (dice < 0.66 ) {
+      video2.currentTime = Math.random() * video2.duration
+    }else{
+      video3.currentTime = Math.random() * video3.duration
+    }
   })
 
   // switch blendmodes
   var blms = [ 1, 7, 13, 4, 12, 8 ]
   var blend_names = ["add", "light", "hard", "dark", "soft", "scrn"]
   var current_blm = 0
-  $('#button-menu').click( function() {
+  $('#button-blend').click( function() {
     current_blm += 1
     if ( current_blm >= blms.length ) current_blm = 0
     //r.blendingMode = blms[current_blm]
     customUniforms.blendmode.value = blms[current_blm]
     //console.log( "blendingMode set to: ", blms[current_blm])
-    $('#button-menu').text(blend_names[current_blm])
+    $('#button-blend').text(blend_names[current_blm])
   })
+
+  // switch mixes
+  var mixs = [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+  var mix_names = ["MIX", "HARD", "NAM", "FAM", "LEFT", "RGHT", "CNTR", "BOOM"]
+  var current_mix = 0
+  $('#button-mix').click( function() {
+    current_mix += 1
+    if ( current_mix >= mixs.length ) current_mix = 0
+    //r.blendingMode = blms[current_blm]
+    //customUniforms.blendmode.value = blms[current_mix]
+    //console.log( "blendingMode set to: ", blms[current_blm])
+    b.mix = mixs[current_mix]
+    $('#button-mix').text(mix_names[current_mix])
+  })
+
 
   // switch content
   $('#button-cont').click( function() {
-    f.change_channels()
+    var brh = new Behaviour( "random_switch", { frequency: 1 } );
+    var nextprogram = brh.run(comp.composition, Math.floor( Math.random() * 3 ) );
   })
 
   setPage()

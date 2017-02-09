@@ -3,6 +3,11 @@
 // Behaviour
 // -----------------------------------------------------------------------------
 
+var jumpin = function(e) {
+  this.currentTime = Math.random() * this.duration
+  this.removeEventListener('canplay', jumpin )
+}
+
 var Behaviour = function( _behaviour, _options ) {
   _self = this;
 
@@ -24,8 +29,23 @@ var Behaviour = function( _behaviour, _options ) {
       var lng = _composition.sets[ _channel ].length;
       var next = _composition.sets[ _channel ][ Math.floor( Math.random() * lng ) ];
       _composition.renderer.updateSource( _channel + 1, _composition.manager.getUrlByQuality( next, '720p_h264') );
-      setTimeout( function() { window["video"+(_channel+1)].currentTime = Math.random() * 90 }, 800 )
+
+      // failsafe
+      window["video"+(_channel+1)].removeEventListener('canplay', jumpin )
+      window["video"+(_channel+1)].addEventListener('canplay', jumpin )
+
+      // update info
+      // TODO: dispatch some kind of event to trigger stuff like this :-/
+      // (this needs to be in the main function)
+      //console.log(next)
+      if ( _channel == 0 && $('#program_title').text != next.title ) {
+        $('#program_title').text( next.title ) //.fadeIn('slow');
+        $('#program_description').text( next.description ) //.fadeIn('slow');
+        setTimeout( function() { doTypeOn("#typer") }, 200 );
+      }
+
       //console.log(_self)
+      return next
     }
   }
 
@@ -58,7 +78,7 @@ var Behaviour = function( _behaviour, _options ) {
   /* jump_now
     sada
   */
-  _self.now = function( _composition, _channel ) {    
+  _self.now = function( _composition, _channel ) {
     if ( this.hasrun == undefined ) {
       console.log("now now", _composition, _channel )
       this[ this.options.behaviour ]( _composition, _channel, true );
@@ -69,7 +89,7 @@ var Behaviour = function( _behaviour, _options ) {
 
   // runner
   _self.run = function( _composition, _channel, _force ) {
-    this[ this.options.label ]( _composition, _channel );
+    return this[ this.options.label ]( _composition, _channel );
   }
 }
 

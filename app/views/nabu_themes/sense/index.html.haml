@@ -12,31 +12,34 @@
   #button-beat.btn.btn-material-sense-yellow
     BEAT
   #button-cat.btn.btn-material-sense-yellow
-    CAT.
-  #button-menu.btn.btn-material-blue-600
-    BLND.
-  #button-cont.btn.btn-material-red-500
-    CONT.
+    SCRT
+  #button-blend.btn.btn-material-blue-600
+    BLND
+  #button-mix.btn.btn-material-blue-600
+    MIX
+  #button-cont.btn.btn-material-sense-yellow
+    VID
 
   .background
 
-#content{"data-visible"=>"true"}
+#content{"data-is_visible"=>"true"}
   // content goes here
   // content is taken from the channel settings
   // untill we get bored from that :p
 
 
 #footer
-  %h1.title
-    %span.small Now playing:
-    %span#program_title collection of videos from the account
-  %h2.subtitle#program_description
-    Actually Some have their crosses and their golden gates.
-    %br
-    Well she is the grace I wear when I lose my faith
-  #logo_smaller
-    = image_tag 'nabu_themes/sense/sense_logo_smaller.png'
-  .background
+  #typer
+    %h1.title
+      %span.small Now playing:
+      %span#program_title collection of videos from the account
+    %h2.subtitle#program_description
+      Actually Some have their crosses and their golden gates.
+      %br
+      Well she is the grace I wear when I lose my faith
+    #logo_smaller
+      = image_tag 'nabu_themes/sense/sense_logo_smaller.png'
+    .background
 
 // add a vignet
 #vignet

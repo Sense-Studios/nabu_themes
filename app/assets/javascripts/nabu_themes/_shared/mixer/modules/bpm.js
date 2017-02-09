@@ -64,10 +64,35 @@ var BPM = function() {
       var right_alpha = 1 - Math.abs( Math.cos( insec / 2 ) )
     }
 
+    // left
+    if (_self.mix == 5) {
+      var left_alpha =  1
+      var right_alpha = 0
+    }
+
+    // right
+    if (_self.mix == 6) {
+      var left_alpha =  0
+      var right_alpha = 1
+    }
+
+    // center
+    if (_self.mix == 7) {
+      var left_alpha =  0.5
+      var right_alpha = 0.5
+    }
+
+    // BOOM
+    if (_self.mix == 8) {
+      var left_alpha =  1
+      var right_alpha = 1
+    }
+
     // console.log( _self.bpm, _self.c_a, left_alpha, right_alpha )
     // rand
     customUniforms.alpha1.value = left_alpha
     customUniforms.alpha2.value = right_alpha
+    // customUniforms.alpha3.value = right_alpha
     customUniforms.counter.value = Math.random();
 
 
@@ -88,9 +113,25 @@ var BPM = function() {
     // $('#_self.bpm_bulp').css({'opacity': _self.alpha } );
   }
 
+  // set bpm through tapping
+  _self.last = Number(new Date());
+  _self.beats = [ 64, 64 ,64 ,64 ,64 ]
+  _self.bpm = 64
   _self.tap = function( num ) {
     // add timed/ tapping function for bpm control
-    
+    //console.log(" >>> click ", Number(new Date()) - last );
+    var time  = Number(new Date()) - _self.last
+    _self.last = Number(new Date());
+
+    if ( time < 10000 ) {
+      _self.beats.splice(0,1)
+      _self.beats.push( 60000/time )
+
+      var avg = _self.beats.reduce(function(a, b) { return a + b; }) / _self.beats.length;
+      _self.bpm = avg
+      $('#button-beat').text( Math.round(avg) );
+      console.log( time, avg, _self.beats )
+    }
   }
 
   // reset to a certain value
