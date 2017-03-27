@@ -45,9 +45,13 @@
 #vignet
 
 // add the video &c necc. for the mixer
-%video#video1.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
-%video#video2.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
-%video#video3.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true}
+%video#video1.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
+//%video#video1_b.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>false, :loop=>true}
+%video#video2.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
+//%video#video2_b.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>false, :loop=>true}
+
+%video#video3.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
+//%video#video3_b.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>false, :loop=>true}
 
 %canvas#buffer1.hidden
 %canvas#buffer2.hidden

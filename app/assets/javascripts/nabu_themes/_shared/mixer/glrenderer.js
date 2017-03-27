@@ -6,7 +6,7 @@ var _width  = window.innerWidth;  // unless < video_width ( 1280 )
 var _height = window.innerHeight; // unless < video_height ( 720 )
 
 // quality and video need to match!
-var video_quality = "720p_h264";
+var video_quality = "320p_h264_mobile";
 var video_width  = 1024;  // as texture
 var video_height = 1024;  // as texture
 
