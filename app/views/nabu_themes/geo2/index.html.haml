@@ -1,0 +1,52 @@
+:javascript
+
+  // these need to be set in a rb parsed file
+  window.main_color = '#{@theme.main_color}';
+  window.support_color = '#{@theme.support_color}';
+  window.background_color = '#{@theme.background_color}';
+  window.menudata = #{@menudata};
+  window.menuconfig = #{@menuconfig};
+  window.channelsettings = #{@channelsettings};
+
+  window.kalturaPartnerId = #{@kalturaPartnerId};
+  window.kalturaUiConfigId = #{@kalturaUiConfigId};
+
+/ this overrides the channel settings
+/ = javascript_include_tag "nabu_themes/geo2/waypoints.js"
+
+/ these /geo2/ links should be automated (?)
+= javascript_include_tag "nabu_themes/geo2/loadgpx"
+= javascript_include_tag "nabu_themes/geo2/geo2"
+= stylesheet_link_tag "nabu_themes/geo2/geo2", media: "all", "data-turbolinks-track" => true, "async" => true
+
+
+/ le video overlay
+%div#video_player
+  / add close button
+  %div#close_button.btn.btn-default x
+
+  = render :partial => "shared/player/video", locals: { height: '100%' }
+
+#map_full_screen_button.btn.btn-default
+  %spa.glyphicon.glyphicon-fullscreen
+
+/ le map (and as you notice, the only actual html here)
+#map
+
+/ Google script
+%script{:src=>"https://maps.googleapis.com/maps/api/js?key=#{GEO_GOOGLE_API_KEY}&callback=initMap", :async=>true, :defer=>true}
+
+/ Any and all overlays on top of the map; should go under the video
+/.info_block1
+/  %h2
+/    Bekijk hier de koers
+/  %br
+/  %h2
+/    regel 2!
+
+.map-gradient
+/.well.info_block2
+/  %h6
+/    Lorem ipsum victor dolit fortuna esse quot mandar.
+/    %br
+/    Non in volit voluba besse.
