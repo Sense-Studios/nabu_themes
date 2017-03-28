@@ -263,10 +263,11 @@ html {
 }
 
 .iw-content .content_left {
-  float:left;
-  width:61.8%;
+  float: left;
+  width: 61.8%;
   background-color: black;
   height: 158px;
+  overflow: hidden;
 }
 
 .iw-content .content_right {
@@ -353,8 +354,10 @@ html {
 }
 
 .iw-content img {
-	float: right;
-	/*margin: 0 5px 5px 10px;*/
+  float: right;
+  margin: 0 -19px 5px 10px;
+  width: auto;
+  height: 100%;
 }
 
 .iw-subTitle {
