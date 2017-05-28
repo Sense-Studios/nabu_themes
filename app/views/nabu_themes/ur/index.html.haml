@@ -1,0 +1,60 @@
+:javascript
+
+  // these need to be set in a rb parsed file
+  window.main_color = '#{@theme.main_color}';
+  window.support_color = '#{@theme.support_color}';
+  window.background_color = '#{@theme.background_color}';
+  window.menudata = #{@menudata};
+  window.menuconfig = #{@menuconfig};
+  window.channelsettings = #{@channelsettings};
+
+  window.kalturaPartnerId = #{@kalturaPartnerId};
+  window.kalturaUiConfigId = #{@kalturaUiConfigId};
+
+= javascript_include_tag "nabu_themes/ur/ur"
+= stylesheet_link_tag "nabu_themes/ur/ur", media: "all", "data-turbolinks-track" => true, "async" => true
+
+
+.header.text-center
+  .container
+    .row
+      .col-sm-6.text-left
+        .brand MARDUQ.TV/VIDEO
+
+      .col-sm-6.text-right
+        = link_to "Home", "#home", :class=>'nav-link main-color'
+        = link_to "Portfolio", "#portfolio", :class=>'nav-link main-color'
+        = link_to "Something", "#something", :class=>'nav-link main-color'
+        = link_to "Something Else", "#something_else", :class=>'nav-link main-color'
+    .ur-nav-bar
+    .ur-nav-bar-collapse
+
+.container
+
+  %iframe.video_container{ :allowfullscreen=>true, :frameborder=>'0', :src=>"/embed2/#{@program.id.to_s}" }
+
+  .row
+    .col-md-12.text-center
+
+      %h1
+        %small Welcome to
+        UR
+      %p.decorative You have reached the UR video channel.
+
+
+  .row
+
+    - JSON.parse(@menudata)['menu'].each do |menu|
+      .col.sm-12.category_container
+        %h2.category_container_name= menu['name']
+        .videoitems
+          - menu['items'].each do |item|
+            - program = @filtered_programs.select{ |x| x[:id] == item['id']}.first
+            .videoitem{'data-id':item['id']}
+              .imageholder
+                .play_button
+                  .i.fa.fa-play
+                .gradient_overlay
+                = image_tag item['thumb'], width: '100%', height: 'auto';
+              %h3= program[:title] unless program.nil?
+              %p.description= program[:description].truncate(64).html_safe unless program.nil?
