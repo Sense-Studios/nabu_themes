@@ -42,9 +42,10 @@ module NabuThemes
 
       # TEST !
       # for CLIPCARD functionality
-      #if (@theme. == 'clipcard')
-      # clipcard
-      #end
+      if !JSON.parse(@channelsettings)['clipcard_id'].nil?
+        @clipcard = Clipcard.find(JSON.parse(@channelsettings)['clipcard_id'])
+        @highscores = Carder.where(:clipcard_id => JSON.parse(@channelsettings)['clipcard_id'] ).sort(:total_score => -1).to_a
+      end
 
       @owner = User.find( @theme.owner )
       @kalturaPartnerId = @owner.kaltura_partner_id
