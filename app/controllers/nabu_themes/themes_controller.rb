@@ -22,7 +22,7 @@ module NabuThemes
       @slug = params[:slug]
       @theme = Theme.where( { "slug"=>params[:slug] } ).first()
       if @theme.settings.blank?
-        @theme.settings = "{'warning':'no_settings'}"
+        @theme.settings = '{"warning":"no_settings"}'
       end
 
       @channelsettings = @theme.settings
