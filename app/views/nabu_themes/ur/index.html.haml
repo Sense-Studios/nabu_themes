@@ -7,6 +7,7 @@
   window.menudata = #{@menudata};
   window.menuconfig = #{@menuconfig};
   window.channelsettings = #{@channelsettings};
+  window.firstprogramid = "#{@program.id}"
 
   window.kalturaPartnerId = #{@kalturaPartnerId};
   window.kalturaUiConfigId = #{@kalturaUiConfigId};
@@ -15,11 +16,15 @@
 = stylesheet_link_tag "nabu_themes/ur/ur", media: "all", "data-turbolinks-track" => true, "async" => true
 
 
-.header.text-center
+.header.text-center.background-color
   .container
     .row
       .col-sm-6.text-left
-        .brand MARDUQ.TV/VIDEO
+        = image_tag @theme.logo, :class => 'logo'
+        .brand
+          = @theme.title
+          \ /
+          %span.secondary-color VIDEO
 
       .col-sm-6.text-right
         = link_to "Home", "#home", :class=>'nav-link main-color'
@@ -29,24 +34,39 @@
     .ur-nav-bar
     .ur-nav-bar-collapse
 
+.video_bar.background-color
+
+/ actual site strts here
 .container
 
-  %iframe.video_container{ :allowfullscreen=>true, :frameborder=>'0', :src=>"/embed2/#{@program.id.to_s}" }
+  .row
+    %iframe.video_container{ :allowfullscreen=>true, :frameborder=>'0', :src=>"" }
+
 
   .row
     .col-md-12.text-center
 
+      %br
       %h1
-        %small Welcome to
-        UR
-      %p.decorative You have reached the UR video channel.
+        = @theme.title
+      %p.decorative= @theme.description
 
+      / lazyloading ?
+
+      /= @theme.logo
+      /= @theme.contact
+      /= @theme.title
+      /=
+
+      / @menudata
+
+      %br
 
   .row
 
     - JSON.parse(@menudata)['menu'].each do |menu|
       .col.sm-12.category_container
-        %h2.category_container_name= menu['name']
+        %h2.category_container_nam.secondary-color= menu['name']
         .videoitems
           - menu['items'].each do |item|
             - program = @filtered_programs.select{ |x| x[:id] == item['id']}.first
@@ -57,4 +77,4 @@
                 .gradient_overlay
                 = image_tag item['thumb'], width: '100%', height: 'auto';
               %h3= program[:title] unless program.nil?
-              %p.description= program[:description].truncate(64).html_safe unless program.nil?
+              %p.description.secondary-color= program[:description].truncate(64).html_safe unless program.nil?

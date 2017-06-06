@@ -42,9 +42,13 @@ module NabuThemes
 
       # TEST !
       # for CLIPCARD functionality
-      if !JSON.parse(@channelsettings)['clipcard_id'].nil?
-        @clipcard = Clipcard.find(JSON.parse(@channelsettings)['clipcard_id'])
-        @highscores = Carder.where(:clipcard_id => JSON.parse(@channelsettings)['clipcard_id'] ).sort(:total_score => -1).to_a
+      begin
+        if !JSON.parse(@channelsettings)['clipcard_id'].nil?
+          @clipcard = Clipcard.find(JSON.parse(@channelsettings)['clipcard_id'])
+          @highscores = Carder.where(:clipcard_id => JSON.parse(@channelsettings)['clipcard_id'] ).sort(:total_score => -1).to_a
+        end
+      rescue
+        logger.debug "json could not be parsed by ruby"
       end
 
       @owner = User.find( @theme.owner )
