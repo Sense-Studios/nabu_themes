@@ -8,13 +8,14 @@
   window.menuconfig = #{@menuconfig};
   window.channelsettings = #{@channelsettings};
   window.firstprogramid = "#{@program.id}"
+  window.firstprogramtitle = "#{@program.title}"
 
   window.kalturaPartnerId = #{@kalturaPartnerId};
   window.kalturaUiConfigId = #{@kalturaUiConfigId};
 
+= javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/7.2.0/lazyload.transpiled.min.js"
 = javascript_include_tag "nabu_themes/ur/ur"
 = stylesheet_link_tag "nabu_themes/ur/ur", media: "all", "data-turbolinks-track" => true, "async" => true
-
 
 .header.text-center.background-color
   .container
@@ -23,8 +24,8 @@
         = image_tag @theme.logo, :class => 'logo'
         .brand
           = @theme.title
-          \ /
-          %span.secondary-color VIDEO
+          /\ /
+          /%span.secondary-color VIDEO
 
       .col-sm-6.text-right
         = link_to "Home", "#home", :class=>'nav-link main-color'
@@ -40,7 +41,14 @@
 .container
 
   .row
-    %iframe.video_container{ :allowfullscreen=>true, :frameborder=>'0', :src=>"" }
+    .video_container
+      %iframe#video_frame{ :allowfullscreen=>true, :frameborder=>'0', :src=>"" }
+      .title_container
+        %h1
+          %small loading ...
+          %br
+          getting information from server...
+
 
 
   .row
@@ -70,11 +78,13 @@
         .videoitems
           - menu['items'].each do |item|
             - program = @filtered_programs.select{ |x| x[:id] == item['id']}.first
-            .videoitem{'data-id':item['id']}
+            - program_title = ""
+            - program_title = program[:title] unless program.nil?
+            .videoitem{'data-id':item['id'], 'data-category':menu['name'], 'data-title':program_title }
               .imageholder
                 .play_button
                   .i.fa.fa-play
                 .gradient_overlay
-                = image_tag item['thumb'], width: '100%', height: 'auto';
-              %h3= program[:title] unless program.nil?
+                = image_tag '', 'data-original': item['thumb'], width: '100%', height: 'auto';
+              %h3= program_title
               %p.description.secondary-color= program[:description].truncate(64).html_safe unless program.nil?

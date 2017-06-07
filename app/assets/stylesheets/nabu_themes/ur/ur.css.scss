@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Cormorant+Garamond:300,300i,400');
-@import url('https://fonts.googleapis.com/css?family=Cinzel+Decorative');
-@import url('https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz');
+// @import url('https://fonts.googleapis.com/css?family=Cinzel+Decorative');               // injected_font_1
+// @import url('https://fonts.googleapis.com/css?family=Cormorant+Garamond:300,300i,400'); // injected_font_2
+// @import url('https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz');               // injected_font_3
 
 // font-family: 'Cormorant Garamond', serif;
 // font-family: 'Cinzel Decorative', cursive;
@@ -13,9 +13,9 @@ body {
   font-family: 'Open Sans';
 }
 
-
 h1, h2 {
-  font-family: 'Cinzel Decorative';
+  //font-family: 'Cinzel Decorative';
+  font-family: 'injected_font_1';
   font-weight: 900;
 
   small {
@@ -24,7 +24,8 @@ h1, h2 {
 }
 
 h3, h4, h5, h6 {
-  font-family: 'Yanone Kaffeesatz', cursive;
+  // font-family: 'Yanone Kaffeesatz', cursive;
+  font-family: 'injected_font_3';
   font-weight: 900;
   letter-spacing: 1.1px;
   margin-top: 6px;
@@ -48,14 +49,13 @@ a {
   }
 }
 
-.secondary-color {
-
-}
+.secondary-color {}
 
 .background-color {}
 
 .decorative {
-  font-family: 'Cormorant Garamond';
+  // font-family: 'Cormorant Garamond';
+  font-family: 'injected_font_2';
   font-size: 21px;
   font-weight: 300;
   font-style: italic;
@@ -71,14 +71,16 @@ a {
   position: relative;
 
   .logo {
-     height: 54px;
-     margin-right: 8px;
-     margin-left: -15px;
-     display: inline-block;
+    height: 53px;
+    margin-right: 8px;
+    margin-left: -15px;
+    display: inline-block;
+    vertical-align: top;
   }
 
   .brand {
-    font-family: 'Yanone Kaffeesatz', cursive;
+    // font-family: 'Yanone Kaffeesatz', cursive;
+    font-family: 'injected_font_3';
     font-size: 21px;
     font-weight: 600;
     letter-spacing: 2px;
@@ -112,10 +114,20 @@ a {
   background: linear-gradient(to bottom, rgba(0,0,0,0.43) 0%,rgba(0,0,0,0.43) 3%,rgba(0,0,0,0) 66%,rgba(0,0,0,0) 72%,rgba(0,0,0,0.31) 99%,rgba(0,0,0,0.31) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6e000000', endColorstr='#4f000000',GradientType=0 ); /* IE6-9 */
 
-  .video_container {
+  border-bottom: solid 1px #eee;
+
+  #video_frame {
     background-color: #000;
   }
 }
+
+.title_container {
+  margin-top: -190px;
+  margin-left: 42px;
+  z-index: 2;
+  position: absolute;
+}
+
 
 .category_container {
 
@@ -230,36 +242,20 @@ a {
 }
 
 @media (max-width: 768px) {
-
-  .video_container {
-    width: 100%;
-    height: 54.5vw;
-  }
-
-  .video_bar  {
-    height: 54.5vw;
-  }
+  #video_frame { width: 100%; height: 54.5vw; }
+  .video_bar  { height: 54.5vw; }
 }
 
 @media (min-width: 768px) {
-  .videoitem {
-    width: 40% !important;
-  }
-
-  .video_container, .video_bar {
-    height: 422px;
-    width: 100%;
-  }
+  .videoitem { width: 40% !important; }
+  #video_frame { height: 422px; width: 100%; }
+  .video_bar { height: 424px; width: 100%; }
 }
 
 @media (min-width: 992px) {
-  .videoitem {
-    width: 28% !important;
-  }
-
-  .video_container, .video_bar {
-    height: 546px;
-  }
+  .videoitem { width: 28% !important; }
+  #video_frame { height: 546px; }
+  .video_bar { height: 548px; }
 }
 
 @media (min-width: 1024px) {
@@ -267,15 +263,8 @@ a {
 
 
 @media (min-width: 1200px) {
-  .videoitem {
-    width: 20% !important;
-  }
-
-  .container {
-    max-width: 1200px !important;
-  }
-
-  .video_container, .video_bar {
-    height: 658px !important;
-  }
+  .videoitem { width: 20% !important; }
+  .container { max-width: 1200px !important; }
+  #video_frame { height: 658px !important; }
+  .video_bar { height: 660px !important; }
 }
