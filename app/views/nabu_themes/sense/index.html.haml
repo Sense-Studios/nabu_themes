@@ -20,6 +20,9 @@
   #button-cont.btn.btn-material-sense-yellow
     VID
 
+  #button-fullscreen.btn.btn-material-grey-800
+    .glyphicon.glyphicon-resize-full
+
   .background
 
 #content{"data-is_visible"=>"true"}
@@ -44,14 +47,37 @@
 // add a vignet
 #vignet
 
+// VIDEO 1
 // add the video &c necc. for the mixer
-%video#video1.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
-//%video#video1_b.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>false, :loop=>true}
-%video#video2.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
-//%video#video2_b.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>false, :loop=>true}
+%video#video1.hidden.video1_active{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
+// %video#video1_a.hidden.video1_active{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
+%video#video1_b.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>false, :loop=>true}
 
-%video#video3.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
-//%video#video3_b.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>false, :loop=>true}
+// VIDEO 2
+%video#video2.hidden.video2_active{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
+//%video#video2_a.hidden.video2_active{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
+%video#video2_b.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>false, :loop=>true}
+
+// VIDEO 3 ( boosting base layer )
+// base layer
+%video#video3.hidden.video3_active{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
+//%video#video3_a.hidden.video3_active{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
+%video#video3_b.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>false, :loop=>true}
+
+// GIF 1
+#gif_container1
+  // %img{ id:"gif_image1", "rel:auto_play":"1"}
+// gif 1
+//%img{"src":"http://nabu.sense-studios.com/assets/nabu_themes/sense/slowclap.jpg", id:"gif_image1", "rel:animated_src":"http://nabu.sense-studios.com/assets/nabu_themes/sense/slowclap.gif", "c_w":"512", "c_h":"512", "rel:auto_play":"1"}
+%img{ id:"gif_image1", "rel:auto_play":"1"}
+// "c_w":"512", "c_h":"512",
+
+// GIF 2
+#gif_container2
+// gif 2
+//%img{ "src":"http://nabu.sense-studios.com/assets/nabu_themes/sense/slowclap.jpg", id:"gif_image2", "rel:animated_src":"http://nabu.sense-studios.com/assets/nabu_themes/sense/slowclap.gif",  "c_w":"512", "c_h":"512", "rel:auto_play":"1"}
+
+
 
 %canvas#buffer1.hidden
 %canvas#buffer2.hidden

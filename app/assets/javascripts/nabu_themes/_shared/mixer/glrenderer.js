@@ -44,9 +44,15 @@ var GLRenderer = function( _options ) {
   /*
   var options = {
     canvas: ''
+
     video1:
     video2:
     videi3:
+
+    gif1
+    gif2
+    gif3
+
     src1
     src2
     src3
@@ -60,8 +66,8 @@ var GLRenderer = function( _options ) {
   var glcanvas = document.getElementById('glcanvas')
 
   // public
-  _self.src1 = "//nabu-dev.s3.amazonaws.com/uploads/video/567498216465766873000000/720p_5000kbps_h264.mp4"
-  _self.src2 = "//nabu-dev.s3.amazonaws.com/uploads/video/558b39266465760a3700001b/720p_5000kbps_h264.mp4" //720p_5000kbps_h264
+  _self.src1 = "//nabu-dev.s3.amazonaws.com/uploads/video/567498216465766873000000/320p_h264_mobile.mp4";  // 720p_5000kbps_h264.mp4"
+  _self.src2 = "//nabu-dev.s3.amazonaws.com/uploads/video/558b39266465760a3700001b/320p_h264_mobile.mp4";  // 720p_5000kbps_h264.mp4" //720p_5000kbps_h264
   _self.src3 = "//nabu-dev.s3.amazonaws.com/uploads/video/556b99326465764bdf000000/320p_h264_mobile.mp4"; //http://nabu-dev.s3.amazonaws.com/uploads/video/556b99a86465764bdf140000/480p_h264.mp4";
 
   // gonna need that counter
@@ -119,20 +125,60 @@ var GLRenderer = function( _options ) {
 
     // -------------------------------------------------------------------------
 
-    var video3 = document.getElementById( 'video3' )
-    video3.src = _self.src3 // "http://nabu-dev.s3.amazonaws.com/uploads/video/556b99326465764bdf000000/720p_5000kbps_h264.mp4"; //http://nabu-dev.s3.amazonaws.com/uploads/video/556b99a86465764bdf140000/480p_h264.mp4";
-    video3.load(); // must call after setting/changing source
-    video3.play();
-    video3.height = video_width
-    video3.width = video_height
-    video3.volume = 0;
+    //var video3 = document.getElementById( 'video3' )
+    //video3.src = _self.src3 // "http://nabu-dev.s3.amazonaws.com/uploads/video/556b99326465764bdf000000/720p_5000kbps_h264.mp4"; //http://nabu-dev.s3.amazonaws.com/uploads/video/556b99a86465764bdf140000/480p_h264.mp4";
+    //video3.load(); // must call after setting/changing source
+    //video3.play();
+    //video3.height = video_width
+    //video3.width = video_height
+    //video3.volume = 0;
+
+    // test
+
+    window.image_source = new Image()
+    //window.image3 = new Image()
+
     //video3.currentTime = 20;
     //video3.addEventListener('timeupdate', function() { firebase.database().ref('/client_1/video3').child('currentTime').set( video3.currentTime ) })
+
+    // http://blog.aaronholmes.net/transparent-video-in-all-browsers-from-cross-domain-sources/
+    // https://www.buzzfeed.com/yacomink/rubbable-gifs?utm_term=.hi0gBAJ5N#.nnYZl4rNz
+    // https://www.reddit.com/r/webdev/comments/5rizmv/how_the_heck_does_giphy_write_from_animated_gif/
+    // https://github.com/buzzfeed/libgif-js
+
+    //image_source.onload = function() {
+    //  window.gif = new GIF({
+    //    workers: 2,
+    //    quality: 10,
+    //    workerScript: "/assets/nabu_themes/_shared/mixer/dist/gif.worker.js"
+    //  });
+
+      // http://jnordberg.github.io/gif.js/
+    //  gif.on('finished', function(blob) {
+    //    window.open(URL.createObjectURL(blob));
+    //    image3.src=URL.createObjectURL(blob)
+    //  });
+
+    //  gif.addFrame( image_source );
+    //  gif.render();
+    //  }
+
+    window.sup1 = new SuperGif( { gif: document.getElementById('gif_image1'), c_w: "512px", c_h: "512px" } );
+    // sup1.load();
+    console.log(" >>>> >>>> >>> LOAD")
+    window.sup1.load_url("http://nabu.sense-studios.com/assets/nabu_themes/sense/slowclap.gif")
+
+
+    //image_source.src = "http://nabu.sense-studios.com/assets/nabu_themes/sense/slowclap.gif"
+
     videoImage3 = document.createElement( 'canvas' );
+    //videoImage3 = ;
     videoImage3.width = video_width;  // these need to match the video size!
     videoImage3.height = video_height; // these need to match the video size!
     videoImageContext3 = videoImage3.getContext( '2d' );
     videoTexture3 = new THREE.Texture( videoImage3 );
+
+    //console.log(">>>> ", image3)
     //videoTexture3.minFilter = THREE.LinearFilter;
     //videoTexture3.magFilter = THREE.LinearFilter;
 
@@ -164,7 +210,7 @@ var GLRenderer = function( _options ) {
     customUniforms = {
       baseTexture1:	 { type: "t", value: videoTexture1 },
       baseTexture2:	 { type: "t", value: videoTexture2 },
-      // baseTexture3:	 { type: "t", value: videoTexture3 },
+      baseTexture3:	 { type: "t", value: videoTexture3 },
       blendmode: 		 { type: "i", value: 1 },
       effect:        { type: "i", value: 1 },
 
@@ -273,10 +319,21 @@ var GLRenderer = function( _options ) {
     }
 
     // when we have a third video
-    if ( video3.readyState === video3.HAVE_ENOUGH_DATA ) {
-      videoImageContext3.drawImage( video3, 0, 0, video_width, video_height );
-      if ( videoTexture3 ) videoTexture3.needsUpdate = true;
-    }
+    //if ( video3.readyState === video3.HAVE_ENOUGH_DATA ) {
+    //  videoImageContext3.drawImage( video3, 0, 0, video_width, video_height );
+    //  if ( videoTexture3 ) videoTexture3.needsUpdate = true;
+    //}
+
+    videoImageContext3.drawImage( $('.jsgif canvas')[0], 0, 0, video_width, video_height );
+    if ( videoTexture3 ) videoTexture3.needsUpdate = true;
+
+    //try {
+    //  videoImageContext3.drawImage( image3, 0, 0, video_width, video_height );
+    //  if ( videoTexture3 ) videoTexture3.needsUpdate = true;
+    //}catch(e){
+      //console.log("no!", e)
+    //}
+
   }
 
   _self.start = function() {

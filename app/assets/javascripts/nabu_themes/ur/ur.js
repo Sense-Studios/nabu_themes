@@ -37,10 +37,17 @@ function setFonts() {
   }
 
   $.each( channelsettings.fonts, function( i, value ) {
-    $.get( value[1], function(e) {
-      var res = e.replace(/font-family: '([a-zA-Z ]+)'/g, "font-family: '" + value[0] + "'");
-      $('head').append("<style>" + res + "</style>");
-    });
+    if ( value[1].indexOf('fonts.googleapis.com') == -1 ) {
+      // its a self-serving
+      var css = "@font-face { font-family: "+ value[0] +"; src: url( /proxy.php?url="+ value[1] +") }"
+      $('head').append("<style>" + css + "</style>");
+    }else{
+      // its a google font
+      $.get( value[1], function(e) {
+        var res = e.replace(/font-family: '([a-zA-Z ]+)'/g, "font-family: '" + value[0] + "'");
+        $('head').append("<style>" + res + "</style>");
+      });
+    }
   });
 }
 

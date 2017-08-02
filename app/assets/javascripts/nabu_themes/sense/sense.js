@@ -1,4 +1,4 @@
-// NOT USED, DEPRICATED
+// NOT USED, DEPRICATED --> Look in layout
 
 //= require jquery
 //= require jqueryui/jquery-ui-1.11.4.min

@@ -137,6 +137,29 @@ $(function() {
     var nextprogram = brh.run(comp.composition, Math.floor( Math.random() * 3 ) );
   })
 
+  function toggleFullScreen() {
+    if (!document.webkitFullscreenElement) {
+        document.body.webkitRequestFullscreen()
+        $('body').addClass('fullscreen')
+        //document.body.requestFullscreen();
+    } else {
+
+      document.webkitExitFullscreen()
+      $('body').remove('fullscreen')
+
+      if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen()
+        // document.exitFullscreen();
+        $('body').remove('fullscreen')
+      }
+    }
+  }
+
+  // Fullscreen
+  $('#button-fullscreen').click( function() {
+    toggleFullScreen();
+  })
+
   setPage()
   $(window).on( 'hashchange', function() { setPage( ); } );
 

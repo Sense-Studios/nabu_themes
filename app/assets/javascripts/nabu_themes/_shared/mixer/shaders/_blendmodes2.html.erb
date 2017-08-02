@@ -78,6 +78,8 @@
 
     uniform sampler2D baseTexture1;
     uniform sampler2D baseTexture2;
+    uniform sampler2D baseTexture3;
+
     uniform sampler2D noiseTexture;
     // uniform sampler2D delayed_image;
     uniform float alpha;
@@ -143,13 +145,18 @@
 
       vec3 video1 = ( texture2D( baseTexture1, vUv ).xyz * alpha1 );
       vec3 video2 = ( texture2D( baseTexture2, vUv ).xyz * alpha2 );
+      vec3 video3 = ( texture2D( baseTexture3, vUv ).xyz * alpha2 );
       // vec4 delayed = vec4( texture2D( delayed_image, vUv ).xyz, 1.0 );
+
+
 
       // vec4 baseColor =
       // if ( vUv.x > 0.5 ) baseColor = delayed;
       //  + vec4( texture2D( afterimage, vUv ).xyz, 1.0 );
       //  baseColor.a = alpha;
-      gl_FragColor = vec4( blend( video1, video2, blendmode ), 1.0 );
+      gl_FragColor = vec4( blend( video1, video3, blendmode ), 1.0 );
+
+      //gl_FragColor = vec4( video3, 1.0 );
       // afterimage = baseColor.xy;
     }
 

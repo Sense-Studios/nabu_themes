@@ -28,7 +28,7 @@ var Behaviour = function( _behaviour, _options ) {
       console.log('switch', _options, this.options.label, _options.frequency, _channel, _force)
       var lng = _composition.sets[ _channel ].length;
       var next = _composition.sets[ _channel ][ Math.floor( Math.random() * lng ) ];
-      _composition.renderer.updateSource( _channel + 1, _composition.manager.getUrlByQuality( next, '720p_h264') ); // foei
+      _composition.renderer.updateSource( _channel + 1, _composition.manager.getUrlByQuality( next, '480p_h264') ); // foei 320p_h264_mobile or 720p_h264
 
       // failsafe
       window["video"+(_channel+1)].removeEventListener('canplay', jumpin )
