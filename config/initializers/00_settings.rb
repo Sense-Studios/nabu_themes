@@ -6,7 +6,7 @@
 NABU_THEMES_MOUNT_POINT = "channel"
 
 # available themes
-NABU_THEMES_AVAILABLE_THEMES = [ "babylon", "ur", "sense","geo", "geo2", "clipcard", "mixer" ]
+NABU_THEMES_AVAILABLE_THEMES = [ "babylon", "ur", "sense","geo", "geo2", "clipcard", "mixer", "oculus" ]
  # "sense", "babylon", "basicwhite", "destandaard", "gazetvanantwerpen", oculus
  # clipcard",
  # "oculus",
