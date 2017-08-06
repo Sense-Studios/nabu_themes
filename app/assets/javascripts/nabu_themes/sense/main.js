@@ -22,14 +22,12 @@ function pollGamepads() {
       gamepad.buttons[0].touched,
       gamepad.buttons[0].value
     );
-
-
   }, 500)
-
 }
 
 // *****************************************************************************
 
+// renderer, bpm, 
 var r, b, f
 
 $(function() {
@@ -56,7 +54,7 @@ $(function() {
 
   // set up the buttons
   $('#button-play').click( function() {
-    if (document.getElementById('video1').paused) {
+    if ( document.getElementById('video1').paused ) {
       video1.play();
       video2.play();
       video3.play();

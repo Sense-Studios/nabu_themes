@@ -26,6 +26,7 @@ var Behaviour = function( _behaviour, _options ) {
   _self.random_switch = function( _composition, _channel, _force ) {
     if ( Math.random() < _options.frequency || _force  ) {
       console.log('switch', _options, this.options.label, _options.frequency, _channel, _force)
+      console.log('alpha', customUniforms.alpha1.value)
       var lng = _composition.sets[ _channel ].length;
       var next = _composition.sets[ _channel ][ Math.floor( Math.random() * lng ) ];
       _composition.renderer.updateSource( _channel + 1, _composition.manager.getUrlByQuality( next, '480p_h264') ); // foei 320p_h264_mobile or 720p_h264
@@ -66,7 +67,7 @@ var Behaviour = function( _behaviour, _options ) {
   */
   _self.random_jump = function( _composition, _channel, _force ) {
     if ( Math.random() < _options.frequency || _force ) {
-      //console.log("jump!", _options, this.options.label, _options.frequency, _channel);
+      console.log("jump!", _options, this.options.label, _options.frequency, _channel);
       try {
         window["video"+(_channel+1)].currentTime = Math.floor( Math.random() * window["video"+(_channel+1)].duration )
       } catch(e) {
