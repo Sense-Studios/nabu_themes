@@ -10,6 +10,9 @@
 // Appearently an engine only searching
 // it's own files, so this doesn't work
 // use application.js from the main app
+
+// APPLICATION.JS IS DEAD!!! *pants*
+
 // to include these.
 // require_tree ../../templates
 // require_tree marduq/marqers

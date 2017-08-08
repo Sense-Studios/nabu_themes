@@ -10,4 +10,6 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require_tree .
+
+// dont fucking do this, this creates a monsterfile that is not used!
+// require_tree .
