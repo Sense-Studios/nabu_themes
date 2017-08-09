@@ -254,8 +254,9 @@ var GLRenderer = function( _options ) {
 
     // createVideoSource( 'video1', _self.src1, 'video1' )
     var videosSources = []
-    function createVideoSource( _video_element_id, _scr, target,  ) {
 
+    function createVideoSource( _video_element_id, _scr, target ) {
+      // TODO
     }
 
     // -------------------------------------------------------------------------
