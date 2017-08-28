@@ -134,6 +134,68 @@ var BPM = function() {
     }
   }
 
+  $( window ).on( 'keydown', function( event ) {
+    console.log( event.type + ": " +  event.which )
+    console.log( _self.bpm )
+    //[ 219
+    //] 221
+    switch ( event.which ) {
+      case 219: // [
+        // bpm down
+        console.log("bpm down")
+        _self.bpm -= 1
+        break;
+
+      case 221: // ]
+        // bpm donw
+        console.log("bpm up")
+        _self.bpm += 1
+        break;
+
+      case 191: // /
+        // bpm donw
+        console.log(" / 2")
+        _self.bpm *= 0.5
+        break;
+
+      case 111: // / numpad
+        // bpm donw
+        console.log(" / 2")
+        _self.bpm *= 0.5
+        break;
+
+
+      case 106: // * numpad
+        // bpm donw
+        console.log(" x 2")
+        _self.bpm *= 2
+        break;
+
+      case 66: // *
+        // bpm donw
+          console.log(" tap")
+        _self.tap()
+        break;
+
+      default:
+        console.log("nope, had: " + event.which)
+        break;
+    }
+
+    $('#button-beat').text( Math.round(_self.bpm) );
+  });
+
+  /*
+
+  / 191
+  \ 220
+  * 106
+  b 66
+
+
+  */
+
+
   // reset to a certain value
   // note this will not bypass c_a
   // set num to -0.5PI and 0.5PI
