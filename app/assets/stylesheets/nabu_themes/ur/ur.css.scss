@@ -94,8 +94,13 @@ a {
     display: inline-block;
     font-weight: 900;
     font-size: 12px;
+    letter-spacing: 1.1px;
+    text-decoration: none;
+    filter: brightness(90%); /* reset brightness */
 
     &:hover {
+      text-decoration: none;
+      font-weight: 900;
     }
   }
 
@@ -271,6 +276,10 @@ a {
 @media (min-width: 1024px) {
 }
 
+@media (max-width: 1024px) {
+  /* should collapse nav */
+  .nav-link { display: none !important; }
+}
 
 @media (min-width: 1200px) {
   .videoitem { width: 20% !important; }
