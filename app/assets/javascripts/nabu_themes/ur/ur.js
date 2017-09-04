@@ -38,7 +38,7 @@ function setFonts() {
 
   $.each( channelsettings.fonts, function( i, value ) {
     if ( value[1].indexOf('fonts.googleapis.com') == -1 ) {
-      // its a self-serving
+      // its a self-serving, proxy the shit out of it
       var css = "@font-face { font-family: "+ value[0] +"; src: url( /proxy.php?url="+ value[1] +") }"
       $('head').append("<style>" + css + "</style>");
     }else{
@@ -55,12 +55,14 @@ function setFonts() {
 $(function() {
 
   var myLazyLoad = new LazyLoad();
+  var player_type = "/embed2/"
+  if ( channelsettings.player != undefined ) player_type = "/" + channelsettings.player + "/"
   setFonts()
 
   // @filtered_programs
   $(window).on('hashchange', function() {
     setTitleAndTimeout()
-    $('#video_frame').attr('src', '/embed2/' + window.location.hash.slice(1) + "");
+    $('#video_frame').attr('src', player_type + window.location.hash.slice(1) + "");
   });
 
   $('.videoitem').click( function() {
@@ -87,7 +89,7 @@ $(function() {
   if (window.location.hash == "") {
     $('.title_container h1').html( "<small>featured</small><br>" + firstprogramtitle );
     setTitleAndTimeout()
-    $('#video_frame').attr('src', '/embed2/' + firstprogramid );
+    $('#video_frame').attr('src', player_type + firstprogramid );
 
   }else{
 
@@ -107,6 +109,6 @@ $(function() {
     $('.title_container h1').html( "<small>" + temp_cat + "</small><br>" + temp_title );
 
     setTitleAndTimeout()
-    $('#video_frame').attr('src', '/embed2/' + window.location.hash.slice(1) );
+    $('#video_frame').attr('src', player_type + window.location.hash.slice(1) );
   }
 });
