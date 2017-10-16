@@ -97,6 +97,7 @@ a {
     letter-spacing: 1.1px;
     text-decoration: none;
     filter: brightness(90%); /* reset brightness */
+    display: none !important; /* let's not use it for now */
 
     &:hover {
       text-decoration: none;
