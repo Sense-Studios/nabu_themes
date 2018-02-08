@@ -9,8 +9,8 @@ var BPM = function() {
 
   // public, custom
   _self.c_a = 0.1 //-( Math.PI / 2) // counted alpha, a measure for bpm and secods
-  _self.bpm = 0               // bpm in, well beats per minutes ;)
-  _self.stacato = false       // hard switching
+  _self.bpm = 0                     // bpm in, well beats per minutes ;)
+  _self.stacato = false             // hard switching
 
   // private
   var n = (new Date()).getTime()
@@ -22,11 +22,13 @@ var BPM = function() {
 
     // now a case might be made to hook this up to the crossfader,
     // not directly to the renderer.
+
+    // actually this is idiocy, mix type and interpretation of the
+    // current BPM should be done in the mixers.
+
     _self.renderer.alpha = 1 //( Math.sin( _self.c_a ) + 1 ) / 2;
 
     //var insec = Math.sin( __C  * Math.PI * $("#bpm_display .bpm").text() / 60)
-
-    // MOVE! THIS TO THE BPM
     if ( _self.bypass || _self.bpm == 0) {
       //_self.c_a = Math.PI
     } else {
@@ -141,39 +143,39 @@ var BPM = function() {
     //] 221
     switch ( event.which ) {
       case 219: // [
-        // bpm down
+        // bpm down 1
         console.log("bpm down")
         _self.bpm -= 1
         break;
 
       case 221: // ]
-        // bpm donw
+        // bpm up 1
         console.log("bpm up")
         _self.bpm += 1
         break;
 
       case 191: // /
-        // bpm donw
+        // bpm down
         console.log(" / 2")
         _self.bpm *= 0.5
         break;
 
       case 111: // / numpad
-        // bpm donw
+        // bpm down
         console.log(" / 2")
         _self.bpm *= 0.5
         break;
 
 
       case 106: // * numpad
-        // bpm donw
+        // bpm up
         console.log(" x 2")
         _self.bpm *= 2
         break;
 
       case 66: // *
-        // bpm donw
-          console.log(" tap")
+        // bpm tap
+        console.log(" tap")
         _self.tap()
         break;
 

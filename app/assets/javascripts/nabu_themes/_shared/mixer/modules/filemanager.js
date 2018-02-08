@@ -43,7 +43,7 @@ var Filemanager = function() {
   var c = 0;                                   // some counter
   _self.renderer;                              // reference
   _self.bypass = false;                        // bypass
-  _self.defaultQuality = "320p_h264_mobile"    //"320p_h264_mobile" -- default quality
+  _self.defaultQuality = "720p_h264"           // "320p_h264_mobile" -- default quality
   _self.eligables = []                         // available files, only programs with _type Video are valid
   _self.composition = {                        // hoder for the current composition
     sets: [],

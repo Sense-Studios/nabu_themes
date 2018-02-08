@@ -6,7 +6,7 @@ var _width  = window.innerWidth;  // unless < video_width ( 1280 )
 var _height = window.innerHeight; // unless < video_height ( 720 )
 
 // quality and video need to match!
-var video_quality = "320p_h264_mobile";
+var video_quality = "480p_h264" //"320p_h264_mobile";
 var video_width  = 1024;  // as texture
 var video_height = 1024;  // as texture
 
@@ -51,9 +51,9 @@ var GLRenderer = function( _options ) {
   var c = 0 // gonna need that counter
 
   // public string, (default) sources
-  _self.src1 = "//nabu-dev.s3.amazonaws.com/uploads/video/567498216465766873000000/320p_h264_mobile.mp4";  // 720p_5000kbps_h264.mp4"
-  _self.src2 = "//nabu-dev.s3.amazonaws.com/uploads/video/558b39266465760a3700001b/320p_h264_mobile.mp4";  // 720p_5000kbps_h264.mp4" //720p_5000kbps_h264
-  _self.src3 = "//nabu-dev.s3.amazonaws.com/uploads/video/556b99326465764bdf000000/320p_h264_mobile.mp4"; //http://nabu-dev.s3.amazonaws.com/uploads/video/556b99a86465764bdf140000/480p_h264.mp4";
+  _self.src1 = "//nabu-dev.s3.amazonaws.com/uploads/video/567498216465766873000000/480p_h264.mp4";  // 720p_5000kbps_h264.mp4"
+  _self.src2 = "//nabu-dev.s3.amazonaws.com/uploads/video/558b39266465760a3700001b/480p_h264.mp4";  // 720p_5000kbps_h264.mp4" //720p_5000kbps_h264
+  _self.src3 = "//nabu-dev.s3.amazonaws.com/uploads/video/556b99326465764bdf000000/480p_h264.mp4";  // http://nabu-dev.s3.amazonaws.com/uploads/video/556b99a86465764bdf140000/480p_h264.mp4";
 
   // ---------------------------------------------------------------------------
 
@@ -66,8 +66,6 @@ var GLRenderer = function( _options ) {
     modules.push( _module );
     _module.renderer = _self;
   }
-
-
 
   _self.updateModules = function() {
     // update other functions
@@ -232,7 +230,6 @@ var GLRenderer = function( _options ) {
     window.sup1.load_url( _url )
   }
 
-
   _self.updateGifSources = function() {
     videoImageContext3.drawImage( $('.jsgif canvas')[0], 0, 0, video_width, video_height );
     if ( videoTexture3 ) videoTexture3.needsUpdate = true;
@@ -255,9 +252,9 @@ var GLRenderer = function( _options ) {
     // createVideoSource( 'video1', _self.src1, 'video1' )
     var videosSources = []
 
-    function createVideoSource( _video_element_id, _scr, target ) {
+    //function createVideoSource( _video_element_id, _scr, target ) {
       // TODO
-    }
+    //}
 
     // -------------------------------------------------------------------------
 
@@ -292,6 +289,10 @@ var GLRenderer = function( _options ) {
       baseTexture1:	 { type: "t", value: videoTexture1 },
       baseTexture2:	 { type: "t", value: videoTexture2 },
       baseTexture3:	 { type: "t", value: videoTexture3 },
+
+      noiseTexture:  { type: "t", value: noiseTexture },
+      waterTexture:  { type: "t", value: noiseTexture },
+
       blendmode: 		 { type: "i", value: 1 },
       effect:        { type: "i", value: 1 },
 
@@ -299,7 +300,6 @@ var GLRenderer = function( _options ) {
       // delayed_image: { type: "t", value: afterimage.texture },
 
       baseSpeed: 		 { type: "f", value: 0.15 },
-      noiseTexture:  { type: "t", value: noiseTexture },
       noiseScale:		 { type: "f", value: 0.2 },
       time: 			   { type: "f", value: 1.0 },
       counter:		   { type: "f", value: 0.0 },

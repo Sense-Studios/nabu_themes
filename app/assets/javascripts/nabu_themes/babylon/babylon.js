@@ -646,10 +646,11 @@ function createMainContent() {
         //Seconds always 2 digits.
         if(seconds.toString().length <= 1) { seconds = '0' + seconds; }
         var duration = minutes + ":" + seconds;
-        item += '<div class="playtime"><span class="glyphicon glyphicon-play background-color"></span><div class="time secondary-color">' + duration + '</div></div>';
+        if (channelsettings.showDuration != "false") item += '<div class="playtime"><span class="glyphicon glyphicon-play background-color"></span><div class="time secondary-color">' + duration + '</div></div>';
         item += ' <div class="image_gradient"/>';
         item += ' <div class="video_duration_bottom_left"/>';
-        item += ' <div class="ontopof"><strong class="title secondary-color">'+ title +'</strong><date class="primary-color"><div class="month background-color">' + monthName + '</div><div class="day ">' + date + '</div></date></div>';
+        item += ' <div class="ontopof"><strong class="title secondary-color">'+ title +'</strong>'
+        if (channelsettings.showDuration != "false") item += '<date class="primary-color"><div class="month background-color">' + monthName + '</div><div class="day ">' + date + '</div></date></div>';
         item += '</a>';
         item += '</div>';
 

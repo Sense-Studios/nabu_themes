@@ -154,7 +154,7 @@
       // if ( vUv.x > 0.5 ) baseColor = delayed;
       //  + vec4( texture2D( afterimage, vUv ).xyz, 1.0 );
       //  baseColor.a = alpha;
-      gl_FragColor = vec4( blend( video1, video3, blendmode ), 1.0 );
+      gl_FragColor = vec4( blend( video1, video2, blendmode ), 1.0 );
 
       //gl_FragColor = vec4( video3, 1.0 );
       // afterimage = baseColor.xy;

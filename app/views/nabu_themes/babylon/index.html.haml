@@ -69,11 +69,6 @@
 
 -### BOTTOM: info and recommended ###
 
-
-
-
-
-
 -### EXTRAs: brandbox ###
 =# @theme.to_yaml
 
@@ -85,6 +80,7 @@
 :javascript
   var programs = #{@filtered_programs.to_json}
   var menudata = #{@menudata}
+  window.channelsettings = #{@channelsettings};
 
 = stylesheet_link_tag "nabu_themes/babylon/babylon", media: "all", "data-turbolinks-track" => true, "async" => true
 
