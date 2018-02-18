@@ -2,25 +2,11 @@
 VideoSource.prototype = new Source(); // assign prototype to marqer
 VideoSource.constructor = VideoSource;  // re-assign constructor
 
-
-  // video placeholders
-  // var video1, video2, video3                               // use to connect
-  // var videoTexture1, videoTexture2, videoTexture3;            // set up texture holders
-  // var bufferImage1, bufferImage2, bufferImage3, bufferImage4; // set up buffers
-
-  // TODO: implement these as arrays
+  // TODO: implement these as arrays ?
   // This is new, but better
   // var videos =        [];   // video1, video2, video3, ...
   // var videoTextures = [];   // videoTexture1, videoTextures,  ...
   // var bufferImages =  [];   // bufferImage1, bufferImage2, ...
-
-  // MOVE TO SETTINGS?
-  // set up defines and uniforms of the shader
-  // var customDefines;
-  // var customUniforms;
-
-  // var videoTexture1 = new VideoSource( _self, {} );
-  // console.log("created texture", videoTexture1.render())
 
 function VideoSource(renderer, options) {
 
@@ -44,7 +30,7 @@ function VideoSource(renderer, options) {
 
   // create elements (private)
   var canvasElement, videoElement, canvasElementContext, videoTexture; // wrapperElemen
-  var alpha = 0.5;
+  var alpha = 1;
 
   // initialize
   _self.init = function() {
@@ -68,7 +54,15 @@ function VideoSource(renderer, options) {
     videoElement.width = 1024
     videoElement.loop = true          // must call after setting/changing source
     videoElement.load();              // must call after setting/changing source
-    videoElement.play();
+
+    var playInterval = setInterval( function() {
+      if ( videoElement.readyState == 4 ) {
+        videoElement.play();
+        console.log(_self.uuid, "First Play.")
+        clearInterval(playInterval)
+      }
+    }, 400 )
+
     videoElement.volume = 0;
     //videoElement.currentTime = Math.random() * 60   // use random in point
 
@@ -139,6 +133,5 @@ function VideoSource(renderer, options) {
   // Rerturn a reference to self
   // ===========================================================================
 
-  //_self.init()
-  return _self
+  // _self.init()
 }

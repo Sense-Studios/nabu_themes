@@ -2,12 +2,28 @@
 
 %canvas#glcanvas
 
-// Firebase
+// DEPRICATED
+=# javascript_include_tag "/assets/nabu_themes/_shared/mixer/settings.js"
+=# javascript_include_tag "/assets/nabu_themes/_shared/mixer/modules/bpm.js"
+=# javascript_include_tag "/assets/nabu_themes/_shared/mixer/modules/filemanager.js"
+=# javascript_include_tag "/assets/nabu_themes/_shared/mixer/modules/compositionmanager.js"
+=# javascript_include_tag "/assets/nabu_themes/_shared/mixer/glrenderer.js"
+=# javascript_include_tag "/assets/nabu_themes/sense/main.js"
+=# javascript_include_tag "/assets/nabu_themes/_shared/mixer2/shaders"
+
+
+// FIREBASE
 =# javascript_include_tag "/assets/firebase/firebase.js"
 =# javascript_include_tag "/assets/firebase/firebase-app.js"
 =# javascript_include_tag "/assets/firebase/firebase-auth.js"
 =# javascript_include_tag "/assets/firebase/firebase-database.js"
 =# javascript_include_tag "/assets/firebase/firebase-messaging.js"
+
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase-app.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase-auth.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase-database.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase-messaging.js"
 
 =# javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase.js"
 =# javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase-app.js"
@@ -16,35 +32,41 @@
 =# javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase-messaging.js"
 =# javascript_include_tag "/assets/nabu_themes/_shared/firebase/firebase.js"
 
-// Mixer
+// Gif source helpers
 = javascript_include_tag "/assets/nabu_themes/_shared/mixer/gif/libgif.js"
 = javascript_include_tag "/assets/nabu_themes/_shared/mixer/gif/rubbable.js"
-=# javascript_include_tag "/assets/nabu_themes/_shared/mixer/settings.js"
-=# javascript_include_tag "/assets/nabu_themes/_shared/mixer/modules/bpm.js"
-=# javascript_include_tag "/assets/nabu_themes/_shared/mixer/modules/filemanager.js"
-=# javascript_include_tag "/assets/nabu_themes/_shared/mixer/modules/compositionmanager.js"
-=# javascript_include_tag "/assets/nabu_themes/_shared/mixer/glrenderer.js"
-=# javascript_include_tag "/assets/nabu_themes/sense/main.js"
 
-=# javascript_include_tag "/assets/nabu_themes/_shared/mixer2/shaders"
-
+// SOURCES
 = javascript_include_tag "/assets/nabu_themes/_shared/mixer2/sources/_source.js"
-= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/sources/Gifsource.js"
-= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/sources/Videosource.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/sources/GifSource.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/sources/VideoSource.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/sources/SolidSource.js"
 
+// MODULES
 = javascript_include_tag "/assets/nabu_themes/_shared/mixer2/modules/Chain.js"
 = javascript_include_tag "/assets/nabu_themes/_shared/mixer2/modules/Mixer.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/modules/Switcher.js"
 = javascript_include_tag "/assets/nabu_themes/_shared/mixer2/modules/Output.js"
 
-= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/controllers/Bpmcontrol.js"
+// CONTROLLERS
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/controllers/GamePad.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/controllers/FireBaseControl.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/controllers/NumPadBPMMixerControl"
 
-=# javascript_include_tag "/assets/nabu_themes/_shared/mixer2/effects/Output.js"
+// EFFECTS
+=# javascript_include_tag "/assets/nabu_themes/_shared/mixer2/effects/BlackAndWhite.js"
 
-= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/addons/Filemanager.js"
+// ADD-ONS
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/addons/BPM.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/addons/FileManager.js"
 =# javascript_include_tag "/assets/nabu_themes/_shared/mixer2/addons/Sourcecontrol.js"
 
+=# javascript_include_tag "/assets/nabu_themes/_shared/mixer2/addons/CompositionManager.js"
 
-= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/Glrenderer.js"
+// RENDERER
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/GlRenderer.js"
+
+// MAIN
 = javascript_include_tag "/assets/nabu_themes/_shared/mixer2/main.js"
 
 

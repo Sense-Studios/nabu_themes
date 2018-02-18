@@ -1,5 +1,8 @@
 function Chain(renderer, options) {
 
+  // THIS IS DEPRICATED
+  // TODO: Rewrite
+
   // create and instance
   var _self = this;
 
@@ -26,6 +29,7 @@ function Chain(renderer, options) {
   _self.init = function() {
     _self.sources.forEach( function( source ) {
       renderer.fragmentShader = renderer.fragmentShader.replace('/* custom_main */', 'final_output = final_output + vec3( texture2D( '+source.uuid+', vUv ).xyz * '+source.uuid+'_alpha );\n  /* custom_main */')
+      //'vec3 '+_self.uuid+'_output =
     });
   }
 

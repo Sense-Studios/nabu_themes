@@ -9,14 +9,23 @@ function FileManager( _source ) {
   _self.file
   _self.renderer = renderer // do we even need this ?!!
 
-  // source.renderer ?
-  programs.map(function(p) {console.log(p.tags)})
 
   _self.setSrc = function( file ) {
+    console.log("set source: ", file)
     _self.source.video.src = file
     _self.source.video.load()
     _self.source.video.currentTime = Math.random() * 60
-    _self.source.video.play()
+    //_self.source.video.play()
+
+    // Move to utility? (see VidoSource r. 58)
+    var playInterval = setInterval( function() {
+      if ( _self.source.video.readyState == 4 ) {
+        _self.source.video.play();
+        console.log(_self.uuid, "First Play.")
+        clearInterval(playInterval)
+      }
+    }, 400 );
+
   }
 
   _self.getFileById = function( _id ) {
@@ -35,6 +44,7 @@ function FileManager( _source ) {
   // HELPERS
   // ---------------------------------------------------------------------------
 
+  // load another source from the stack
   _self.change = function() {
     if ( programs.length == 0 ) return "no programs"
     var program = programs[ Math.floor( Math.random() * programs.length ) ]
@@ -46,10 +56,12 @@ function FileManager( _source ) {
     _self.setSrc( _self.getSrcByQuality( program ) );
   }
 
+  // for old times sake,
   _self.changez = function(){
     _self.change()
   }
 
+  // get the version by it's quality
   _self.getSrcByQuality = function( _program, _quality ) {
     if ( _quality == undefined ) _quality = "720p_h264"
     var match = null

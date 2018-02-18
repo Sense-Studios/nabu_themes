@@ -131,7 +131,6 @@ var BPM = function() {
 
       var avg = _self.beats.reduce(function(a, b) { return a + b; }) / _self.beats.length;
       _self.bpm = avg
-      $('#button-beat').text( Math.round(avg) );
       console.log( time, avg, _self.beats )
     }
   }

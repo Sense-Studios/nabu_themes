@@ -1,0 +1,194 @@
+
+// FIREBASE
+=# javascript_include_tag "/assets/firebase/firebase.js"
+=# javascript_include_tag "/assets/firebase/firebase-app.js"
+=# javascript_include_tag "/assets/firebase/firebase-auth.js"
+=# javascript_include_tag "/assets/firebase/firebase-database.js"
+=# javascript_include_tag "/assets/firebase/firebase-messaging.js"
+
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase-app.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase-auth.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase-database.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase-messaging.js"
+
+=# javascript_include_tag "/assets/nabu_themes/_shared/firebase/firebase.js"
+
+/ Gamepad
+%span#leftx 0
+,
+%span#lefty 0
+%pre#info
+
+
+/ Buttons
+
+.container
+  .row
+    .col-xs-3.text-center
+      %button#button_1.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #1
+    .col-xs-3.text-center
+      %button#button_2.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #2
+    .col-xs-3.text-center
+      %button#button_3.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #3
+    .col-xs-3.text-center
+      %button#button_4.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #4
+
+  %br
+
+  .row
+    .col-xs-3.text-center
+      %button#button_5.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #1
+    .col-xs-3.text-center
+      %button#button_6.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #2
+    .col-xs-3.text-center
+      %button#button_7.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #3
+    .col-xs-3.text-center
+      %button#button_8.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #4
+
+  %br
+
+  .row
+    .col-xs-3.text-center
+      %button#button_9.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #1
+    .col-xs-3.text-center
+      %button#button_10.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #2
+    .col-xs-3.text-center
+      %button#button_11.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #3
+    .col-xs-3.text-center
+      %button#button_12.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #4
+
+  %br
+
+  .row
+    .col-xs-3.text-center
+      %button#button_13.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #1
+    .col-xs-3.text-center
+      %button#button_14.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #2
+    .col-xs-3.text-center
+      %button#button_15.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #3
+    .col-xs-3.text-center
+      %button#button_16.btn.btn-default.btn-xl.btn-fab.btn-material-grey-400 #4
+
+
+:javascript
+
+  var igotyou = false
+  window.addEventListener("gamepadconnected", function(e) {
+    igotyou = true
+    console.log(" got gamepad ", e )
+  })
+
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDgrYfOUDN1QLRDcY4z45WwkcOjkXiImNQ",
+    authDomain: "mixerbase-829c2.firebaseapp.com",
+    databaseURL: "https://mixerbase-829c2.firebaseio.com",
+    storageBucket: "mixerbase-829c2.appspot.com",
+    messagingSenderId: "568387460963"
+  };
+
+  firebase.initializeApp(config);
+
+  var _dbRef = firebase.database()
+  var _clientRef = "/client_1/"
+  var _client = _dbRef.ref(_clientRef)
+  var clients = []
+
+  //$.each( clients, function( i, c ) {
+  //  c.dbref.ref('/client/').on('value', function( e ) {
+  //    c.update( e )
+  //  })
+  //})
+
+  var i = 0
+  while ( i < 17 ) {
+     console.log(i)
+     $('#button_' + i).data("index", i)
+     //_client.child( "mobilepad/button_" + i).set('0')
+     i++
+  }
+
+  $('button').bind( 'mousedown touchstart', function() {
+    _client.child( "mobilepad/button_" + $(this).data('index') ).set('1')
+    console.log(">> down >>", $(this).data('index'))
+    // _client.child('gamepad/leftx').set( leftx );
+  })
+
+  $('button').bind( 'mouseup touchend',function() {
+    _client.child( "mobilepad/button_" + $(this).data('index') ).set('0')
+    console.log(">> down >>", $(this).data('index'))
+    // _client.child('gamepad/leftx').set( leftx );
+  })
+
+  _client.on('value', function(e) {
+    console.log("I update you", e)
+    //console.log( _client.child( "/leftx" ).val() )
+    //console.log( _client.child( "/lefty" ).val() )
+  });
+
+  _client.child( "/leftx" ).on('value', function(e) {
+    console.log(e.val())
+  })
+
+  _client.child( "/lefty" ).on('value', function(e) {
+    console.log(e.val())
+  })
+
+  function render() {
+    //requestAnimationFrame( render )
+    var r = Math.round( Math.random() * 10000 )
+    // _client.child('trans_left').set( r );
+    // console.log(" tik ")
+
+    if (!igotyou) return
+
+    var axes = navigator.getGamepads()[0].axes
+    var leftx = axes[0];
+    var lefty = axes[1];
+
+    document.getElementById('info').innerText = navigator.getGamepads()[0]
+    navigator.getGamepads()[0].buttons.forEach(function(b, i) {
+      document.getElementById('info').innerText += "\n " + i + ".: " + navigator.getGamepads()[0].buttons[i].pressed
+    })
+
+    var button_0 = navigator.getGamepads()[0].buttons[0]
+    var button_1 = navigator.getGamepads()[0].buttons[1]
+    var button_2 = navigator.getGamepads()[0].buttons[2]
+    var button_3 = navigator.getGamepads()[0].buttons[3]
+    //console.log('tik ... ', r, leftx, lefty)
+
+    document.getElementById('leftx').innerText = leftx
+    document.getElementById('lefty').innerText = lefty
+
+    _client.child('gamepad/leftx').set( leftx );
+    _client.child('gamepad/lefty').set( lefty );
+
+    // so we see something locally, basically arranged through info
+    // document.getElementById('button_1').innerText = button_0.pressed
+    // document.getElementById('button_2').innerText = button_1.pressed
+    // document.getElementById('button_3').innerText = button_2.pressed
+    // document.getElementById('button_4').innerText = button_3.pressed
+
+    _client.child('gamepad/button_0').set( button_0.pressed );
+    _client.child('gamepad/button_1').set( button_1.pressed );
+    _client.child('gamepad/button_2').set( button_2.pressed );
+    _client.child('gamepad/button_3').set( button_3.pressed );
+    _client.child('gamepad/button_4').set( button_4.pressed );
+    _client.child('gamepad/button_5').set( button_5.pressed );
+    _client.child('gamepad/button_6').set( button_6.pressed );
+    _client.child('gamepad/button_7').set( button_7.pressed );
+    _client.child('gamepad/button_8').set( button_8.pressed );
+    _client.child('gamepad/button_9').set( button_9.pressed );
+    _client.child('gamepad/button_10').set( button_10.pressed );
+    _client.child('gamepad/button_11').set( button_11.pressed );
+    _client.child('gamepad/button_12').set( button_12.pressed );
+    _client.child('gamepad/button_13').set( button_13.pressed );
+    _client.child('gamepad/button_14').set( button_14.pressed );
+    _client.child('gamepad/button_15').set( button_15.pressed );
+
+    var rightx = axes[5];
+    var righty = axes[6];
+  }
+
+  setInterval( render, 50 )
