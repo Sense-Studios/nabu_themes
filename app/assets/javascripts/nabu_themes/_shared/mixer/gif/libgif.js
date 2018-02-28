@@ -434,7 +434,7 @@
         for (var i in opts ) { options[i] = opts[i] }
         if (options.vp_w && options.vp_h) options.is_vp = true;
 
-        console.log(">>> >> ", options)
+        //console.log(">>> >> ", options)
 
         var stream;
         var hdr;
@@ -465,7 +465,7 @@
         var onEndListener = (options.hasOwnProperty('on_end') ? options.on_end : null);
         var loopDelay = (options.hasOwnProperty('loop_delay') ? options.loop_delay : 0);
         var overrideLoopMode = (options.hasOwnProperty('loop_mode') ? options.loop_mode : 'auto');
-        var drawWhileLoading = (options.hasOwnProperty('draw_while_loading') ? options.draw_while_loading : true);
+        var drawWhileLoading = (options.hasOwnProperty('draw_while_loading') ? options.draw_while_loading : false);
         var showProgressBar = drawWhileLoading ? (options.hasOwnProperty('show_progress_bar') ? options.show_progress_bar : true) : false;
         var progressBarHeight = (options.hasOwnProperty('progressbar_height') ? options.progressbar_height : 25);
         var progressBarBackgroundColor = (options.hasOwnProperty('progressbar_background_color') ? options.progressbar_background_color : 'rgba(255,255,255,0.4)');
@@ -874,8 +874,8 @@
             div.appendChild(canvas);
             div.appendChild(toolbar);
 
-            parent.insertBefore(div, gif);
-            parent.removeChild(gif);
+            //parent.insertBefore(div, gif);
+            //parent.removeChild(gif);
 
             if (options.c_w && options.c_h) setSizes(options.c_w, options.c_h);
             initialized=true;

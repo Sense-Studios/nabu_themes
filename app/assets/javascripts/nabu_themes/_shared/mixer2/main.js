@@ -53,15 +53,16 @@
 var renderer = new GlRenderer();
 
 // create sources
-//var testSource1 = new VideoSource( renderer, { src: '//nabu-dev.s3.amazonaws.com/uploads/video/556ce4f36465764bdf590000/720p_h264.mp4' } );
-//var testSource2 = new VideoSource( renderer, { src: '//nabu-dev.s3.amazonaws.com/uploads/video/556ce4f36465764bdf590000/720p_h264.mp4' } );
-//var testSource3 = new VideoSource( renderer, { src: '//nabu-dev.s3.amazonaws.com/uploads/video/556ce4f36465764bdf590000/720p_h264.mp4' } );
-//var testSource4 = new VideoSource( renderer, { src: '//nabu-dev.s3.amazonaws.com/uploads/video/556ce4f36465764bdf590000/720p_h264.mp4' } );
+// var testSource1 = new VideoSource( renderer, { src: '//nabu-dev.s3.amazonaws.com/uploads/video/556ce4f36465764bdf590000/720p_h264.mp4' } );
+var testSource1 = new GifSource( renderer, { src: '//nabu-dev.s3.amazonaws.com/uploads/video/556ce4f36465764bdf590000/720p_h264.mp4' } );
+var testSource2 = new VideoSource( renderer, { src: '//nabu-dev.s3.amazonaws.com/uploads/video/556ce4f36465764bdf590000/720p_h264.mp4' } );
+var testSource3 = new VideoSource( renderer, { src: '//nabu-dev.s3.amazonaws.com/uploads/video/556ce4f36465764bdf590000/720p_h264.mp4' } );
+var testSource4 = new VideoSource( renderer, { src: '//nabu-dev.s3.amazonaws.com/uploads/video/556ce4f36465764bdf590000/720p_h264.mp4' } );
 
-var testSource1 = new SolidSource( renderer, { color: { r: 1.0, g: 0.0, b: 0.0 } } );
-var testSource2 = new SolidSource( renderer, { color: { r: 0.0, g: 1.0, b: 0.0 } } );
-var testSource3 = new SolidSource( renderer, { color: { r: 0.0, g: 0.0, b: 1.0 } } );
-var testSource4 = new SolidSource( renderer, { color: { r: 1.0, g: 1.0, b: 0.0 } } );
+// var testSource1 = new SolidSource( renderer, { color: { r: 1.0, g: 0.0, b: 0.0 } } );
+// var testSource2 = new SolidSource( renderer, { color: { r: 0.0, g: 1.0, b: 0.0 } } );
+// var testSource3 = new SolidSource( renderer, { color: { r: 0.0, g: 0.0, b: 1.0 } } );
+// var testSource4 = new SolidSource( renderer, { color: { r: 1.0, g: 1.0, b: 0.0 } } );
 
 // solid
 var testSource5 = new SolidSource( renderer, { color: { r: 0.1, g: 1.0, b: 0.5 } } );
@@ -78,7 +79,7 @@ var switcher1 = new Switcher( renderer, [ mixer3, mixer4 ] );
 
 
 // create the filemanager addon for the sources
-var filemanager1 = new FileManager( testSource1 )
+var giphymanager1 = new GiphyManager( testSource1 )
 var filemanager2 = new FileManager( testSource2 )
 var filemanager3 = new FileManager( testSource3 )
 var filemanager4 = new FileManager( testSource4 )
@@ -93,6 +94,7 @@ bpm.add( mixer4.pod )
 // -----------------------------------------------------------------------------
 // set the output node (needs to be last!)
 var output = new Output( renderer, switcher1 )
+//var output = new Output( renderer, testSource1 )
 
 // -----------------------------------------------------------------------------
 // add a controller to mixer and bpm
@@ -179,7 +181,7 @@ function changez() {
 changez()
 */
 
-
+/*
 function jumps() {
   var r = Math.floor( Math.random() * jump_mod )
   setTimeout( function() {
@@ -197,6 +199,7 @@ function jumps() {
   }catch(err) {}
 };
 jumps()
+
 
 function scratch() {
   var r = Math.floor( Math.random() * scratch_mod )
@@ -217,3 +220,4 @@ function scratch() {
   }catch(err) { console.log("err:", err)}
 };
 scratch()
+*/

@@ -12,20 +12,7 @@ function FileManager( _source ) {
 
   _self.setSrc = function( file ) {
     console.log("set source: ", file)
-    _self.source.video.src = file
-    _self.source.video.load()
-    _self.source.video.currentTime = Math.random() * 60
-    //_self.source.video.play()
-
-    // Move to utility? (see VidoSource r. 58)
-    var playInterval = setInterval( function() {
-      if ( _self.source.video.readyState == 4 ) {
-        _self.source.video.play();
-        console.log(_self.uuid, "First Play.")
-        clearInterval(playInterval)
-      }
-    }, 400 );
-
+    _self.source.src(file)
   }
 
   _self.getFileById = function( _id ) {
@@ -61,7 +48,7 @@ function FileManager( _source ) {
     _self.change()
   }
 
-  // get the version by it's quality
+  // get the version by it's quality ( marduq asset library )
   _self.getSrcByQuality = function( _program, _quality ) {
     if ( _quality == undefined ) _quality = "720p_h264"
     var match = null

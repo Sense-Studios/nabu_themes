@@ -18,6 +18,8 @@ function VideoSource(renderer, options) {
     _self.uuid = options.uuid
   }
 
+  _self.type = "VideoSource"
+
   // allow bypass
   _self.bypass = true;
 
@@ -119,6 +121,34 @@ function VideoSource(renderer, options) {
 
   // ===========================================================================
   // HELPERS
+  // ===========================================================================
+
+  _self.src = function( file ) {
+    videoElement.src = file
+    var playInterval = setInterval( function() {
+      if ( videoElement.readyState == 4 ) {
+        videoElement.play();
+        console.log(_self.uuid, "First Play.")
+        clearInterval(playInterval)
+      }
+    }, 400 )
+  }
+
+  _self.play =         function() { return videoElement.play() }
+  _self.pause =        function() { return videoElement.pause() }
+  _self.paused =       function() { return videoElement.paused }
+  _self.currentFrame = function( _num ) {
+    if ( _num === undefined ) {
+      return videoElement.currentTime();
+    } else {
+      return _num;
+    }
+
+  }  // seconds
+  _self.duration =     function() { return videoElement.duration }    // seconds
+
+  // ===========================================================================
+  // For now only here, move to _source?
   // ===========================================================================
 
   _self.alpha = function(a) {

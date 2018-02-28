@@ -105,26 +105,21 @@
   while ( i < 17 ) {
      console.log(i)
      $('#button_' + i).data("index", i)
-     //_client.child( "mobilepad/button_" + i).set('0')
      i++
   }
 
   $('button').bind( 'mousedown touchstart', function() {
     _client.child( "mobilepad/button_" + $(this).data('index') ).set('1')
     console.log(">> down >>", $(this).data('index'))
-    // _client.child('gamepad/leftx').set( leftx );
   })
 
   $('button').bind( 'mouseup touchend',function() {
     _client.child( "mobilepad/button_" + $(this).data('index') ).set('0')
     console.log(">> down >>", $(this).data('index'))
-    // _client.child('gamepad/leftx').set( leftx );
   })
 
   _client.on('value', function(e) {
     console.log("I update you", e)
-    //console.log( _client.child( "/leftx" ).val() )
-    //console.log( _client.child( "/lefty" ).val() )
   });
 
   _client.child( "/leftx" ).on('value', function(e) {
@@ -136,10 +131,7 @@
   })
 
   function render() {
-    //requestAnimationFrame( render )
     var r = Math.round( Math.random() * 10000 )
-    // _client.child('trans_left').set( r );
-    // console.log(" tik ")
 
     if (!igotyou) return
 

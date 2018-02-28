@@ -57,6 +57,7 @@ function FireBaseControl( renderer, _mixer1, _mixer2, _mixer3 ) {
       //console.log( _client.child( "/lefty" ).val() )
     });
 
+    // a overwritable timer interval to avoid collisions
     var _to
 
     _client.child( "gamepad/leftx" ).on('value', function(e) {
