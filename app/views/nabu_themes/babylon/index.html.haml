@@ -78,9 +78,9 @@
 = javascript_include_tag "nabu_themes/babylon/babylon"
 
 :javascript
-  var programs = #{@filtered_programs.to_json}
-  var menudata = #{@menudata}
-  window.channelsettings = #{@channelsettings};
+  var programs = #{raw @filtered_programs.to_json}
+  var menudata = #{raw @menudata}
+  window.channelsettings = #{raw @channelsettings};
 
 = stylesheet_link_tag "nabu_themes/babylon/babylon", media: "all", "data-turbolinks-track" => true, "async" => true
 
@@ -96,11 +96,9 @@
   .primary-border-color { border-color: #{@theme.main_color }!important; }
   #tabs .active { background-color: #{@theme.main_color } !important; }
 
-
   .secondary-color { color: #{@theme.support_color } !important; }
   .secondary-color-links { color: #{@theme.support_color } !important; text-decoration: underline; }
   .background-color { background-color: #{@theme.support_color } !important; }
-
 
   .mobile-background-color { background-color: #{@theme.background_color } !important; }
   .mobile-background-cat-color { color: #{@theme.background_color } !important; }

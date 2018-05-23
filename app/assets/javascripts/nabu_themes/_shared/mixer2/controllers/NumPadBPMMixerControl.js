@@ -59,10 +59,10 @@ function NumpadBpmMixerControl( renderer, _mixer, _bpm ) {
     var keybindings = [
 
       // BPM
-      [ 219, function() { _bpms.forEach( function( b ) { b.bpm -= 1   } ); } ], // [
-      [ 221, function() { _bpms.forEach( function( b ) { b.bpm += 1   } ); } ],  // ]
-      [ 109, function() { _bpms.forEach( function( b ) { b.bpm -= 1   } ); } ], // [
-      [ 107, function() { _bpms.forEach( function( b ) { b.bpm += 1   } ); } ],  // ]
+      //[ 219, function() { _bpms.forEach( function( b ) { b.bpm -= 1   } ); } ], // [[]
+      //[ 221, function() { _bpms.forEach( function( b ) { b.bpm += 1   } ); } ],  // ]
+      [ 109, function() { _bpms.forEach( function( b ) { b.bpm -= 1   } ); } ], //  -
+      [ 107, function() { _bpms.forEach( function( b ) { b.bpm += 1   } ); } ],  // +
 
       [ 106, function() { _bpms.forEach( function( b ) { b.bpm *= 2   } ); } ],  // ]
       [ 111, function() { _bpms.forEach( function( b ) { b.bpm *= 0.5 } ); } ],  // ]
@@ -70,12 +70,17 @@ function NumpadBpmMixerControl( renderer, _mixer, _bpm ) {
       [ 101, function() { _bpms.forEach( function( b ) { b.tap()      } ); }  ],  // ]
 
       // hackity
-      [  96, function() { switcher1.doSwitch(0) } ],  // ]
-      [ 110, function() { switcher1.doSwitch(1) } ],  // ]
+      [  96, function() { switcher1.doSwitch(0) } ],  // 0
+      [ 110, function() { switcher1.doSwitch(1) } ],  // .
+      [  75, function() { switcher1.doSwitch(0) } ],  // k
+      [  76, function() { switcher1.doSwitch(1) } ],  // l
+      [  66, function() { _bpms.forEach( function( b ) { b.tap()      } ); }  ],  // b
 
       // hack
-      [  219, function() { clearTimeout(_to); _to = setTimeout( function() { filemanager1.change() } , 200 ) } ],
-      [  221, function() { clearTimeout(_to); _to = setTimeout( function() { filemanager2.change() } , 200 ) } ],
+      //[  219, function() { clearTimeout(_to); _to = setTimeout( function() { filemanager1.change() } , 200 ) } ], // [
+      [  221, function() { clearTimeout(_to); _to = setTimeout( function() { filemanager2.change() } , 200 ) } ], // ]
+      [  221, function() { clearTimeout(_to); _to = setTimeout( function() { giphymanager1.change() } , 200 ) } ], // \
+      [  71, function() { clearTimeout(_to); _to = setTimeout( function() { giphymanager1.change() } , 200 ) } ], // g
 
       // MIXER
       // [ 219, function() { return i -= 1 } ], // 4
@@ -84,9 +89,9 @@ function NumpadBpmMixerControl( renderer, _mixer, _bpm ) {
       // reset
       [ 104, function() { _mixers.forEach( function(m) { m.blendMode(1); m.mixMode(1); blendmodes = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 ]; mixmodes = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ] }) }],  // 8
 
-      [ 103, function() { blendmodes.unshift( blendmodes.pop() ); _mixers.forEach( function(m) { m.blendMode(blendmodes[0]); } ) } ],  // 6
-      [ 105, function() { blendmodes.push( blendmodes.shift());   _mixers.forEach( function(m) { m.blendMode(blendmodes[0]); } ) } ],  // 6
-      [ 100, function() { mixmodes.unshift( mixmodes.pop() );     _mixers.forEach( function(m) { m.mixMode(mixmodes[0]);     } ) } ],  // 6
+      [ 103, function() { blendmodes.unshift( blendmodes.pop() ); _mixers.forEach( function(m) { m.blendMode(blendmodes[0]); } ) } ],  // 7
+      [ 105, function() { blendmodes.push( blendmodes.shift());   _mixers.forEach( function(m) { m.blendMode(blendmodes[0]); } ) } ],  // 9
+      [ 100, function() { mixmodes.unshift( mixmodes.pop() );     _mixers.forEach( function(m) { m.mixMode(mixmodes[0]);     } ) } ],  // 4
       [ 102, function() { mixmodes.push( mixmodes.shift());       _mixers.forEach( function(m) { m.mixMode(mixmodes[0]);     } ) } ],  // 6
 
       [ 97, function() { console.log("mix trans left, down") } ],  // 6

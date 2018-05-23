@@ -4,9 +4,9 @@
   window.main_color = '#{@theme.main_color}';
   window.support_color = '#{@theme.support_color}';
   window.background_color = '#{@theme.background_color}';
-  window.menudata = #{@menudata};
-  window.menuconfig = #{@menuconfig};
-  window.channelsettings = #{@channelsettings};
+  window.menudata = #{raw @menudata};
+  window.menuconfig = #{raw @menuconfig};
+  window.channelsettings = #{raw @channelsettings};
   window.firstprogramid = "#{@program.id}"
   window.firstprogramtitle = "#{@program.title}"
 
@@ -61,12 +61,12 @@
 
       / lazyloading ?
 
-      /= @theme.logo
-      /= @theme.contact
-      /= @theme.title
-      /=
+      /=# @theme.logo
+      /=# @theme.contact
+      /=# @theme.title
+      /=#
 
-      / @menudata
+      / # @menudata
 
       %br
 

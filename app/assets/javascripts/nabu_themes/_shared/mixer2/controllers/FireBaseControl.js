@@ -71,7 +71,8 @@ function FireBaseControl( renderer, _mixer1, _mixer2, _mixer3 ) {
     })
 
     _client.child( "gamepad/button_1" ).on('value', function(e) {
-      clearTimeout(_to); _to = setTimeout( function() { filemanager1.change() } , 200 )
+      //clearTimeout(_to); _to = setTimeout( function() { filemanager1.change() } , 200 )
+      clearTimeout(_to); _to = setTimeout( function() { giphymanager1.change() } , 200 )
     })
 
     _client.child( "gamepad/button_2" ).on('value', function(e) {

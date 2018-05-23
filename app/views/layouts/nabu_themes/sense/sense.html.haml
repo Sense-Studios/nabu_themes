@@ -16,10 +16,10 @@
     window.main_color = '#{@theme.main_color}'
     window.support_color = '#{@theme.support_color}'
     window.background_color = '#{@theme.background_color}'
-    window.menudata = #{@menudata}
-    window.menuconfig = #{@menuconfig}
-    window.channelsettings = #{@channelsettings}
-    window.programs = #{@filtered_programs.to_json}
+    window.menudata = #{raw @menudata}
+    window.menuconfig = #{raw @menuconfig}
+    window.channelsettings = #{raw @channelsettings}
+    window.programs = #{raw @filtered_programs.to_json}
 
   // Stylesheets
   = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true, "async" => true

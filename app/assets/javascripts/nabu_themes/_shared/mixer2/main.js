@@ -106,6 +106,8 @@ numpad1.addMixer( mixer3 )
 numpad1.addMixer( mixer4 )
 // nupad1.addFileManager
 
+//var keyboard1 = new KeyboardMixerControl( renderer, mixer1, bpm )
+
 // var gamepad = new GamePad( renderer, mixer1, mixer2, mixer3 )
 // var gamepad1 = new GamePadDiagonalControl( renderer, mixer1, mixer2, mixer3 )
 // var gamepad2 = new GamePadVerticalControl( renderer, mixer1, mixer2, mixer3, mixer4, mixer5, mixer6, mixer7 )

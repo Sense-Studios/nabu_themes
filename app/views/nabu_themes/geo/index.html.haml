@@ -4,12 +4,12 @@
   window.main_color = '#{@theme.main_color}';
   window.support_color = '#{@theme.support_color}';
   window.background_color = '#{@theme.background_color}';
-  window.menudata = #{@menudata};
-  window.menuconfig = #{@menuconfig};
-  window.channelsettings = #{@channelsettings};
+  window.menudata = #{raw @menudata};
+  window.menuconfig = #{raw @menuconfig};
+  window.channelsettings = #{raw @channelsettings};
 
-  window.kalturaPartnerId = #{@kalturaPartnerId};
-  window.kalturaUiConfigId = #{@kalturaUiConfigId};
+  window.kalturaPartnerId = #{raw @kalturaPartnerId};
+  window.kalturaUiConfigId = #{raw @kalturaUiConfigId};
 
 = javascript_include_tag "nabu_themes/geo/geo"
 = stylesheet_link_tag "nabu_themes/geo/geo", media: "all", "data-turbolinks-track" => true, "async" => true

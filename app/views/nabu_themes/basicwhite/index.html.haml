@@ -5,10 +5,10 @@
   -#  Meer videos
   .video_background_hider#video_container
   = render :partial => "shared/player/video", locals: {height:''}
-  
+
   #controls.control_holder.hidden
     = render partial: 'nabu_themes/basicwhite/controls'
-    
+
 
 -### TOP: Nav and Menu ###
 
@@ -16,12 +16,12 @@
   .custom_navbar
     .custom_navbar_brand
       = link_to "javascript:", :target=>"_top" , :class => 'navbar-brand primary-color ' do
-        = image_tag @theme.logo, :class => 'pull-left'                
-        %h1.pull-left= @theme.title 
+        = image_tag @theme.logo, :class => 'pull-left'
+        %h1.pull-left= @theme.title
 
     .menu_button.pull-right
       = image_tag '/clients/AgriMedia/images/menu_icon.png'
-  
+
   .side_menu
     .side_menu_overlay_gradient
     .search
@@ -72,18 +72,18 @@
       %div.tabpanel{:role=>"tabpanel"}
         %ul#tabs.nav.nav-tabs.nav_tabs_custom.primary-bottom-border-color-active{:role=>"tablist"}
           %li.tabtitlewrapper.active{:role=>"presentation"}
-            %a.primary-border-color-active{:href=>"#related", :aria=>{:controls=>"related"}, :role=>"tab" , :data=>{:toggle=>"tab"}} 
+            %a.primary-border-color-active{:href=>"#related", :aria=>{:controls=>"related"}, :role=>"tab" , :data=>{:toggle=>"tab"}}
               %h3.tabtitle
                 GERELATEERD
           %li.tabtitlewrapper{:role=>"presentation"}
-            %a.primary-border-color-active{:href=>"#definition", :aria=>{:controls=>"definition"}, :role=>"tab" , :data=>{:toggle=>"tab"}} 
+            %a.primary-border-color-active{:href=>"#definition", :aria=>{:controls=>"definition"}, :role=>"tab" , :data=>{:toggle=>"tab"}}
               %h3.tabtitle
                 OMSCHRIJVING
           %li.tabtitlewrapper{:role=>"presentation"}
-            %a.primary-border-color-active{:href=>"#newvideos", :aria=>{:controls=>"newvideos"}, :role=>"tab" , :data=>{:toggle=>"tab"}} 
+            %a.primary-border-color-active{:href=>"#newvideos", :aria=>{:controls=>"newvideos"}, :role=>"tab" , :data=>{:toggle=>"tab"}}
               %h3.tabtitle
                 NIEUWSTE VIDEOS
-        
+
         .tab-content
           #related.tab-pane.fade.in.active{:role=>"tabpanel",}
             = render partial: 'nabu_themes/basicwhite/latestvideos'
@@ -92,7 +92,7 @@
           #newvideos.tab-pane.fade{:role=>"tabpanel",}
             = render partial: 'nabu_themes/basicwhite/latestvideos'
 
-                      
+
 
 
 
@@ -103,20 +103,20 @@
 %script{:src=>'/assets/jquery-shapeshift/jquery.shapeshift.js'}
 = javascript_include_tag "nabu_themes/basicwhite/basicwhite"
 
-:javascript 
-  var programs = #{@programs.to_json}
-  var menudata = #{@menudata}
+:javascript
+  var programs = #{raw @programs.to_json}
+  var menudata = #{raw @menudata}
 
 = stylesheet_link_tag "nabu_themes/basicwhite/basicwhite", media: "all", "data-turbolinks-track" => true, "async" => true
 
 :css
-  .primary-color { color: #{@theme.main_color } !important; } 
+  .primary-color { color: #{@theme.main_color } !important; }
   .secondary-color { color: #{@theme.support_color } !important; }
   .background-color { background-color: #{@theme.background_color } !important; }
-  .primary-border-color { border-color: #{@theme.main_color } !important; } 
+  .primary-border-color { border-color: #{@theme.main_color } !important; }
   .primary-background-color { background-color: #{@theme.main_color } !important; }
-  .primary-background-color-hover:hover { background-color: #{@theme.main_color } !important; } 
-  .primary-color-hover:hover { color: #{@theme.main_color } !important; }  
+  .primary-background-color-hover:hover { background-color: #{@theme.main_color } !important; }
+  .primary-color-hover:hover { color: #{@theme.main_color } !important; }
   .active .primary-border-color-active { border-color: #{@theme.main_color }!important; border-bottom-color: transparent!important; }
   .primary-bottom-border-color-active { border-color: #{@theme.main_color }!important; }
 
@@ -133,5 +133,5 @@
     result = 'rgba('+r+','+g+','+b+','+ 50 +')';
     console.log("background-color" + result);
   });
-    
+
 */
