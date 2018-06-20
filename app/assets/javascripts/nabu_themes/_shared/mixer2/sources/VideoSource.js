@@ -12,6 +12,7 @@ function VideoSource(renderer, options) {
 
   // create and instance
   var _self = this;
+
   if ( options.uuid == undefined ) {
     _self.uuid = "VideoSource_" + (((1+Math.random())*0x100000000)|0).toString(16).substring(1);
   } else {
@@ -56,14 +57,22 @@ function VideoSource(renderer, options) {
     videoElement.width = 1024
     videoElement.loop = true          // must call after setting/changing source
     videoElement.load();              // must call after setting/changing source
+    _self.firstplay = false
 
     var playInterval = setInterval( function() {
       if ( videoElement.readyState == 4 ) {
         videoElement.play();
+        _self.firstplay = true
         console.log(_self.uuid, "First Play.")
         clearInterval(playInterval)
       }
     }, 400 )
+
+    // firstload for mobile
+    $("body").click(function() {
+      videoElement.play();
+      _self.firstplay = true
+    });
 
     videoElement.volume = 0;
     //videoElement.currentTime = Math.random() * 60   // use random in point
@@ -134,13 +143,15 @@ function VideoSource(renderer, options) {
     }, 400 )
   }
 
+  // Or use source.video[...]
   _self.play =         function() { return videoElement.play() }
   _self.pause =        function() { return videoElement.pause() }
   _self.paused =       function() { return videoElement.paused }
-  _self.currentFrame = function( _num ) {
+  _self.currentTime = function( _num ) {
     if ( _num === undefined ) {
-      return videoElement.currentTime();
+      return videoElement.currentTime;
     } else {
+      videoElement.currentTime = _num;
       return _num;
     }
 

@@ -74,9 +74,13 @@ function GifSource( renderer, options ) {
 
   _self.update = function() {
     //if (_self.bypass == false) return
-    canvasElementContext.clearRect(0, 0, 1024, 1024);
-    canvasElementContext.drawImage( supergifelement.get_canvas(), 0, 0, 1024, 1024  );
-    if ( gifTexture ) gifTexture.needsUpdate = true;
+    try {
+      canvasElementContext.clearRect(0, 0, 1024, 1024);
+      canvasElementContext.drawImage( supergifelement.get_canvas(), 0, 0, 1024, 1024  );
+      if ( gifTexture ) gifTexture.needsUpdate = true;
+    }catch(e){
+      // not yet
+    }
   }
 
   _self.render = function() {
@@ -102,6 +106,7 @@ function GifSource( renderer, options ) {
     if ( _num === undefined ) {
       return supergifelement.get_current_frame();
     } else {
+      supergifelement.move_to(_num);
       return _num;
     }
 
