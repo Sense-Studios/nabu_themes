@@ -12,7 +12,7 @@ function GiphyManager( _source ) {
   var key = "tIovPHdiZhUF3w0UC6ETdEzjYOaFZQFu"
 
   _self.needle = function( _needle ) {
-    $.get('http://api.giphy.com/v1/gifs/search?api_key='+key+'&q='+_needle, function(d) {
+    $.get('//api.giphy.com/v1/gifs/search?api_key='+key+'&q='+_needle, function(d) {
       _self.programs = d.data
       console.log(" === GIPHY (re)LOADED === ")
     })

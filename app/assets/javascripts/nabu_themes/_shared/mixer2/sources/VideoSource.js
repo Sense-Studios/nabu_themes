@@ -61,9 +61,16 @@ function VideoSource(renderer, options) {
 
     var playInterval = setInterval( function() {
       if ( videoElement.readyState == 4 ) {
+        setTimeout( function() {
+          console.log("doh")
+          var r = Math.random() * videoElement.duration
+          videoElement.currentTime = r
+
+        }, 350 )
+
         videoElement.play();
         _self.firstplay = true
-        console.log(_self.uuid, "First Play.")
+        //console.log(_self.uuid, "First Play; ", r)
         clearInterval(playInterval)
       }
     }, 400 )
@@ -134,8 +141,11 @@ function VideoSource(renderer, options) {
 
   _self.src = function( file ) {
     videoElement.src = file
+    // videoElement.video.style.opacity = 0
     var playInterval = setInterval( function() {
       if ( videoElement.readyState == 4 ) {
+        var r = Math.random() * videoElement.duration
+        videoElement.currentTime = r
         videoElement.play();
         console.log(_self.uuid, "First Play.")
         clearInterval(playInterval)
@@ -151,6 +161,7 @@ function VideoSource(renderer, options) {
     if ( _num === undefined ) {
       return videoElement.currentTime;
     } else {
+      console.log("set time", _num)
       videoElement.currentTime = _num;
       return _num;
     }

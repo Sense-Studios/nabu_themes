@@ -1,33 +1,60 @@
+
 // Firebase
-=# javascript_include_tag "/assets/firebase/firebase.js"
-=# javascript_include_tag "/assets/firebase/firebase-app.js"
-=# javascript_include_tag "/assets/firebase/firebase-auth.js"
-=# javascript_include_tag "/assets/firebase/firebase-database.js"
-=# javascript_include_tag "/assets/firebase/firebase-messaging.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase-app.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase-auth.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase-database.js"
+= javascript_include_tag "https://www.gstatic.com/firebasejs/4.9.0/firebase-messaging.js"
 
-= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase.js"
-= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase-app.js"
-= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase-auth.js"
-= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase-database.js"
-= javascript_include_tag "https://www.gstatic.com/firebasejs/3.6.2/firebase-messaging.js"
-=# javascript_include_tag "/assets/nabu_themes/_shared/firebase/firebase.js"
-
-// Mixer
+// Gif source helpers
 = javascript_include_tag "/assets/nabu_themes/_shared/mixer/gif/libgif.js"
 = javascript_include_tag "/assets/nabu_themes/_shared/mixer/gif/rubbable.js"
-= javascript_include_tag "/assets/nabu_themes/_shared/mixer/settings.js"
-= javascript_include_tag "/assets/nabu_themes/_shared/mixer/modules/bpm.js"
-= javascript_include_tag "/assets/nabu_themes/_shared/mixer/modules/filemanager.js"
-= javascript_include_tag "/assets/nabu_themes/_shared/mixer/modules/compositionmanager.js"
-= javascript_include_tag "/assets/nabu_themes/_shared/mixer/glrenderer.js"
-= javascript_include_tag "/assets/nabu_themes/sense/main.js"
 
+// SOURCES
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/sources/_source.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/sources/GifSource.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/sources/VideoSource.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/sources/SolidSource.js"
 
-// Sense
-// = javascript_include_tag "nabu_themes/sense/sense"
+// MODULES
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/modules/Chain.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/modules/Mixer.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/modules/Switcher.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/modules/Output.js"
 
-// Render Shaders
-= render "../../assets/javascripts/nabu_themes/_shared/mixer/shaders/blendmodes2"
+// CONTROLLERS
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/controllers/GamePad.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/controllers/FireBaseControl.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/controllers/NumPadBPMMixerControl"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/controllers/MidiController"
+
+// EFFECTS
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/effects/BlackAndWhite.js"
+
+// ADD-ONS
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/addons/BPM.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/addons/FileManager.js"
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/addons/GiphyManager.js"
+
+// RENDERER
+= javascript_include_tag "/assets/nabu_themes/_shared/mixer2/GlRenderer.js"
+
+:javascript
+
+  $(function() {
+    // create renderer
+    var renderer = new GlRenderer();
+
+    // create sources
+    var testSource1 = new GifSource(   renderer, { src: '//nabu.sense-studios.com/assets/nabu_themes/sense/slowclap.gif' } );
+    var testSource2 = new VideoSource( renderer, { src: '//nabu-dev.s3.amazonaws.com/uploads/video/556ce4f36465764bdf590000/720p_h264.mp4' } );
+    var testSource3 = new VideoSource( renderer, { src: '//nabu-dev.s3.amazonaws.com/uploads/video/556ce4f36465764bdf590000/720p_h264.mp4' } );
+    var testSource4 = new VideoSource( renderer, { src: '//nabu-dev.s3.amazonaws.com/uploads/video/556ce4f36465764bdf590000/720p_h264.mp4' } );
+    var output = new Output( renderer, testSource1 )
+
+    renderer.init();         // init
+    renderer.render();       // start update & animation
+  })
 
 // Render menu
 #sidebar
@@ -75,45 +102,4 @@
 // add a vignet
 #vignet
 
-// add the video &c necc. for the mixer
-#videos
-  // TODO this should be done through a generateor
-  // VIDEO 1
-  %video#video1.hidden.video1_active{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
-  // %video#video1_a.hidden.video1_active{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
-  %video#video1_b.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>false, :loop=>true}
-
-  // VIDEO 2
-  %video#video2.hidden.video2_active{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
-  //%video#video2_a.hidden.video2_active{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
-  %video#video2_b.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>false, :loop=>true}
-
-  // VIDEO 3 ( boosting base layer )
-  // base layer
-  %video#video3.hidden.video3_active{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
-  //%video#video3_a.hidden.video3_active{:crossorigin=>"anonymous", :controls=>true, :autoplay=>true, :loop=>true, :preload=>'auto'}
-  %video#video3_b.hidden{:crossorigin=>"anonymous", :controls=>true, :autoplay=>false, :loop=>true}
-
-// GIF 1
-#gif_containers
-  // %img{ id:"gif_image1", "rel:auto_play":"1"}
-  // gif 1
-  //%img{"src":"http://nabu.sense-studios.com/assets/nabu_themes/sense/slowclap.jpg", id:"gif_image1", "rel:animated_src":"http://nabu.sense-studios.com/assets/nabu_themes/sense/slowclap.gif", "c_w":"512", "c_h":"512", "rel:auto_play":"1"}
-  //%img{ id:"gif_image1", "rel:auto_play":"1"}
-  // "c_w":"512", "c_h":"512",
-
-// GIF 2
-// #gif_container2
-// gif 2
-//%img{ "src":"http://nabu.sense-studios.com/assets/nabu_themes/sense/slowclap.jpg", id:"gif_image2", "rel:animated_src":"http://nabu.sense-studios.com/assets/nabu_themes/sense/slowclap.gif",  "c_w":"512", "c_h":"512", "rel:auto_play":"1"}
-
-
-// #buffers.hidden
-// TODO this should be done through a generateor
-%canvas#buffer1.hidden
-%canvas#buffer2.hidden
-%canvas#buffer3.hidden
-%canvas#buffer4.hidden
-
-%canvas#canvas
 %canvas#glcanvas

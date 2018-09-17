@@ -68,7 +68,7 @@ function GifSource( renderer, options ) {
     supergifelement = new SuperGif( { gif: gifElement, c_w: "1024px", c_h: "576px" } );
     // sup1.load();
     console.log(_self.uuid, " Load...")
-    supergifelement.load_url("http://nabu.sense-studios.com/assets/nabu_themes/sense/slowclap.gif")
+    supergifelement.load_url("//nabu.sense-studios.com/assets/nabu_themes/sense/slowclap.gif")
     _self.bypass = false
   }
 

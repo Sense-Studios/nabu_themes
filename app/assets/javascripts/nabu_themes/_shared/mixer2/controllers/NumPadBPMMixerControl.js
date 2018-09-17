@@ -42,6 +42,8 @@ function NumpadBpmMixerControl( renderer, _mixer, _bpm ) {
   var mixmodes = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
   var _to;
 
+  $('body').click( function() { _bpms.forEach( function( b ) { b.tap() } ) } );
+
   var keyDownHandler = function( _event ) {
     // should be some way to check focus of this BPM instance
     // if _self.hasFocus
@@ -61,13 +63,13 @@ function NumpadBpmMixerControl( renderer, _mixer, _bpm ) {
       // BPM
       //[ 219, function() { _bpms.forEach( function( b ) { b.bpm -= 1   } ); } ], // [[]
       //[ 221, function() { _bpms.forEach( function( b ) { b.bpm += 1   } ); } ],  // ]
-      [ 109, function() { _bpms.forEach( function( b ) { b.bpm -= 1   } ); } ], //  -
-      [ 107, function() { _bpms.forEach( function( b ) { b.bpm += 1   } ); } ],  // +
+      [ 109, function() { _bpms.forEach( function( b ) { b.bpm -= 1   } ); } ], //  numpad -
+      [ 107, function() { _bpms.forEach( function( b ) { b.bpm += 1   } ); } ],  // numpad +
 
-      [ 106, function() { _bpms.forEach( function( b ) { b.bpm *= 2   } ); } ],  // ]
-      [ 111, function() { _bpms.forEach( function( b ) { b.bpm *= 0.5 } ); } ],  // ]
+      [ 106, function() { _bpms.forEach( function( b ) { b.bpm *= 2   } ); } ],  // numpad *
+      [ 111, function() { _bpms.forEach( function( b ) { b.bpm *= 0.5 } ); } ],  // numpad /
 
-      [ 101, function() { _bpms.forEach( function( b ) { b.tap()      } ); }  ],  // ]
+      [ 101, function() { _bpms.forEach( function( b ) { b.tap()      } ); }  ],  // numpad 5
 
       // hackity
       [  96, function() { switcher1.doSwitch(0) } ],  // 0
@@ -75,25 +77,45 @@ function NumpadBpmMixerControl( renderer, _mixer, _bpm ) {
       [  75, function() { switcher1.doSwitch(0) } ],  // k
       [  76, function() { switcher1.doSwitch(1) } ],  // l
       [  66, function() { _bpms.forEach( function( b ) { b.tap()      } ); }  ],  // b
+      [  32, function() { _bpms.forEach( function( b ) { b.tap()      } ); }  ],  // [space]
 
       // hack
       //[  219, function() { clearTimeout(_to); _to = setTimeout( function() { filemanager1.change() } , 200 ) } ], // [
-      [  221, function() { clearTimeout(_to); _to = setTimeout( function() { filemanager2.change() } , 200 ) } ], // ]
-      [  221, function() { clearTimeout(_to); _to = setTimeout( function() { giphymanager1.change() } , 200 ) } ], // \
-      [  71, function() { clearTimeout(_to); _to = setTimeout( function() { giphymanager1.change() } , 200 ) } ], // g
+      [  81, function() { clearTimeout(_to); _to = setTimeout( function() { giphymanager1.change() } , 200 ) } ], // q
+      //[  87, function() { clearTimeout(_to); _to = setTimeout( function() { giphymanager1.change() } , 200 ) } ], // w
+
+      // change
+      [  87, function() { clearTimeout(_to); _to = setTimeout( function() { filemanager2.change("awesome") } , 200 ) } ], // w
+      [  69, function() { clearTimeout(_to); _to = setTimeout( function() { filemanager3.change("runner") } , 200 ) } ], // e
+      [  82, function() { clearTimeout(_to); _to = setTimeout( function() { filemanager4.change() } , 200 ) } ], // r
+
+      // scratch
+      [  65, function() { giphymanager1.source.currentFrame( Math.floor( Math.random() * giphymanager1.source.duration() ) ) } ], // a
+      [  83, function() { filemanager2.source.currentTime( Math.floor( Math.random() * filemanager2.source.duration() ) ) } ], // b
+      [  68, function() { filemanager3.source.currentTime( Math.floor( Math.random() * filemanager3.source.duration() ) ) } ], // c
+
+      [  188, function() { mixer3.pod( mixer3.pod() - 0.1 ) } ], // ,
+      [  190, function() { mixer3.pod( mixer3.pod() + 0.1 ) } ], // .
+      //[  190, function() { mixer3.pod( mixer3.pod() + 0.1 ) } ], // .
+
+      [  49, function() { chain1.keyDown( 0, _event ) } ], // 1
+      [  50, function() { chain1.keyDown( 1, _event ) } ], // 2
+      [  51, function() { chain1.keyDown( 2, _event ) } ], // 3
 
       // MIXER
       // [ 219, function() { return i -= 1 } ], // 4
       // [ 221, function() { return i += 1 } ]  // 6
 
-      // reset
+      // reset; KeyPad 5
       [ 104, function() { _mixers.forEach( function(m) { m.blendMode(1); m.mixMode(1); blendmodes = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 ]; mixmodes = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ] }) }],  // 8
 
-      [ 103, function() { blendmodes.unshift( blendmodes.pop() ); _mixers.forEach( function(m) { m.blendMode(blendmodes[0]); } ) } ],  // 7
-      [ 105, function() { blendmodes.push( blendmodes.shift());   _mixers.forEach( function(m) { m.blendMode(blendmodes[0]); } ) } ],  // 9
-      [ 100, function() { mixmodes.unshift( mixmodes.pop() );     _mixers.forEach( function(m) { m.mixMode(mixmodes[0]);     } ) } ],  // 4
-      [ 102, function() { mixmodes.push( mixmodes.shift());       _mixers.forEach( function(m) { m.mixMode(mixmodes[0]);     } ) } ],  // 6
+      // change modes
+      [ 103, function() { blendmodes.unshift( blendmodes.pop() ); _mixers.forEach( function(m) { m.blendMode(blendmodes[0]); } ) } ],  // KeyPad 7
+      [ 105, function() { blendmodes.push( blendmodes.shift());   _mixers.forEach( function(m) { m.blendMode(blendmodes[0]); } ) } ],  // KeyPad 9
+      [ 100, function() { mixmodes.unshift( mixmodes.pop() );     _mixers.forEach( function(m) { m.mixMode(mixmodes[0]);     } ) } ],  // KeyPad 4
+      [ 102, function() { mixmodes.push( mixmodes.shift());       _mixers.forEach( function(m) { m.mixMode(mixmodes[0]);     } ) } ],  // KeyPad 6
 
+      // TODO: Trans 
       [ 97, function() { console.log("mix trans left, down") } ],  // 6
       //[ 95, function() { transmodes.unshift( transmodes.pop() ); mixmode = transmodes[0]; } ],  // 6
       [ 99, function() { console.log("mmix trans right, down") } ]  // 6
@@ -113,7 +135,11 @@ function NumpadBpmMixerControl( renderer, _mixer, _bpm ) {
     var keybindings = [
       [ 97, function() { console.log("mix trans left, up") } ],  // 6
       //[ 95, function() { transmodes.unshift( transmodes.pop() ); mixmode = transmodes[0]; } ],  // 6
-      [ 99, function() { console.log("mmix trans right, up") } ]  // 6
+      [ 99, function() { console.log("mmix trans right, up") } ],  // 6
+
+      [ 49, function() { chain1.keyUp( 0, _event ) } ], // .
+      [ 50, function() { chain1.keyUp( 1, _event ) } ], // .
+      [ 51, function() { chain1.keyUp( 2, _event ) } ] // .
     ]
 
     keybindings.forEach( function( bind ) {

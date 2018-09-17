@@ -1,0 +1,597 @@
+
+:css
+
+  .size1 { color: #eeeeee; }
+  .size2 { color: #cccccc; }
+  .size3 { color: #aaaaaa; }
+  .size4 { color: #999999; }
+  .size5 { color: #777777; }
+  .size6 { color: #555555; }
+  .size7 { color: #333333; }
+  .size8 { color: #222222; }
+  .size9 { color: #111111; }
+
+  canvas {
+    width: 100%;
+    height: 200px;
+    background-color: grey;
+    display: inline-block;
+  }
+
+  body, html {
+    overflow: scroll !important;
+    font-size: 12px;
+    font-family: monospace;
+  }
+
+.container{:style=>'width:100% !important;max-width:100%;'}
+  %br
+  %br
+  .row
+    .col-md-4
+      %h4 Normal
+      %canvas#canvas1
+      %canvas#canvas2
+      %canvas#canvas5
+      %hr
+      %pre#info1{:style => "font-weight: bold;font-size:large;display:inline-block;width:400px"}
+      %pre#dump1{:style => "font-weight: bold;font-size:large;display:inline-block;width:400px;height:720px;"}
+
+    .col-md-4
+      %h4 Filtered
+      %canvas#canvas4
+      %canvas#canvas3
+      %canvas#canvas6
+      %hr
+      %pre#info2{:style => "font-weight: bold;font-size:large;display:inline-block;width:400px"}
+      %pre#dump2{:style => "font-weight: bold;font-size:large;display:inline-block;width:400px;height:720px;"}
+
+    .col-md-4
+      %a{:href=>'javascript:audio.play()'} Play
+      %a{:href=>'javascript:audio.pause()'} Pause
+      %hr
+      peak treshold
+      %input#treshold{:type=>"range", :value=>0.7, :step=>0.01, :min => -2, :max => 2}
+      %br
+      //%input#lngt{:type=>"number", :value=>70, :step=>10}
+      lowpass frequency
+      %input#frq1{:type=>"range", :value=>0, :step=>0.01, :min => 0, :max => 1}
+      %br
+      lowpass quality
+      %input#qlt1{:type=>"range", :value=>0.5, :step=>0.01, :min => 0, :max => 1}
+      bandpass frequency
+      %input#frq2{:type=>"range", :value=>0, :step=>0.01, :min => 0, :max => 1}
+      %br
+      bandpass quality
+      %input#qlt2{:type=>"range", :value=>0.5, :step=>0.01, :min => 0, :max => 1}
+      highpass frequency
+      %input#frq3{:type=>"range", :value=>0, :step=>0.01, :min => 0, :max => 1}
+      %br
+      highpass quality
+      %input#qlt3{:type=>"range", :value=>0.5, :step=>0.01, :min => 0, :max => 1}
+      %input#wtf{:type=>"number", :step=>0.01, :value=>2.78}
+
+:javascript
+  var start = (new Date()).getTime()
+  var audio = new Audio();
+  var lngt = 70
+  var treshold = 0.7
+  var bpm = 0
+
+  var frq1 = 400
+  var qlt1 = 0.5
+  var frq2 = 400
+  var qlt2 = 0.5
+  var frq3 = 400
+  var qlt3 = 0.5
+
+  var bandpassFilter1
+  var bandpassFilter2
+
+  $('#treshold').change(function() { treshold = $(this).val(); console.log($(this).val()) })
+  $('#lngt').change(function() { lngt = $(this).val() })
+  $('#frq1').change(function() {
+    frq1 = $(this).val() * 2000;
+    bandpassFilter1.frequency.value = frq1 //(settings.passFreq ? settings.passFreq : 400);
+    bandpassFilter1.Q.value = qlt1;
+    console.log(frq1, qlt1)
+  })
+
+  $('#qlt1').change(function() {
+    qlt1 = $(this).val() * 20;
+    bandpassFilter1.frequency.value = frq1 //(settings.passFreq ? settings.passFreq : 400);
+    bandpassFilter1.Q.value = qlt1;
+    console.log(frq1, qlt1)
+  })
+
+  $('#frq2').change(function() {
+    frq2 = $(this).val() * 2000;
+    bandpassFilter2.frequency.value = frq2 //(settings.passFreq ? settings.passFreq : 400);
+    bandpassFilter2.Q.value = qlt2;
+    console.log(frq2, qlt2)
+  })
+
+  $('#qlt2').change(function() {
+    qlt2 = $(this).val() * 20;
+    bandpassFilter2.frequency.value = frq2//(settings.passFreq ? settings.passFreq : 400);
+    bandpassFilter2.Q.value = qlt2;
+    console.log(frq2, qlt2)
+  })
+
+  $('#frq3').change(function() {
+    frq3 = $(this).val() * 2000;
+    bandpassFilter2.frequency.value = frq3 //(settings.passFreq ? settings.passFreq : 400);
+    bandpassFilter2.Q.value = qlt3;
+    console.log(frq3, qlt3)
+  })
+
+  $('#qlt3').change(function() {
+    qlt3 = $(this).val() * 20;
+    bandpassFilter3.frequency.value = frq3 //(settings.passFreq ? settings.passFreq : 400);
+    bandpassFilter3.Q.value = qlt3;
+    console.log(frq3, qlt3)
+  })
+
+
+  //audio.src =  'http://nabu.sense-studios.com/proxy.php?url=http://37.220.36.51:8906';
+  //audio.src = '/audio/rage_hard.mp3'
+  audio.src = '/audio/i_own_it.mp3'
+  //audio.src = '/audio/100_metronome.mp3'
+  //audio.src = '/audio/120_metronome.mp3'
+  //audio.src = '/audio/140_metronome.mp3'
+  audio.controls = true;
+  audio.loop = true;
+  audio.autoplay = true;
+
+  // Establish all variables that your Analyser will use
+  var canvas, ctx, source, context, analyser, analyser2, fbc_array, bars, bar_x, bar_width, bar_height;
+  var gainNode
+
+  // Initialize the MP3 player after the page loads all of its HTML into the window
+  window.addEventListener("load", initMp3Player, false);
+  function initMp3Player(){
+
+    // document.getElementById('audio_box').appendChild(audio);
+  	context = new AudioContext(); // AudioContext object instance
+  	analyser = context.createAnalyser(); // AnalyserNode method
+
+    // canvas = document.getElementById('analyser_render');
+  	// ctx = canvas.getContext('2d');
+  	// Re-route audio playback into the processing graph of the AudioContext
+  	source = context.createMediaElementSource(audio);
+  	source.connect(analyser);
+  	// analyser.connect(context.destination);
+
+  	analyser2 = context.createAnalyser(); // AnalyserNode method
+    bandpassFilter1 = context.createBiquadFilter();
+    bandpassFilter2 = context.createBiquadFilter();
+    bandpassFilter3 = context.createBiquadFilter();
+
+    // bandpassFilter.type = (typeof bandpassFilter.type === 'string') ? 'bandpass' : 2;
+    // bandpassFilter.frequency.value = 400 //(settings.passFreq ? settings.passFreq : 400);
+    // bandpassFilter.Q.value = 0.5;
+
+    bandpassFilter1.type = "lowpass";
+    bandpassFilter1.frequency.value = frq1 //(settings.passFreq ? settings.passFreq : 400);
+    bandpassFilter1.Q.value = qlt1;
+
+    bandpassFilter2.type = "bandpass";
+    bandpassFilter2.frequency.value = frq2 //(settings.passFreq ? settings.passFreq : 400);
+    bandpassFilter2.Q.value = qlt2;
+
+    bandpassFilter3.type = "highpass";
+    bandpassFilter3.frequency.value = frq3 //(settings.passFreq ? settings.passFreq : 400);
+    bandpassFilter3.Q.value = qlt3;
+
+
+    gainNode = context.createGain();
+
+    source.connect(bandpassFilter1)
+
+    bandpassFilter1.connect(gainNode)
+
+    //bandpassFilter1.connect(bandpassFilter2)
+    //bandpassFilter2.connect(bandpassFilter3)
+    //bandpassFilter3.connect(gainNode);
+
+    gainNode.connect(analyser2);
+
+    analyser.fftSize = 256;
+    analyser2.fftSize = 256;
+
+    //analyser2.connect(context.destination);
+  	//source.connect(analyser2);
+  	analyser2.connect(context.destination);
+
+    doloop()
+  }
+
+  var c = 0
+  var peaks
+  var spreads1 = []
+  var spreads2 = []
+  var averages1 = []
+  var averages2 = []
+  var drawpeaks1 = []
+  var drawpeaks2 = []
+
+  var before,now,fps;
+  now = 0
+  before = Date.now();
+  fps = 0;
+
+  function doloop() {
+
+      //document.getElementById('info1').innerHTML = dataArray
+      //document.getElementById('info2').innerHTML = low + "\t " + high + "\t [ " + spread + " ]\t " + av/dataArray.length
+
+      drawCanvas1()
+      drawCanvas2()
+      drawCanvas3()
+      drawCanvas4()
+      drawCanvas('canvas5', analyser, spreads1, averages1, drawpeaks1, 'info1', 'dump1' )
+      drawCanvas('canvas6', analyser2, spreads2, averages2, drawpeaks2, 'info2', 'dump2' )
+
+      c++
+      if (c%60 == 0) {
+        now = Date.now();
+        fps = Math.round( 1000 / ( now - before ) );
+        before = now;
+        console.log(fps)
+      }
+
+      requestAnimationFrame(doloop)
+  }
+
+  function drawCanvas( _canvas, _analyser, spreads, averages, drawpeaks, info, dump ) {
+    var WIDTH = 400
+    var HEIGHT = 150
+    var MAX = 2024
+
+    var bufferLength = _analyser.frequencyBinCount;
+    // _analyser.smoothingTimeConstant = 0.8;
+    var dataArray = new Uint8Array(bufferLength);
+    _analyser.getByteTimeDomainData( dataArray );
+
+    // var dataArray = new Float32Array(bufferLength);
+    // _analyser.getFloatFrequencyData(dataArray);
+
+    //getByteFrequencyData()
+    //getByteTimeDomainData()
+    //getFloatFrequencyData()
+    //getFloatTimeDomainData()
+
+    var newdata = []
+    var av = 0
+    var high = 0
+    var low = 0
+
+    dataArray.forEach( function(v, i) {
+      //if ( i < 100 || i > 150  ) v = 0
+      //newdata.push(v)
+      av += v
+      if ( high == 0 || v > high ) high = v
+      if ( low == 0  || v < low ) low = v
+    })
+
+    var spread = high - low
+    var median = dataArray.sort()[Math.round(dataArray.length/2)]
+    var average = av / dataArray.length
+    //console.log(spread, median, average)
+    //console.log(spreads.length)
+
+    spreads.push( spread ) // used!
+    averages.push( spread )
+
+    if ( spreads.length > MAX ) spreads.splice(0,1)
+    if ( averages.length > MAX ) averages.splice(0,1)
+
+    var cnv = document.getElementById( _canvas )
+    cnv.width = WIDTH
+    cnv.height = HEIGHT
+    var ctx = cnv.getContext("2d")
+
+    ctx.fillStyle = 'rgb(0, 0, 0)';
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    var sbarWidth = 1 // (WIDTH/MAX)
+    var sbarHeight;
+    var sx = 0;
+
+    var abarWidth = 1 //(WIDTH/MAX)
+    var abarHeight;
+    var ax = 0;
+
+    for(var i = 0; i < MAX; i++) {
+      sbarHeight = spreads[i];
+      abarHeight = averages[i];
+
+      ctx.fillStyle = 'rgb(50,50,250)';
+      ctx.fillRect(ax, ( HEIGHT - abarHeight/2 ), abarWidth, abarHeight);
+
+      ctx.fillStyle = 'rgb(250,50,50)';
+      ctx.fillRect(sx, ( HEIGHT - sbarHeight/2 ), sbarWidth, sbarHeight);
+
+      sx += (WIDTH/MAX); //sbarWidth //(WIDTH/MAX);
+      ax += (WIDTH/MAX); //abarWidth //(WIDTH/MAX);
+    }
+
+    peaks = []
+    var high = 0
+
+    spreads.forEach(function(s) {
+      if ( Math.abs(s) > high ) high = s
+      //high += s
+    })
+
+
+    //high = high/spreads.length
+    //console.log(high)
+
+    var isPeaking = false
+    var next_p = 0
+    spreads.forEach(function(p, i) {
+      //if ( p > ( treshold * high ) && spreads[p-1] < (treshold*high) ) peaks.push( i )
+      if ( p > (treshold*high) && i > next_p ) {
+        if ( !isPeaking ) {
+          peaks.push(i);
+          isPeaking = true
+          next_p = i + 67 // don't measure under 90bpm
+        }
+
+      }else{
+        isPeaking = false
+      }
+    })
+
+    var drawLePeaks = new Array(MAX)
+    peaks.forEach( function(pk, i) {
+      drawLePeaks[ pk ] = 1
+    })
+
+
+    if (drawLePeaks.length > MAX) drawLePeaks.splice(0, 1)
+
+    ctx.fillStyle = 'rgb(250,250,50)';
+    ctx.fillRect( 0, HEIGHT - (treshold*high/2), 400, 2 );
+
+    drawLePeaks.forEach( function( p, i ) {
+        ctx.fillStyle = 'rgb(250,250,250)';
+        if (p == 1) ctx.fillRect( i * (WIDTH/MAX), 1, 1, 18 )
+    })
+
+    var tempoCounts = []
+    if (c%60 == 0) {
+      tempoCounts = groupNeighborsByTempo( countIntervalsBetweenNearbyPeaks( peaks ) )
+
+
+      function mycomparator(a,b) {
+        return parseInt(a.count, 10) - parseInt(b.count, 10);
+      }
+
+      tempoCounts.sort( mycomparator )
+
+      var str = ""
+      tempoCounts.reverse().forEach( function( tc, i ) {
+        str += "interval: " + Math.round(tc.tempo * 1000 ) / 1000 + "," + "count: " + tc.count + "<br>"
+      });
+
+      if ( tempoCounts.length > 0 ) {
+        bpm = tempoCounts[0].tempo
+      }else{
+        bpm = 0
+      }
+
+      document.getElementById( info ).innerHTML = "peaks: 0" + peaks.length + "\tbpm: " + bpm + "\t" + high
+      document.getElementById( dump ).innerHTML = str
+    }
+
+    //if (c%10 == 0) console.log(peaks)
+    if (c%MAX == 0) {
+      //lngt = (new Date()).getTime() - start
+      //start = (new Date()).getTime()
+      //console.log("===> ", lngt, lngt/MAX)
+    }
+
+    if (c%12 == 0) {
+      //console.log("-->",countIntervalsBetweenNearbyPeaks( peaks ))
+      // console.log(" --> ", lngt, lngt/MAX )
+    }
+    //document.getElementById( info ).innerHTML = spreads.length + "\t" + averages.length
+  }
+
+  var intervalCounts = [];
+  function countIntervalsBetweenNearbyPeaks(peaks) {
+    intervalCounts = [];
+
+    peaks.forEach(function(peak, index) {
+      for(var i = 0; i < 10; i++) {
+        var interval = peaks[index + i] - peak;
+        var foundInterval = intervalCounts.some(function(intervalCount) {
+          if (intervalCount.interval === interval)
+            return intervalCount.count++;
+        });
+        if (!foundInterval) {
+          intervalCounts.push({
+            interval: interval,
+            count: 1
+          });
+        }
+      }
+    });
+    return intervalCounts;
+  }
+  function groupNeighborsByTempo(intervalCounts, iv ) {
+
+    if (lngt == 0) return [];
+    //console.log(intervalCounts.length)
+    var tempoCounts = []
+    var str = ""
+
+    // console.log( intervalCounts )
+
+    intervalCounts.forEach(function(intervalCount, i) {
+
+      // Convert an interval to tempo
+      if (intervalCount.interval != 0 && !isNaN(intervalCount.interval)) {
+
+        // although we're running at 60fps (perfect!)
+        // we need to correct as wee
+        // console.log(fps)
+        var theoreticalTempo = Math.round( intervalCount.interval * $('#wtf').val() )//* ( 1024 / 60 )  //* 0.0166015625)
+        //console.log("tt ", intervalCount.interval, lngt, theoreticalTempo )
+        //str += intervalCount.interval + "," + lngt + "," + theoreticalTempo + "<br>"
+      }
+
+      // Adjust the tempo to fit within the 90-180 BPM range
+      while (theoreticalTempo < 90) theoreticalTempo *= 2;
+      while (theoreticalTempo > 180) theoreticalTempo /= 2;
+
+      var foundTempo = tempoCounts.some(function(tempoCount) {
+        if (tempoCount.tempo === theoreticalTempo)
+          return tempoCount.count += intervalCount.count;
+      });
+
+      if (!foundTempo) {
+        if ( theoreticalTempo ) {
+          tempoCounts.push({
+            tempo: theoreticalTempo,
+            count: intervalCount.count
+          })
+        }
+      }
+    });
+
+    //return 'ok'
+    return tempoCounts
+  }
+
+
+
+  function drawCanvas1() {
+    var WIDTH = 400
+    var HEIGHT = 150
+
+    var bufferLength = analyser.frequencyBinCount;
+    var dataArray = new Uint8Array(bufferLength);
+
+    //analyser.getByteTimeDomainData(dataArray);
+    analyser.getByteFrequencyData(dataArray);
+    var ctx = document.getElementById('canvas1').getContext("2d")
+
+    ctx.fillStyle = 'rgb(0, 0, 0)';
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    var barWidth = (WIDTH / bufferLength);
+    var barHeight;
+    var x = 0;
+
+    for(var i = 0; i < bufferLength; i++) {
+      barHeight = dataArray[i];
+
+      //ctx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
+      ctx.fillStyle = 'rgb(250,50,50)';
+      //ctx.fillRect(x, HEIGHT - barHeight/2,barWidth, barHeight);
+      ctx.fillRect(x, HEIGHT - barHeight/2, barWidth, barHeight);
+
+      //console.log(x, barHeight)
+      x += barWidth;
+    }
+  }
+
+  function drawCanvas2() {
+    var WIDTH = 400
+    var HEIGHT = 150
+
+    var bufferLength = analyser.frequencyBinCount;
+    var dataArray = new Uint8Array(bufferLength);
+
+    analyser.getByteTimeDomainData(dataArray);
+    //analyser.getByteFrequencyData(dataArray);
+    var ctx = document.getElementById('canvas2').getContext("2d")
+
+    ctx.fillStyle = 'rgb(0, 0, 0)';
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    var barWidth = (WIDTH / bufferLength) * 2.5;
+    var barHeight;
+    var x = 0;
+
+    for(var i = 0; i < bufferLength; i++) {
+      barHeight = dataArray[i];
+
+      //ctx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
+      ctx.fillStyle = 'rgb(250,50,50)';
+      //ctx.fillRect(x, HEIGHT - barHeight/2,barWidth, barHeight);
+      ctx.fillRect(x, HEIGHT - barHeight/2, barWidth, barHeight);
+
+      //console.log(x, barHeight)
+      x += barWidth + 1;
+    }
+  }
+
+  function drawCanvas3() {
+    var WIDTH = 400
+    var HEIGHT = 150
+
+    var bufferLength = analyser2.frequencyBinCount;
+    var dataArray = new Uint8Array(bufferLength);
+
+    //console.log(dataArray)
+
+    analyser2.getByteTimeDomainData(dataArray);
+    //analyser2.getByteFrequencyData(dataArray);
+    var ctx = document.getElementById('canvas3').getContext("2d")
+
+    ctx.fillStyle = 'rgb(0, 0, 0)';
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    var barWidth = (WIDTH / bufferLength) * 2.5;
+    var barHeight;
+    var x = 0;
+
+    for(var i = 0; i < bufferLength; i++) {
+      barHeight = dataArray[i];
+
+      //ctx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
+      ctx.fillStyle = 'rgb(250,50,50)';
+      //ctx.fillRect(x, HEIGHT - barHeight/2,barWidth, barHeight);
+      ctx.fillRect(x, HEIGHT - barHeight/2, barWidth, barHeight);
+
+      //console.log(x, barHeight)
+      x += barWidth + 1;
+    }
+  }
+
+  function drawCanvas4() {
+    var WIDTH = 400
+    var HEIGHT = 150
+
+    var bufferLength = analyser2.frequencyBinCount;
+    var dataArray = new Uint8Array(bufferLength);
+
+    //console.log(dataArray)
+
+    analyser2.getByteFrequencyData(dataArray);
+    //analyser2.getByteFrequencyData(dataArray);
+    var ctx = document.getElementById('canvas4').getContext("2d")
+
+    ctx.fillStyle = 'rgb(0, 0, 0)';
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    var barWidth = (WIDTH / bufferLength) * 2.5;
+    var barHeight;
+    var x = 0;
+
+    for(var i = 0; i < bufferLength; i++) {
+      barHeight = dataArray[i];
+
+      //ctx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
+      ctx.fillStyle = 'rgb(250,50,50)';
+      //ctx.fillRect(x, HEIGHT - barHeight/2,barWidth, barHeight);
+      ctx.fillRect(x, HEIGHT - barHeight/2, barWidth, barHeight);
+
+      //console.log(x, barHeight)
+      x += barWidth + 1;
+    }
+    }

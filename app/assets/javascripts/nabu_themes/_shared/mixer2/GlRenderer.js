@@ -9,7 +9,7 @@ var GlRenderer = function() {
   // set up threejs scene
   _self.scene = new THREE.Scene();
   _self.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-  _self.camera.position.z = 24
+  _self.camera.position.z = 20
 
   // container for all elements that inherit init() and update()
   _self.nodes = [] // sources modules and effects
