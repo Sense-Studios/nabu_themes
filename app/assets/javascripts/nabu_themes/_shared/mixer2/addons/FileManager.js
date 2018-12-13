@@ -44,6 +44,10 @@ function FileManager( _source ) {
   // HELPERS
   // ---------------------------------------------------------------------------
 
+  _self.load = function( _file ) {
+
+  }
+
   // load another source from the stack
   _self.change = function( _tag ) {
 
@@ -346,8 +350,8 @@ function FileManager( _source ) {
     //$.get('/set/notv', function(d) { notv = JSON.parse(d) })
 
     console.log("SOURCE")
-    var source = notv[ Math.floor( Math.random() * notv.length) ];
-    //var source = occupy_chaos[ Math.floor( Math.random() * occupy_chaos.length) ];
+    //var source = notv[ Math.floor( Math.random() * notv.length) ];
+    var source = occupy_chaos[ Math.floor( Math.random() * occupy_chaos.length) ];
 
     //var source = _self.getSrcByQuality( program )
     //  _self.setSrc( source );
