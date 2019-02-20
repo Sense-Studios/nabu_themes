@@ -11,6 +11,8 @@ setMarqers
 resetMarqers
 */
 
+console.log(" === themes v. 0.0.1 === ")
+
 /*var analytics_urchin = null;*/
 var pop_under_set = false;
 var menu_toggle = 0;
@@ -115,7 +117,7 @@ if($(window).width() < 700) {
 
 var sideMenuTop = function() {
   if($(window).width() < 700) {
-    console.log('wtf', $(window).width());
+    // console.log('wtf', $(window).width());
     $('.brandbox').css('background-color', secundary_color);
     var side_menuTop = $('.video_background').height();
     side_menuTop = side_menuTop + 138;
@@ -127,11 +129,9 @@ var sideMenuTop = function() {
 var secundary_color = $('.secondary-color').css('color');
 
 if(isMobile.any()) {
-   $('.control_holder').remove();
-   $('.brandbox').css('background-color', secundary_color);
-   setTimeout(function(){
-     $('#video').prop("controls",true);
-   }, 500);
+  console.log(" === has video, show mobile controls === ")
+  $('.control_holder').addClass('mobile');
+  //$('.brandbox').css('background-color', secundary_color);
 }
 
 
@@ -496,6 +496,7 @@ var toggleSite = function() {
     $('.custom_navbar_mobile_menu').fadeIn();
 
     if(isMobile.any()) $('.navbar-brand').css('margin-left', '10%');
+
     $('.custom_navbar_brand').removeClass('hidden_navbar_brand');
     $('.custom_navbar_menu').css('background-color','#FFF');
     $('.custom_navbar_menu span').addClass('primary-color');
@@ -510,6 +511,9 @@ var toggleSite = function() {
 
     //pop.pause();
     pop.playbackRate(0.4);
+
+    // stop on mobile
+    if(isMobile.any()) pop.pause();
 
   }
 };

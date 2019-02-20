@@ -59,6 +59,15 @@ html, body {
   background-color: #000!important;
 }
 
+:not(:root):-webkit-full-screen, .in_full_screen {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 2000000011 !important;
+}
+
 .nav-tabs {
   background: none !important;
 }
@@ -1381,6 +1390,18 @@ border: none;
   background-color: rgba(53,53,53,0.7);
 }
 
+.control_holder.mobile {
+  display: block;
+  width: 100%;
+  bottom: 8px;
+  margin-left: 10px;
+
+  .play-button_scrub-bar {
+    width: calc(100% - 130px);
+  }
+}
+
+
 .playpausebutton {
   position: relative;
   height: 100%!important;
@@ -1590,11 +1611,20 @@ border: none;
 
 @media all and (max-width: 600px) {
   #controls {
-    width: 400px;
+    width: 440px;
   }
 
   .tabtitle {
     font-size: 15px;
+  }
+
+  #butt-togglemute, .mute-switcher {
+    display: none!important;
+    opacity: 0;
+  }
+
+  .smaller_background {
+    height: 70px;
   }
 }
 
@@ -1722,9 +1752,11 @@ border: none;
     height: auto;
     min-height: 280px;
     top: 70px;
+
     #video_frame {
       height: auto!important;
       min-height: 280px;
+
       iframe {
         min-height: 280px
       }
@@ -2084,4 +2116,19 @@ border: none;
 
 @media (orientation : landscape) {
 
+}
+
+.video_background.in_full_screen {
+  height: 100vh!important;
+  width: 100vw!important;
+
+  #video_frame.fullscreen {
+    height: 100vh!important;
+    width: 100vw!important;
+
+    iframe {
+      height: 100vh!important;
+      width: 100vw!important;
+    }
+  }
 }

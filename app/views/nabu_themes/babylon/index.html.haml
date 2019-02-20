@@ -3,8 +3,9 @@
 .video_background
   -#.moar_button.over_glow
   -#  Meer videos
-  .video_background_hider#video_container
-  = render :partial => "shared/player/video", locals: {height:''}
+  -# .video_background_hider
+  #video_container
+    = render :partial => "shared/player/video", locals: {height:''}
 
   #controls.control_holder.hidden
     = render partial: 'nabu_themes/babylon/controls'
