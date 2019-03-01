@@ -8,7 +8,7 @@ function setTitleTimeout() {
     });
 
     document.getElementById('video_frame').contentWindow.pop.on('pause', function() {
-      $('.title_container').animate( { 'opacity': 1 }, 300);
+      if ( pop.currentTime < 1 ) $('.title_container').animate( { 'opacity': 1 }, 300);
     });
   }
 }
