@@ -31,7 +31,7 @@ module NabuThemes
 
       if params[:id].blank?
         if @theme.home_program.blank?
-          @program = appMarduqResource::Program.find( JSON.parse( Menu.find(@theme.menu).items)["menu"][0]["items"][0]["id"] )
+          @program = MarduqResource::Program.find( JSON.parse( Menu.find(@theme.menu).items)["menu"][0]["items"][0]["id"] )
         else
           @program = MarduqResource::Program.find( @theme.home_program ) # home program
         end
